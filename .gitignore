@@ -2,6 +2,9 @@
 /dist
 /node_modules
 
+#Schemas Graphql
+.gql
+
 # Logs
 logs
 *.log
