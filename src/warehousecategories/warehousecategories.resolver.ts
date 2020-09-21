@@ -12,6 +12,11 @@ export class WarehouseCategoriesResolver {
         return this.service.findAll();
     }
 
+    @Query(()=> WarehouseCategoryType)
+    async warehouseCategory(@Args('id') id: String){
+        return this.service.findById(id);
+    }
+
     @Mutation(() => WarehouseCategoryType)
     async createWarehouseCategories(@Args('input') input: createWarehouseCategoryInput) {
         const warehouseCategory = await this.service.create(input);
@@ -22,4 +27,15 @@ export class WarehouseCategoriesResolver {
         error.message = "WarehouseCategory is already exists.";
         return error;
     }
+    
+    @Mutation(()=>WarehouseCategoryType)
+    async updateWarehouseCategory(@Args('id') id: String, @Args('input') input:createWarehouseCategoryInput){
+        return this.service.update(id,input);
+    }
+    
+    @Mutation(() => WarehouseCategoryType)
+    async removeWarehouseCategory(@Args('id') id: String){
+        return this.service.delete(id);
+    }
+
 }

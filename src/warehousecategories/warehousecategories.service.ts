@@ -24,4 +24,16 @@ export class WarehouseCategoriesService {
     async findByTitle(ptitle: String): Promise<WarehouseCategory[]> {
         return await this.model.find({ title: ptitle }).exec();
     }
+
+    async findById(id:String):Promise<WarehouseCategory>{
+        return await this.model.findById(id);
+    }
+
+    async delete(id: String):Promise<WarehouseCategory>{
+        return await this.model.findByIdAndRemove(id);
+    }
+
+    async update(id:String, input: createWarehouseCategoryInput): Promise<WarehouseCategory>{
+        return await this.model.findByIdAndUpdate(id,input,{new:false});
+    }
 }

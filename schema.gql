@@ -16,10 +16,13 @@ scalar DateTime
 
 type Query {
   warehousesCategories: [WarehouseCategoryType!]!
+  warehouseCategory(id: String!): WarehouseCategoryType!
 }
 
 type Mutation {
   createWarehouseCategories(input: createWarehouseCategoryInput!): WarehouseCategoryType!
+  updateWarehouseCategory(input: createWarehouseCategoryInput!, id: String!): WarehouseCategoryType!
+  removeWarehouseCategory(id: String!): WarehouseCategoryType!
 }
 
 input createWarehouseCategoryInput {
