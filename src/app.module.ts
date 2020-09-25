@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
 import { WarehouseCategoriesModule } from './warehousecategories/warehousecategories.module';
+import { WarehouseModule } from './warehouses/warehouses.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { WarehouseCategoriesModule } from './warehousecategories/warehousecatego
       useCreateIndex:true,
     }),
     WarehouseCategoriesModule,
+    WarehouseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
