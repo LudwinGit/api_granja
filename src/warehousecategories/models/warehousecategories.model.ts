@@ -6,7 +6,7 @@ export class WarehouseCategoryType {
     id: string
 
     @Field()
-    title: string;
+    name: string;
 
     @Field({ nullable: true })
     logo?: string;

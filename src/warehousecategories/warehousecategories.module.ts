@@ -8,6 +8,7 @@ import { WarehouseCategorySchema } from './schema/warehousecategories.schema';
   imports: [MongooseModule.forFeature([
     { name: 'WarehouseCategory', schema: WarehouseCategorySchema }
   ])],
+  exports: [WarehouseCategoriesService],
   providers: [WarehouseCategoriesService, WarehouseCategoriesResolver]
 })
 export class WarehouseCategoriesModule { }

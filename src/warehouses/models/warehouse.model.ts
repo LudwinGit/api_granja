@@ -6,8 +6,11 @@ export class WarehouseType {
     @Field(type => ID)
     id: String
 
+    @Field(type => WarehouseCategoryType)
+    warehouseCategory: String;
+
     @Field()
-    warehouseCategoyry: WarehouseCategoryType;
+    name: String;
 
     @Field()
     creationDate: Date;

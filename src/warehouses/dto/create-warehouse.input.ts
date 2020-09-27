@@ -3,5 +3,8 @@ import { Field, InputType } from "@nestjs/graphql";
 @InputType()
 export class createWarehouseInput {
     @Field()
-    warehouseCategoryId: String;
+    warehouseCategory: String
+
+    @Field()
+    name: String
 }

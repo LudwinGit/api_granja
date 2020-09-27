@@ -3,7 +3,7 @@ import { Field, InputType } from "@nestjs/graphql";
 @InputType()
 export class createWarehouseCategoryInput {
     @Field()
-    title: String;
+    name: String;
 
     @Field({ nullable: true })
     logo?: String;

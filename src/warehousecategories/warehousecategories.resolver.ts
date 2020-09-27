@@ -19,13 +19,7 @@ export class WarehouseCategoriesResolver {
 
     @Mutation(() => WarehouseCategoryType)
     async createWarehouseCategories(@Args('input') input: createWarehouseCategoryInput) {
-        const warehouseCategory = await this.service.create(input);
-        if (warehouseCategory != null) {
-            return warehouseCategory;
-        }
-        const error = new TypeError()
-        error.message = "WarehouseCategory is already exists.";
-        return error;
+        return this.service.create(input)
     }
     
     @Mutation(()=>WarehouseCategoryType)

@@ -13,12 +13,9 @@ export class WarehouseCategoriesService {
     }
 
     async create(newInput: createWarehouseCategoryInput): Promise<WarehouseCategory> {
-        const first = await this.findByTitle(newInput.title)
-        if (first.length == 0) {
-            const createdWarehouse = new this.model(newInput);
-            return await createdWarehouse.save();
-        }
-        return null;
+        newInput.name = newInput.name.toUpperCase();
+        const createdWarehouse = new this.model(newInput);
+        return await createdWarehouse.save();
     }
 
     async findByTitle(ptitle: String): Promise<WarehouseCategory[]> {

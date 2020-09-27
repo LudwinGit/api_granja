@@ -4,7 +4,7 @@
 
 type WarehouseCategoryType {
   id: ID!
-  title: String!
+  name: String!
   logo: String
   creationDate: DateTime!
 }
@@ -16,23 +16,33 @@ scalar DateTime
 
 type WarehouseType {
   id: ID!
-  warehouseCategoyry: WarehouseCategoryType!
+  warehouseCategory: WarehouseCategoryType!
+  name: String!
   creationDate: DateTime!
 }
 
 type Query {
   warehousesCategories: [WarehouseCategoryType!]!
   warehouseCategory(id: String!): WarehouseCategoryType!
-  warehouses: [WarehouseType!]!
+  getWarehouses: [WarehouseType!]!
+  getWarehouse(id: String!): WarehouseType!
 }
 
 type Mutation {
   createWarehouseCategories(input: createWarehouseCategoryInput!): WarehouseCategoryType!
   updateWarehouseCategory(input: createWarehouseCategoryInput!, id: String!): WarehouseCategoryType!
   removeWarehouseCategory(id: String!): WarehouseCategoryType!
+  createWarehouse(input: createWarehouseInput!): WarehouseType!
+  updateWarehouse(input: createWarehouseInput!, id: String!): WarehouseType!
+  removeWarehouse(id: String!): WarehouseType!
 }
 
 input createWarehouseCategoryInput {
-  title: String!
+  name: String!
   logo: String
+}
+
+input createWarehouseInput {
+  warehouseCategory: String!
+  name: String!
 }
