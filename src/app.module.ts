@@ -1,13 +1,13 @@
+import { ConfigModule } from "@nestjs/config";
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
-import { WarehouseCategoriesModule } from './warehousecategories/warehousecategories.module';
-import { WarehouseModule } from './warehouses/warehouses.module';
+import { WarehouseModule } from './modules/warehouses/warehouses.module';
+import { WarehouseCategoriesModule } from "./modules/warehousecategories/warehousecategories.module";
 
 @Module({
   imports: [
+    ConfigModule.forRoot({isGlobal:true}),
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
     }),
@@ -19,7 +19,7 @@ import { WarehouseModule } from './warehouses/warehouses.module';
     WarehouseCategoriesModule,
     WarehouseModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

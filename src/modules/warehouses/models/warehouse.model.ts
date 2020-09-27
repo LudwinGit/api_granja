@@ -1,5 +1,5 @@
 import { Field, ObjectType, ID } from "@nestjs/graphql";
-import { WarehouseCategoryType } from "src/warehousecategories/models/warehousecategories.model";
+import { WarehouseCategoryType } from "src/modules/warehousecategories/models/warehousecategories.model";
 
 @ObjectType()
 export class WarehouseType {

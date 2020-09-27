@@ -2,7 +2,7 @@ import { Resolver, Query, Mutation, Args, ResolveField, Parent, } from '@nestjs/
 import { WarehousesService } from './warehouses.service';
 import { WarehouseType } from './models/warehouse.model';
 import { createWarehouseInput } from './dto/create-warehouse.input';
-import { WarehouseCategoriesService } from 'src/warehousecategories/warehousecategories.service';
+import { WarehouseCategoriesService } from '../warehousecategories/warehousecategories.service';
 
 @Resolver(of => WarehouseType)
 export class WarehousesResolver {

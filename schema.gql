@@ -22,27 +22,27 @@ type WarehouseType {
 }
 
 type Query {
-  warehousesCategories: [WarehouseCategoryType!]!
-  warehouseCategory(id: String!): WarehouseCategoryType!
   getWarehouses: [WarehouseType!]!
   getWarehouse(id: String!): WarehouseType!
+  warehousesCategories: [WarehouseCategoryType!]!
+  warehouseCategory(id: String!): WarehouseCategoryType!
 }
 
 type Mutation {
-  createWarehouseCategories(input: createWarehouseCategoryInput!): WarehouseCategoryType!
-  updateWarehouseCategory(input: createWarehouseCategoryInput!, id: String!): WarehouseCategoryType!
-  removeWarehouseCategory(id: String!): WarehouseCategoryType!
   createWarehouse(input: createWarehouseInput!): WarehouseType!
   updateWarehouse(input: createWarehouseInput!, id: String!): WarehouseType!
   removeWarehouse(id: String!): WarehouseType!
-}
-
-input createWarehouseCategoryInput {
-  name: String!
-  logo: String
+  createWarehouseCategories(input: createWarehouseCategoryInput!): WarehouseCategoryType!
+  updateWarehouseCategory(input: createWarehouseCategoryInput!, id: String!): WarehouseCategoryType!
+  removeWarehouseCategory(id: String!): WarehouseCategoryType!
 }
 
 input createWarehouseInput {
   warehouseCategory: String!
   name: String!
+}
+
+input createWarehouseCategoryInput {
+  name: String!
+  logo: String
 }
