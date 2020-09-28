@@ -4,6 +4,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
 import { WarehouseModule } from './modules/warehouses/warehouses.module';
 import { WarehouseCategoriesModule } from "./modules/warehousecategories/warehousecategories.module";
+import { EmployeesModule } from './modules/employees/employees.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { WarehouseCategoriesModule } from "./modules/warehousecategories/warehou
     }),
     WarehouseCategoriesModule,
     WarehouseModule,
+    EmployeesModule,
   ],
   controllers: [],
   providers: [],

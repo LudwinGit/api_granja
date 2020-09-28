@@ -21,20 +21,37 @@ type WarehouseType {
   creationDate: DateTime!
 }
 
+type EmployeeType {
+  id: ID!
+  name: String!
+  lastname: String!
+  telephone: String!
+  dpi: String!
+  image: String!
+  address: String
+  input_date: DateTime
+  output_date: DateTime
+  creationDate: DateTime!
+}
+
 type Query {
   getWarehouses: [WarehouseType!]!
   getWarehouse(id: String!): WarehouseType!
   warehousesCategories: [WarehouseCategoryType!]!
   warehouseCategory(id: String!): WarehouseCategoryType!
+  employees: [EmployeeType!]!
+  employe(id: String!): EmployeeType!
 }
 
 type Mutation {
   createWarehouse(input: createWarehouseInput!): WarehouseType!
   updateWarehouse(input: createWarehouseInput!, id: String!): WarehouseType!
-  removeWarehouse(id: String!): WarehouseType!
+  removeWarehouse(id: String!): EmployeeType!
   createWarehouseCategories(input: createWarehouseCategoryInput!): WarehouseCategoryType!
   updateWarehouseCategory(input: createWarehouseCategoryInput!, id: String!): WarehouseCategoryType!
   removeWarehouseCategory(id: String!): WarehouseCategoryType!
+  createEmployee(input: createEmployeeInput!): EmployeeType!
+  updateEmployee(input: createEmployeeInput!, id: String!): EmployeeType!
 }
 
 input createWarehouseInput {
@@ -45,4 +62,15 @@ input createWarehouseInput {
 input createWarehouseCategoryInput {
   name: String!
   logo: String
+}
+
+input createEmployeeInput {
+  name: String!
+  lastname: String!
+  telephone: String!
+  dpi: String!
+  image: String
+  address: String
+  input_date: DateTime
+  output_date: DateTime
 }
