@@ -9,6 +9,7 @@ import { WarehouseCategoriesModule } from '../warehousecategories/warehousecateg
   imports:[MongooseModule.forFeature([
     {name:'Warehouse',schema:WarehouseSchema}
   ]),WarehouseCategoriesModule],
+  exports:[WarehousesService],
   providers: [WarehousesService, WarehousesResolver]
 })
 export class WarehouseModule {}

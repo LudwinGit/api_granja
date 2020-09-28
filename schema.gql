@@ -29,6 +29,9 @@ type EmployeeType {
   dpi: String!
   image: String!
   address: String
+  isSeller: Boolean!
+  status: String!
+  warehouses: [WarehouseType!]
   input_date: DateTime
   output_date: DateTime
   creationDate: DateTime!
@@ -52,6 +55,7 @@ type Mutation {
   removeWarehouseCategory(id: String!): WarehouseCategoryType!
   createEmployee(input: createEmployeeInput!): EmployeeType!
   updateEmployee(input: createEmployeeInput!, id: String!): EmployeeType!
+  employees_addWarehouse(idWarehouse: String!, idEmployee: String!): EmployeeType!
 }
 
 input createWarehouseInput {
@@ -71,6 +75,8 @@ input createEmployeeInput {
   dpi: String!
   image: String
   address: String
+  isSeller: Boolean = false
+  status: String = "Active"
   input_date: DateTime
   output_date: DateTime
 }

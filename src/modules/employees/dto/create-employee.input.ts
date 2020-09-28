@@ -20,6 +20,12 @@ export class createEmployeeInput {
     @Field({nullable:true})
     address?: String
 
+    @Field({defaultValue: false})
+    isSeller: Boolean
+
+    @Field({defaultValue: 'Active'})
+    status: String
+
     @Field({nullable:true})
     input_date?: Date
 
