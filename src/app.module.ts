@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { WarehouseModule } from './modules/warehouses/warehouses.module';
 import { WarehouseCategoriesModule } from "./modules/warehousecategories/warehousecategories.module";
 import { EmployeesModule } from './modules/employees/employees.module';
+import { ProductsModule } from './modules/products/products.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { EmployeesModule } from './modules/employees/employees.module';
     WarehouseCategoriesModule,
     WarehouseModule,
     EmployeesModule,
+    ProductsModule,
   ],
   controllers: [],
   providers: [],
