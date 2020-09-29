@@ -6,6 +6,7 @@ import { WarehouseModule } from './modules/warehouses/warehouses.module';
 import { WarehouseCategoriesModule } from "./modules/warehousecategories/warehousecategories.module";
 import { EmployeesModule } from './modules/employees/employees.module';
 import { ProductsModule } from './modules/products/products.module';
+import { TypeOrmModule } from "@nestjs/typeorm";
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { ProductsModule } from './modules/products/products.module';
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
     }),
+    TypeOrmModule.forRootAsync
     MongooseModule.forRoot('mongodb://localhost/nest',{
       useNewUrlParser: true,
       useFindAndModify: false,
