@@ -18,7 +18,7 @@ type Warehouse {
   id: Float!
   name: String!
   invoicing: Boolean!
-  categoryName: String!
+  category_name: String!
   createdAt: DateTime!
   updatedAt: DateTime!
   warehouseCategory: WarehouseCategory!
@@ -38,7 +38,8 @@ type Product {
 }
 
 type Query {
-  getWarehouses: [Warehouse!]!
+  warehouses: [Warehouse!]
+  warehouse(id: Float!): Warehouse
   warehousesCategories: [WarehouseCategory!]!
   warehouseCategory(id: String!): WarehouseCategory
   products: [Product!]!
@@ -46,6 +47,8 @@ type Query {
 
 type Mutation {
   createWarehouse(data: WarehouseInput!): Warehouse!
+  updateWarehouse(data: WarehouseInput!, id: Float!): Warehouse!
+  removeWarehouse(id: Float!): Warehouse!
   createWarehouseCategory(data: WarehouseCategoryInput!): WarehouseCategory!
   updateWarehouseCategory(data: WarehouseCategoryInput!, id: String!): WarehouseCategory
   removeWarehouseCategory(id: String!): WarehouseCategory
@@ -55,7 +58,7 @@ type Mutation {
 input WarehouseInput {
   name: String!
   invoicing: Boolean!
-  warehouseCategory: String!
+  category_name: String!
 }
 
 input WarehouseCategoryInput {

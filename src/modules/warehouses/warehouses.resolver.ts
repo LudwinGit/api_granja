@@ -12,36 +12,34 @@ export class WarehousesResolver {
         private readonly warehouseCategoryService:WarehouseCategoriesService
     ){}
 
-    @Query(() => [Warehouse])
-    async getWarehouses() {
+    @Query(() => [Warehouse],{nullable:true})
+    async warehouses() {
         return this.warehouseService.findAll();
     }
 
     @ResolveField(()=>WarehouseCategory)
     async warehouseCategory(@Parent() warehouse: Warehouse){
-        const {categoryName} = warehouse;
-        return this.warehouseCategoryService.find(categoryName);
+        const {category_name} = warehouse;
+        return this.warehouseCategoryService.find(category_name);
     }
 
-    // @Query(returns => WarehouseType)
-    // async getWarehouse(@Args('id') id:string){
-    //     return this.warehouseService.findOneById(id);
-    // }
+    @Query(() => Warehouse,{nullable:true})
+    async warehouse(@Args('id') id:number){
+        return this.warehouseService.find(id);
+    }
 
     @Mutation(() => Warehouse)
     async createWarehouse(@Args('data') input: WarehouseInput) {
         return this.warehouseService.create(input);
     }
 
-    // @Mutation(()=>WarehouseType)
-    // async updateWarehouse(@Args('id') id: string, @Args('input') input:createWarehouseInput){
-    //     return this.warehouseService.update(id,input);
-    // }
+    @Mutation(()=>Warehouse)
+    async updateWarehouse(@Args('id') id: number, @Args('data') input:WarehouseInput){
+        return this.warehouseService.update(id,input);
+    }
     
-    // @Mutation(() => WarehouseType)
-    // async removeWarehouse(@Args('id') id: string){
-    //     return this.warehouseService.delete(id);
-    // }
-    // @ResolveProperty()
-    // async 
+    @Mutation(() => Warehouse)
+    async removeWarehouse(@Args('id') id: number){
+        return this.warehouseService.delete(id);
+    }
 }

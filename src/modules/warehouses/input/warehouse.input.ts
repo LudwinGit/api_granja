@@ -9,5 +9,5 @@ export class WarehouseInput {
     invoicing:boolean
     
     @Field()
-    warehouseCategory: string
+    category_name: string
 }

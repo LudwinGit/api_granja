@@ -19,7 +19,7 @@ export class Warehouse{
 
     @Field()
     @Column({name:"category_name"})
-    categoryName: string
+    category_name: string
 
     @Field()
     @CreateDateColumn({ name: 'created_at' })
@@ -29,14 +29,7 @@ export class Warehouse{
     @UpdateDateColumn({ name: 'updated_at' })
     updatedAt: Date
 
-    @ManyToOne(type=>WarehouseCategory, category => category.warehouses)
+    @ManyToOne(()=>WarehouseCategory, category => category.warehouses)
     @JoinColumn({name:"category_name"})
     warehouseCategory: WarehouseCategory
-    // @ManyToOne(
-    //     ()=>WarehouseCategory,
-    //     category => category.warehouseConnection,
-    //     {primary:true},
-    // )
-    // @JoinColumn({name:"warehouseCategory"})
-    // categoryConnection: Promise<WarehouseCategory>;
 }

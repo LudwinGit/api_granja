@@ -34,9 +34,7 @@ export class WarehouseCategoriesService {
             throw new HttpException('Not found',HttpStatus.NOT_FOUND);
         }
 
-        await this.warehousecategoryRepository.update({name:id},{
-            name:input.name.toUpperCase(),
-        })
+        await this.warehousecategoryRepository.update({name:id},input)
 
         return await this.find(input.name)
     }

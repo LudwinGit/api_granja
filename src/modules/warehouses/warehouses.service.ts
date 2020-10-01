@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Warehouse } from './warehouse.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -16,28 +16,37 @@ export class WarehousesService {
         return await this.warehouseRepository.find();
     }
 
-    // async findOneById(id:String):Promise<Warehouse>{
-    //     return await this.modelWarehouse.findById(id);
-    // }
+    async find(id:number):Promise<Warehouse>{
+        return await this.warehouseRepository.findOne({where:{id}});
+    }
 
     async create(input: WarehouseInput): Promise<Warehouse> {
         input.name = input.name.toUpperCase()
-        const warehouseCategory: WarehouseCategory = await this.warehouseCategoryRepository.findOne({where: {name:input.warehouseCategory}});
-        const warehouse: Warehouse = this.warehouseRepository.create({
-            ...input,
-            warehouseCategory,
-        });
+        const warehouseCategory: WarehouseCategory = await this.warehouseCategoryRepository.findOne({where: {name:input.category_name}});
+        if(!warehouseCategory)
+            throw new HttpException('Category Warehouse Not Found',HttpStatus.NOT_FOUND);
+        const warehouse: Warehouse = this.warehouseRepository.create({...input,});
         await this.warehouseRepository.save(warehouse)
         return warehouse
     }
 
-    // async update(ide:String ,updateInput: createWarehouseInput): Promise<Warehouse>{
-    //     updateInput.name = updateInput.name.toUpperCase()
-    //     return await this.modelWarehouse.findByIdAndUpdate(ide,updateInput,{new:false});
-    // }
+    async update(id:number ,input: WarehouseInput): Promise<Warehouse>{
+        input.name = input.name.toUpperCase()
+        let warehouse: Warehouse = await this.warehouseRepository.findOne({id})
+        let warehouseCategory: WarehouseCategory = await this.warehouseCategoryRepository.findOne({where: {name:input.category_name}});
+        if(!warehouse)
+            throw new HttpException('Warehouse Not Found',HttpStatus.NOT_FOUND);
+        if(!warehouseCategory)
+            throw new HttpException('Category Warehouse Not Found',HttpStatus.NOT_FOUND);
+        await this.warehouseRepository.update({id},{...input})
+        return warehouse
+    }
 
-    // async delete(id:String): Promise<Warehouse>{
-    //     return await this.modelWarehouse.findByIdAndRemove(id);
-    // }
-
+    async delete(id:number): Promise<Warehouse>{
+        const warehouse: Warehouse = await this.warehouseRepository.findOne({id});
+        if(!warehouse)
+            throw new HttpException('Warehouse Not Found',HttpStatus.NOT_FOUND);
+        await this.warehouseRepository.remove(warehouse)
+        return warehouse;
+    }
 }
