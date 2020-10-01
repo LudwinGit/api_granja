@@ -7,7 +7,7 @@ import { WarehouseCategoryInput } from "./input/warehousecategory.input";
 export class WarehouseCategoriesResolver {
     constructor(private readonly service: WarehouseCategoriesService) { }
 
-    @Query(() => [WarehouseCategory])
+    @Query(() => [WarehouseCategory],{nullable:true})
     async warehousesCategories() {
         return this.service.findAll();
     }
@@ -22,7 +22,7 @@ export class WarehouseCategoriesResolver {
         return this.service.create(input)
     }
     
-    @Mutation(()=>WarehouseCategory,{nullable:true})
+    @Mutation(()=>WarehouseCategory)
     async updateWarehouseCategory(@Args('id') id: string, @Args('data') input:WarehouseCategoryInput){
         return this.service.update(id.toUpperCase(),input);
     }

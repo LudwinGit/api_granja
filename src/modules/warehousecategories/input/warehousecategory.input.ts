@@ -5,6 +5,6 @@ export class WarehouseCategoryInput {
     @Field()
     name: string;
 
-    @Field()
+    @Field({nullable:true,defaultValue:true})
     isActive: boolean;
 }

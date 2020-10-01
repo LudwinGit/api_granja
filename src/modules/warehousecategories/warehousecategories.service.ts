@@ -16,7 +16,12 @@ export class WarehouseCategoriesService {
 
     async create(input: WarehouseCategoryInput): Promise<WarehouseCategory> {
         input.name = input.name.toUpperCase();
-        let category: WarehouseCategory = await this.warehousecategoryRepository.create(input)
+        let category = await this.warehousecategoryRepository.findOne({
+            where: {name: input.name}
+        })
+        if(category)
+            throw new HttpException('Category already exists',HttpStatus.NOT_MODIFIED);
+        category = await this.warehousecategoryRepository.create(input)
         await this.warehousecategoryRepository.save(category)
         return category;
     }
@@ -30,22 +35,23 @@ export class WarehouseCategoriesService {
         let category = await this.warehousecategoryRepository.findOne({
             where: {name: id}
         })
-        if(!category){
+        let newcategory = await this.warehousecategoryRepository.findOne({
+            where: {name: input.name}
+        })
+        if(!category)
             throw new HttpException('Not found',HttpStatus.NOT_FOUND);
-        }
-
-        await this.warehousecategoryRepository.update({name:id},input)
-
+        if((category.name != input.name) && newcategory)
+            throw new HttpException('Category already exists',HttpStatus.NOT_MODIFIED);
+        await this.warehousecategoryRepository.update({name:id},{...input})
         return await this.find(input.name)
     }
 
     async delete(id: string):Promise<WarehouseCategory>{
-        let category = await this.warehousecategoryRepository.findOne({
+        const category:WarehouseCategory = await this.warehousecategoryRepository.findOne({
             where: {name: id}
         })
-        if(!category){
+        if(!category)
             throw new HttpException('Not found',HttpStatus.NOT_FOUND);
-        }
         await this.warehousecategoryRepository.remove(category)
         return null
     }

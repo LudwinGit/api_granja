@@ -40,7 +40,7 @@ type Product {
 type Query {
   warehouses: [Warehouse!]
   warehouse(id: Float!): Warehouse
-  warehousesCategories: [WarehouseCategory!]!
+  warehousesCategories: [WarehouseCategory!]
   warehouseCategory(id: String!): WarehouseCategory
   products: [Product!]!
 }
@@ -50,7 +50,7 @@ type Mutation {
   updateWarehouse(data: WarehouseInput!, id: Float!): Warehouse!
   removeWarehouse(id: Float!): Warehouse!
   createWarehouseCategory(data: WarehouseCategoryInput!): WarehouseCategory!
-  updateWarehouseCategory(data: WarehouseCategoryInput!, id: String!): WarehouseCategory
+  updateWarehouseCategory(data: WarehouseCategoryInput!, id: String!): WarehouseCategory!
   removeWarehouseCategory(id: String!): WarehouseCategory
   createProduct(input: ProductInput!): Product!
 }
@@ -63,7 +63,7 @@ input WarehouseInput {
 
 input WarehouseCategoryInput {
   name: String!
-  isActive: Boolean!
+  isActive: Boolean = true
 }
 
 input ProductInput {

@@ -20,12 +20,7 @@ export class WarehouseCategory{
     @Field()
     @UpdateDateColumn({ name: 'updated_at' })
     updatedAt: Date
-
-    // @OneToMany(
-    //     () => Warehouse,
-    //     warehouse => warehouse.categoryConnection
-    // )
-    // warehouseConnection:Promise<Warehouse[]>;
-    @OneToMany(type=>Warehouse, warehouse => warehouse.warehouseCategory, {cascade:true})
+    
+    @OneToMany(type=>Warehouse, warehouse => warehouse.warehouseCategory)
     warehouses: Warehouse[];
 }

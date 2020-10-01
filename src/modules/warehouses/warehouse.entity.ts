@@ -29,7 +29,7 @@ export class Warehouse{
     @UpdateDateColumn({ name: 'updated_at' })
     updatedAt: Date
 
-    @ManyToOne(()=>WarehouseCategory, category => category.warehouses)
+    @ManyToOne(()=>WarehouseCategory, category => category.warehouses,{onUpdate:"CASCADE"})
     @JoinColumn({name:"category_name"})
     warehouseCategory: WarehouseCategory
 }
