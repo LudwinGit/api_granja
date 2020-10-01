@@ -1,34 +1,43 @@
-import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Warehouse } from './interfaces/warehouse.interface';
-import { createWarehouseInput } from './dto/create-warehouse.input';
+import { Warehouse } from './warehouse.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { WarehouseInput } from './input/warehouse.input';
+import { WarehouseCategory } from '../warehousecategories/warehousecategories.entity';
 
 @Injectable()
 export class WarehousesService {
-    constructor (@InjectModel('Warehouse') private readonly modelWarehouse:Model<Warehouse>){}
+    constructor (
+        @InjectRepository(Warehouse) private readonly warehouseRepository: Repository<Warehouse> ,
+        @InjectRepository(WarehouseCategory) private readonly warehouseCategoryRepository: Repository<WarehouseCategory> ,
+    ){}
 
     async findAll():Promise<Warehouse[]>{
-        return await this.modelWarehouse.find().exec();
+        return await this.warehouseRepository.find();
     }
 
-    async findOneById(id:String):Promise<Warehouse>{
-        return await this.modelWarehouse.findById(id);
+    // async findOneById(id:String):Promise<Warehouse>{
+    //     return await this.modelWarehouse.findById(id);
+    // }
+
+    async create(input: WarehouseInput): Promise<Warehouse> {
+        input.name = input.name.toUpperCase()
+        const warehouseCategory: WarehouseCategory = await this.warehouseCategoryRepository.findOne({where: {name:input.warehouseCategory}});
+        const warehouse: Warehouse = this.warehouseRepository.create({
+            ...input,
+            warehouseCategory,
+        });
+        await this.warehouseRepository.save(warehouse)
+        return warehouse
     }
 
-    async create(newInput: createWarehouseInput): Promise<Warehouse> {
-        newInput.name = newInput.name.toUpperCase()
-        const newWarehouse = new this.modelWarehouse(newInput)
-        return await newWarehouse.save()
-    }
+    // async update(ide:String ,updateInput: createWarehouseInput): Promise<Warehouse>{
+    //     updateInput.name = updateInput.name.toUpperCase()
+    //     return await this.modelWarehouse.findByIdAndUpdate(ide,updateInput,{new:false});
+    // }
 
-    async update(ide:String ,updateInput: createWarehouseInput): Promise<Warehouse>{
-        updateInput.name = updateInput.name.toUpperCase()
-        return await this.modelWarehouse.findByIdAndUpdate(ide,updateInput,{new:false});
-    }
-
-    async delete(id:String): Promise<Warehouse>{
-        return await this.modelWarehouse.findByIdAndRemove(id);
-    }
+    // async delete(id:String): Promise<Warehouse>{
+    //     return await this.modelWarehouse.findByIdAndRemove(id);
+    // }
 
 }

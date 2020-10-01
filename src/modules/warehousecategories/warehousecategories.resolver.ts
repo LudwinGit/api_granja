@@ -1,35 +1,35 @@
 import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
 import { WarehouseCategoriesService } from "./warehousecategories.service";
-import { WarehouseCategoryType } from "./models/warehousecategories.model";
-import { createWarehouseCategoryInput } from "./dto/create-warehousecategories.input";
+import { WarehouseCategory  } from "./warehousecategories.entity";
+import { WarehouseCategoryInput } from "./input/warehousecategory.input";
 
 @Resolver()
 export class WarehouseCategoriesResolver {
     constructor(private readonly service: WarehouseCategoriesService) { }
 
-    @Query(() => [WarehouseCategoryType])
+    @Query(() => [WarehouseCategory])
     async warehousesCategories() {
         return this.service.findAll();
     }
 
-    @Query(()=> WarehouseCategoryType)
-    async warehouseCategory(@Args('id') id: String){
-        return this.service.findById(id);
+    @Query(()=> WarehouseCategory,{nullable:true})
+    async warehouseCategory(@Args('id') id: string){
+        return this.service.find(id.toUpperCase());
     }
 
-    @Mutation(() => WarehouseCategoryType)
-    async createWarehouseCategories(@Args('input') input: createWarehouseCategoryInput) {
+    @Mutation(() => WarehouseCategory)
+    async createWarehouseCategory(@Args('data') input: WarehouseCategoryInput) {
         return this.service.create(input)
     }
     
-    @Mutation(()=>WarehouseCategoryType)
-    async updateWarehouseCategory(@Args('id') id: String, @Args('input') input:createWarehouseCategoryInput){
-        return this.service.update(id,input);
+    @Mutation(()=>WarehouseCategory,{nullable:true})
+    async updateWarehouseCategory(@Args('id') id: string, @Args('data') input:WarehouseCategoryInput){
+        return this.service.update(id.toUpperCase(),input);
     }
     
-    @Mutation(() => WarehouseCategoryType)
-    async removeWarehouseCategory(@Args('id') id: String){
-        return this.service.delete(id);
+    @Mutation(() => WarehouseCategory,{nullable:true})
+    async removeWarehouseCategory(@Args('id') id: string){
+        return this.service.delete(id.toUpperCase());
     }
 
 }

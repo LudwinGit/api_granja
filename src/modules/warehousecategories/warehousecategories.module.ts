@@ -1,14 +1,13 @@
-import { Module } from '@nestjs/common';
 import { WarehouseCategoriesService } from './warehousecategories.service';
-import { WarehouseCategoriesResolver } from './warehousecategories.resolver';
-import { MongooseModule } from '@nestjs/mongoose';
-import { WarehouseCategorySchema } from './schema/warehousecategories.schema';
+import { Module } from '@nestjs/common';
+import { WarehouseCategoriesResolver } from './warehousecategories.resolver';;
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { WarehouseCategory } from './warehousecategories.entity';
 
 @Module({
-  imports: [MongooseModule.forFeature([
-    { name: 'WarehouseCategory', schema: WarehouseCategorySchema }
-  ])],
-  exports: [WarehouseCategoriesService],
-  providers: [WarehouseCategoriesService, WarehouseCategoriesResolver]
+  imports:[TypeOrmModule.forFeature([WarehouseCategory])],
+  providers: [WarehouseCategoriesService, WarehouseCategoriesResolver],
+  exports:[WarehouseCategoriesService]
 })
-export class WarehouseCategoriesModule { }
+export class WarehouseCategoriesModule { 
+}

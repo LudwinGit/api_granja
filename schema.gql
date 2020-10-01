@@ -2,11 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type WarehouseCategoryType {
-  id: ID!
+type WarehouseCategory {
   name: String!
-  logo: String
-  creationDate: DateTime!
+  isActive: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 """
@@ -14,94 +14,61 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type WarehouseType {
-  id: ID!
-  warehouseCategory: WarehouseCategoryType!
+type Warehouse {
+  id: Float!
   name: String!
-  creationDate: DateTime!
+  invoicing: Boolean!
+  categoryName: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  warehouseCategory: WarehouseCategory!
 }
 
-type EmployeeType {
-  id: ID!
-  name: String!
-  lastname: String!
-  telephone: String!
-  dpi: String!
-  image: String!
-  address: String
-  isSeller: Boolean!
-  status: String!
-  warehouses: [WarehouseType!]
-  input_date: DateTime
-  output_date: DateTime
-  creationDate: DateTime!
-}
-
-type ProductType {
-  id: ID!
+type Product {
+  id: Float!
   sku: String!
   description: String!
   price_cost: Float!
   image: String!
-  status: String!
+  isActive: Boolean!
   units_package: Float!
   min_stock: Float!
-  creationDate: DateTime!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type Query {
-  getWarehouses: [WarehouseType!]!
-  getWarehouse(id: String!): WarehouseType!
-  warehousesCategories: [WarehouseCategoryType!]!
-  warehouseCategory(id: String!): WarehouseCategoryType!
-  employees: [EmployeeType!]!
-  employe(id: String!): EmployeeType!
-  products: [ProductType!]!
-  product(id: String!): ProductType!
+  getWarehouses: [Warehouse!]!
+  warehousesCategories: [WarehouseCategory!]!
+  warehouseCategory(id: String!): WarehouseCategory
+  products: [Product!]!
 }
 
 type Mutation {
-  createWarehouse(input: createWarehouseInput!): WarehouseType!
-  updateWarehouse(input: createWarehouseInput!, id: String!): WarehouseType!
-  removeWarehouse(id: String!): ProductType!
-  createWarehouseCategories(input: createWarehouseCategoryInput!): WarehouseCategoryType!
-  updateWarehouseCategory(input: createWarehouseCategoryInput!, id: String!): WarehouseCategoryType!
-  removeWarehouseCategory(id: String!): WarehouseCategoryType!
-  createEmployee(input: createEmployeeInput!): EmployeeType!
-  updateEmployee(input: createProductInput!, id: String!): ProductType!
-  employees_addWarehouse(idWarehouse: String!, idEmployee: String!): EmployeeType!
-  createProduct(input: createProductInput!): ProductType!
+  createWarehouse(data: WarehouseInput!): Warehouse!
+  createWarehouseCategory(data: WarehouseCategoryInput!): WarehouseCategory!
+  updateWarehouseCategory(data: WarehouseCategoryInput!, id: String!): WarehouseCategory
+  removeWarehouseCategory(id: String!): WarehouseCategory
+  createProduct(input: ProductInput!): Product!
 }
 
-input createWarehouseInput {
+input WarehouseInput {
+  name: String!
+  invoicing: Boolean!
   warehouseCategory: String!
-  name: String!
 }
 
-input createWarehouseCategoryInput {
+input WarehouseCategoryInput {
   name: String!
-  logo: String
+  isActive: Boolean!
 }
 
-input createEmployeeInput {
-  name: String!
-  lastname: String!
-  telephone: String!
-  dpi: String!
-  image: String
-  address: String
-  isSeller: Boolean = false
-  status: String = "Active"
-  input_date: DateTime
-  output_date: DateTime
-}
-
-input createProductInput {
+input ProductInput {
   sku: String!
   description: String!
   price_cost: Float!
   image: String
-  status: String = "Active"
+  isActive: Boolean = true
   units_package: Float = 1
   min_stock: Float = 1
 }

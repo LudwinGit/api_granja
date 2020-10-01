@@ -1,44 +1,47 @@
-import { Resolver, Query, Mutation, Args, ResolveField, Parent, } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, ResolveField, Parent, ResolveProperty } from '@nestjs/graphql';
 import { WarehousesService } from './warehouses.service';
-import { WarehouseType } from './models/warehouse.model';
-import { createWarehouseInput } from './dto/create-warehouse.input';
 import { WarehouseCategoriesService } from '../warehousecategories/warehousecategories.service';
+import { Warehouse } from './warehouse.entity';
+import { WarehouseInput } from './input/warehouse.input';
+import { WarehouseCategory } from '../warehousecategories/warehousecategories.entity';
 
-@Resolver(of => WarehouseType)
+@Resolver(() => Warehouse)
 export class WarehousesResolver {
     constructor(
         private readonly warehouseService:WarehousesService,
         private readonly warehouseCategoryService:WarehouseCategoriesService
     ){}
 
-    @Query(() => [WarehouseType])
+    @Query(() => [Warehouse])
     async getWarehouses() {
         return this.warehouseService.findAll();
     }
 
-    @ResolveField()
-    async warehouseCategory(@Parent() warehouse: WarehouseType){
-        const {warehouseCategory} = warehouse;
-        return this.warehouseCategoryService.findById(warehouseCategory);
+    @ResolveField(()=>WarehouseCategory)
+    async warehouseCategory(@Parent() warehouse: Warehouse){
+        const {categoryName} = warehouse;
+        return this.warehouseCategoryService.find(categoryName);
     }
 
-    @Query(returns => WarehouseType)
-    async getWarehouse(@Args('id') id:String){
-        return this.warehouseService.findOneById(id);
-    }
+    // @Query(returns => WarehouseType)
+    // async getWarehouse(@Args('id') id:string){
+    //     return this.warehouseService.findOneById(id);
+    // }
 
-    @Mutation(() => WarehouseType)
-    async createWarehouse(@Args('input') input: createWarehouseInput) {
+    @Mutation(() => Warehouse)
+    async createWarehouse(@Args('data') input: WarehouseInput) {
         return this.warehouseService.create(input);
     }
 
-    @Mutation(()=>WarehouseType)
-    async updateWarehouse(@Args('id') id: String, @Args('input') input:createWarehouseInput){
-        return this.warehouseService.update(id,input);
-    }
+    // @Mutation(()=>WarehouseType)
+    // async updateWarehouse(@Args('id') id: string, @Args('input') input:createWarehouseInput){
+    //     return this.warehouseService.update(id,input);
+    // }
     
-    @Mutation(() => WarehouseType)
-    async removeWarehouse(@Args('id') id: String){
-        return this.warehouseService.delete(id);
-    }
+    // @Mutation(() => WarehouseType)
+    // async removeWarehouse(@Args('id') id: string){
+    //     return this.warehouseService.delete(id);
+    // }
+    // @ResolveProperty()
+    // async 
 }

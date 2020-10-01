@@ -1,7 +1,7 @@
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { ProductsService } from './products.service';
-import { ProductType } from "./models/products.model";
-import { createProductInput } from './dto/create-product.input';
+import { Product } from './product.entity';
+import { ProductInput } from "./input/product.input";
 
 @Resolver()
 export class ProductsResolver {
@@ -9,28 +9,28 @@ export class ProductsResolver {
         private readonly producService: ProductsService,
     ){}
 
-    @Query(()=>[ProductType],{name:"products"})
+    @Query(()=>[Product],{name:"products"})
     async getProducts() {
         return this.producService.findAll();
     }
 
-    @Query(()=>ProductType,{name:"product"})
-    async getProduct(@Args('id') id:String){
-        return this.producService.findOneById(id);
-    }
+    // @Query(()=>ProductType,{name:"product"})
+    // async getProduct(@Args('id') id:string){
+    //     return this.producService.findOneById(id);
+    // }
 
-    @Mutation(()=>ProductType)
-    async createProduct(@Args('input') input:createProductInput){
+    @Mutation(()=>Product)
+    async createProduct(@Args('input') input:ProductInput){
         return this.producService.create(input)
     }
 
-    @Mutation(()=>ProductType)
-    async updateEmployee(@Args('id') id:String, @Args('input') input:createProductInput){
-        return this.producService.update(id,input)
-    }
+    // @Mutation(()=>ProductType)
+    // async updateEmployee(@Args('id') id:string, @Args('input') input:createProductInput){
+    //     return this.producService.update(id,input)
+    // }
 
-    @Mutation(()=>ProductType)
-    async removeWarehouse(@Args('id') id: String){
-        return this.producService.delete(id);
-    }
+    // @Mutation(()=>ProductType)
+    // async removeWarehouse(@Args('id') id: string){
+    //     return this.producService.delete(id);
+    // }
 }

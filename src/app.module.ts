@@ -1,12 +1,13 @@
-import { ConfigModule } from "@nestjs/config";
+import { ConfigModule, ConfigService } from "@nestjs/config";
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
-import { MongooseModule } from '@nestjs/mongoose';
 import { WarehouseModule } from './modules/warehouses/warehouses.module';
 import { WarehouseCategoriesModule } from "./modules/warehousecategories/warehousecategories.module";
 import { EmployeesModule } from './modules/employees/employees.module';
 import { ProductsModule } from './modules/products/products.module';
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { ConnectionOptions } from "typeorm";
+// import { warehousecategories } from './modules/warehousecategories';
 
 @Module({
   imports: [
@@ -14,18 +15,30 @@ import { TypeOrmModule } from "@nestjs/typeorm";
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
     }),
-    TypeOrmModule.forRootAsync
-    MongooseModule.forRoot('mongodb://localhost/nest',{
-      useNewUrlParser: true,
-      useFindAndModify: false,
-      useCreateIndex:true,
-    }),
+    TypeOrmModule.forRootAsync(
+      {
+        inject: [ConfigService],
+        async useFactory(config: ConfigService){
+          return{
+            type:'postgres',
+            host: config.get('DB_HOST'),
+            username: config.get('DB_USER'),
+            password: config.get('DB_PASSWORD'),
+            port: +config.get('DB_PORT'),
+            database: config.get('DB_NAME'),
+            autoLoadEntities: true,
+            synchronize: true, //Solo en desarrollo
+            // ssl: true,
+          } as ConnectionOptions;
+        },
+      }
+    ),
     WarehouseCategoriesModule,
     WarehouseModule,
-    EmployeesModule,
+    // EmployeesModule,
     ProductsModule,
   ],
   controllers: [],
-  providers: [],
+  // providers: [Warehousecategories],
 })
 export class AppModule {}

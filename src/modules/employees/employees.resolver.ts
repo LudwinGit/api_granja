@@ -36,9 +36,9 @@ export class EmployeesResolver {
         return this.employeeService.delete(id);
     }
 
-    @Mutation(()=>EmployeeType,{name :"employees_addWarehouse"})
-    async addWarehouse(@Args('idEmployee') idEmployee:String,@Args('idWarehouse') idWarehouse:String){
-        const warehouse = await this.warehouseService.findOneById(idWarehouse)
-        return this.employeeService.addWarehouse(idEmployee,warehouse);
-    }
+    // @Mutation(()=>EmployeeType,{name :"employees_addWarehouse"})
+    // async addWarehouse(@Args('idEmployee') idEmployee:String,@Args('idWarehouse') idWarehouse:String){
+    //     const warehouse = await this.warehouseService.findOneById(idWarehouse)
+    //     return this.employeeService.addWarehouse(idEmployee,warehouse);
+    // }
 }

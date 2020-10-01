@@ -1,10 +1,10 @@
 import { Field, InputType } from "@nestjs/graphql";
 
 @InputType()
-export class createWarehouseInput {
+export class WarehouseCategoryInput {
     @Field()
-    warehouseCategory: String
+    name: string;
 
     @Field()
-    name: String
+    isActive: boolean;
 }

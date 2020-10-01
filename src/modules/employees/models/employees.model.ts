@@ -1,5 +1,4 @@
 import { Field, ObjectType, ID } from "@nestjs/graphql";
-import { WarehouseType } from "src/modules/warehouses/models/warehouse.model";
 
 @ObjectType()
 export class EmployeeType {
@@ -30,8 +29,8 @@ export class EmployeeType {
     @Field({defaultValue: 'Active'})
     status: String;
 
-    @Field(type=>[WarehouseType],{nullable:true})
-    warehouses: [WarehouseType]
+    // @Field(type=>[WarehouseType],{nullable:true})
+    // warehouses: [WarehouseType]
 
     @Field({nullable:true})
     input_date: Date;
