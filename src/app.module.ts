@@ -8,6 +8,7 @@ import { ProductsModule } from './modules/products/products.module';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConnectionOptions } from "typeorm";
 // import { warehousecategories } from './modules/warehousecategories';
+import { MeasuresModule } from './modules/measures/measures.module';
 
 @Module({
   imports: [
@@ -37,8 +38,10 @@ import { ConnectionOptions } from "typeorm";
     WarehouseModule,
     // EmployeesModule,
     ProductsModule,
+    MeasuresModule,
   ],
   controllers: [],
+  providers: [],
   // providers: [Warehousecategories],
 })
 export class AppModule {}

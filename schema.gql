@@ -37,12 +37,21 @@ type Product {
   updatedAt: DateTime!
 }
 
+type Measure {
+  id: Float!
+  name: String!
+  unit: Float!
+  isActive: Boolean!
+}
+
 type Query {
   warehouses: [Warehouse!]
   warehouse(id: Float!): Warehouse
   warehousesCategories: [WarehouseCategory!]
   warehouseCategory(id: String!): WarehouseCategory
   products: [Product!]!
+  measures: [Measure!]
+  measure(id: Float!): Measure
 }
 
 type Mutation {
@@ -53,6 +62,9 @@ type Mutation {
   updateWarehouseCategory(data: WarehouseCategoryInput!, id: String!): WarehouseCategory!
   removeWarehouseCategory(id: String!): WarehouseCategory
   createProduct(input: ProductInput!): Product!
+  createMeasure(data: MeasureInput!): Measure!
+  updateMeasure(data: MeasureInput!, id: Float!): Measure!
+  removeMeasure(id: Float!): Measure!
 }
 
 input WarehouseInput {
@@ -74,4 +86,10 @@ input ProductInput {
   isActive: Boolean = true
   units_package: Float = 1
   min_stock: Float = 1
+}
+
+input MeasureInput {
+  name: String!
+  unit: Float!
+  isActive: Boolean = true
 }
