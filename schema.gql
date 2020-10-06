@@ -24,6 +24,13 @@ type Warehouse {
   warehouseCategory: WarehouseCategory!
 }
 
+type Measure {
+  id: Float!
+  name: String!
+  unit: Float!
+  isActive: Boolean!
+}
+
 type Product {
   id: Float!
   sku: String!
@@ -31,17 +38,10 @@ type Product {
   price_cost: Float!
   image: String!
   isActive: Boolean!
-  units_package: Float!
+  measure_default: Float!
   min_stock: Float!
   createdAt: DateTime!
   updatedAt: DateTime!
-}
-
-type Measure {
-  id: Float!
-  name: String!
-  unit: Float!
-  isActive: Boolean!
 }
 
 type Query {

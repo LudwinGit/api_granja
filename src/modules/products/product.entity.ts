@@ -1,5 +1,6 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Measure } from "../measures/measure.entity";
 
 @ObjectType()
 @Entity({name:'product'})
@@ -32,8 +33,8 @@ export class Product{
     isActive: boolean
 
     @Field()
-    @Column()
-    units_package:number
+    @Column({name:"measure_default"})
+    measure_default:number
 
     @Field()
     @Column()
@@ -45,5 +46,9 @@ export class Product{
 
     @Field()
     @UpdateDateColumn({ name: 'updated_at' })
-    updatedAt: Date
+    updatedAt: Date   
+
+    @ManyToMany(()=>Measure)
+    @JoinTable({name:"product_measure"})
+    measures: Measure[]
 }
