@@ -9,28 +9,28 @@ export class ProductsResolver {
         private readonly producService: ProductsService,
     ){}
 
-    @Query(()=>[Product],{name:"products"})
-    async getProducts() {
+    @Query(()=>[Product],{name:"products",nullable:true})
+    async products() {
         return this.producService.findAll();
     }
 
-    // @Query(()=>ProductType,{name:"product"})
-    // async getProduct(@Args('id') id:string){
-    //     return this.producService.findOneById(id);
-    // }
+    @Query(()=>Product,{name:"product",nullable:true})
+    async product(@Args('id') id:number){
+        return this.producService.findOne(id);
+    }
 
     @Mutation(()=>Product)
-    async createProduct(@Args('input') input:ProductInput){
+    async createProduct(@Args('data') input:ProductInput){
         return this.producService.create(input)
     }
 
-    // @Mutation(()=>ProductType)
-    // async updateEmployee(@Args('id') id:string, @Args('input') input:createProductInput){
-    //     return this.producService.update(id,input)
-    // }
+    @Mutation(()=>Product)
+    async updateProduct(@Args('id') id:number, @Args('data') input:ProductInput){
+        return this.producService.update(id,input)
+    }
 
-    // @Mutation(()=>ProductType)
-    // async removeWarehouse(@Args('id') id: string){
-    //     return this.producService.delete(id);
-    // }
+    @Mutation(()=>Product,{nullable:true})
+    async removeProduct(@Args('id') id: number){
+        return this.producService.delete(id);
+    }
 }

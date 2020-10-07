@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { Product } from './product.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -6,21 +6,20 @@ import { ProductInput } from './input/product.input';
 
 @Injectable()
 export class ProductsService {
-    // constructor(@InjectModel('Product') private readonly modelProduct: Model<Product>,) { }
     constructor(
         @InjectRepository(Product)
         private productRepository: Repository<Product>,
-    ){}
+    ) { }
 
     async findAll(): Promise<Product[]> {
-        return await this.productRepository.find();
+        return await this.productRepository.find({ relations: ["measures"] })
     }
 
-    // async findOneById(id:String): Promise<Product>{
-    //     return await this.modelProduct.findById(id);
-    // }
+    async findOne(id: number): Promise<Product> {
+        return await this.productRepository.findOne(id, { relations: ["measures"] });
+    }
 
-    async create(input: ProductInput ): Promise<Product>{
+    async create(input: ProductInput): Promise<Product> {
         input.description = input.description.toUpperCase()
         input.sku = input.sku.toUpperCase()
         let product: Product = await this.productRepository.create(input);
@@ -28,13 +27,21 @@ export class ProductsService {
         return product
     }
 
-    // async update(id: String,updateInput: createProductInput):Promise<Product>{
-    //     updateInput.sku = updateInput.sku.toUpperCase()
-    //     updateInput.description = updateInput.description.toUpperCase()
-    //     return await this.modelProduct.findByIdAndUpdate(id,updateInput,{new: false})
-    // }
+    async update(id: number, updateInput: ProductInput): Promise<Product> {
+        updateInput.description = updateInput.description.toUpperCase()
+        updateInput.sku = updateInput.sku.toUpperCase()
+        let product: Product = await this.productRepository.findOne(id, { relations: ["measures"] });
+        if (!product)
+            throw new HttpException('Product Not Found', HttpStatus.NOT_FOUND);
+        await this.productRepository.update({ id }, { ...updateInput })
+        return product
+    }
 
-    // async delete(id:String):Promise<Product>{
-    //     return await this.modelProduct.findByIdAndRemove(id)
-    // }
+    async delete(id:number):Promise<Product>{
+        let product: Product = await this.productRepository.findOne({ id })
+        if (!product)
+            throw new HttpException('Product Not Found', HttpStatus.NOT_FOUND);
+        await this.productRepository.remove(product)
+        return product
+    }
 }

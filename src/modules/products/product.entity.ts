@@ -33,10 +33,6 @@ export class Product{
     isActive: boolean
 
     @Field()
-    @Column({name:"measure_default"})
-    measure_default:number
-
-    @Field()
     @Column()
     min_stock: number
 
@@ -48,6 +44,8 @@ export class Product{
     @UpdateDateColumn({ name: 'updated_at' })
     updatedAt: Date   
 
+    @Field(()=>[Measure])
+    // @ManyToMany(()=>Measure, measure => measure.products)
     @ManyToMany(()=>Measure)
     @JoinTable({name:"product_measure"})
     measures: Measure[]

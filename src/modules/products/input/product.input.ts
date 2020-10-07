@@ -18,9 +18,5 @@ export class ProductInput {
     isActive: boolean
 
     @Field({defaultValue: 1})
-    units_package: number
-
-    @Field({defaultValue: 1})
     min_stock: number
-
 }

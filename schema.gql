@@ -38,10 +38,10 @@ type Product {
   price_cost: Float!
   image: String!
   isActive: Boolean!
-  measure_default: Float!
   min_stock: Float!
   createdAt: DateTime!
   updatedAt: DateTime!
+  measures: [Measure!]!
 }
 
 type Query {
@@ -49,7 +49,8 @@ type Query {
   warehouse(id: Float!): Warehouse
   warehousesCategories: [WarehouseCategory!]
   warehouseCategory(id: String!): WarehouseCategory
-  products: [Product!]!
+  products: [Product!]
+  product(id: Float!): Product
   measures: [Measure!]
   measure(id: Float!): Measure
 }
@@ -61,7 +62,9 @@ type Mutation {
   createWarehouseCategory(data: WarehouseCategoryInput!): WarehouseCategory!
   updateWarehouseCategory(data: WarehouseCategoryInput!, id: String!): WarehouseCategory!
   removeWarehouseCategory(id: String!): WarehouseCategory
-  createProduct(input: ProductInput!): Product!
+  createProduct(data: ProductInput!): Product!
+  updateProduct(data: ProductInput!, id: Float!): Product!
+  removeProduct(id: Float!): Product
   createMeasure(data: MeasureInput!): Measure!
   updateMeasure(data: MeasureInput!, id: Float!): Measure!
   removeMeasure(id: Float!): Measure!
@@ -84,7 +87,6 @@ input ProductInput {
   price_cost: Float!
   image: String
   isActive: Boolean = true
-  units_package: Float = 1
   min_stock: Float = 1
 }
 
