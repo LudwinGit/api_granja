@@ -33,4 +33,9 @@ export class ProductsResolver {
     async removeProduct(@Args('id') id: number){
         return this.producService.delete(id);
     }
+
+    @Mutation(()=>Product,{nullable:true})
+    async addMeasureToProduct(@Args('idproduct')idproduct:number,@Args('idmeasure')idmeasure:number){
+        return this.producService.addMeasureToProduct(idproduct,idmeasure)
+    }
 }

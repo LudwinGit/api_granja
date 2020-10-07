@@ -3,12 +3,15 @@ import { Product } from './product.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ProductInput } from './input/product.input';
+import { Measure } from '../measures/measure.entity';
 
 @Injectable()
 export class ProductsService {
     constructor(
         @InjectRepository(Product)
         private productRepository: Repository<Product>,
+        @InjectRepository(Measure)
+        private measureRepository: Repository<Measure>,
     ) { }
 
     async findAll(): Promise<Product[]> {
@@ -37,11 +40,23 @@ export class ProductsService {
         return product
     }
 
-    async delete(id:number):Promise<Product>{
+    async delete(id: number): Promise<Product> {
         let product: Product = await this.productRepository.findOne({ id })
         if (!product)
             throw new HttpException('Product Not Found', HttpStatus.NOT_FOUND);
         await this.productRepository.remove(product)
+        return product
+    }
+
+    async addMeasureToProduct(idproduct: number, idmeasure: number): Promise<Product> {
+        let product: Product = await this.productRepository.findOne(idproduct, { relations: ["measures"] });
+        if (!product)
+            throw new HttpException('Product Not Found', HttpStatus.NOT_FOUND);
+        let measure: Measure = await this.measureRepository.findOne(idmeasure);
+        if (!measure)
+            throw new HttpException('Measure Not Found', HttpStatus.NOT_FOUND);
+        product.measures.push(measure);
+        await this.productRepository.save(product)
         return product
     }
 }

@@ -65,6 +65,7 @@ type Mutation {
   createProduct(data: ProductInput!): Product!
   updateProduct(data: ProductInput!, id: Float!): Product!
   removeProduct(id: Float!): Product
+  addMeasureToProduct(idmeasure: Float!, idproduct: Float!): Product
   createMeasure(data: MeasureInput!): Measure!
   updateMeasure(data: MeasureInput!, id: Float!): Measure!
   removeMeasure(id: Float!): Measure!

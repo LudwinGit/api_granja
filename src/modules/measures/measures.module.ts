@@ -6,6 +6,7 @@ import { Measure } from './measure.entity';
 
 @Module({
   imports:[TypeOrmModule.forFeature([Measure])],
-  providers: [MeasuresService, MeasuresResolver]
+  providers: [MeasuresService, MeasuresResolver],
+  exports: [MeasuresService]
 })
 export class MeasuresModule {}
