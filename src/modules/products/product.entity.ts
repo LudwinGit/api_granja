@@ -1,6 +1,7 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn, OneToMany } from "typeorm";
 import { Measure } from "../measures/measure.entity";
+import { ProductMeasure } from "src/manytomany/productMeasure.entity";
 
 @ObjectType()
 @Entity({name:'product'})
@@ -44,9 +45,13 @@ export class Product{
     @UpdateDateColumn({ name: 'updated_at' })
     updatedAt: Date   
 
-    @Field(()=>[Measure])
-    // @ManyToMany(()=>Measure, measure => measure.products)
-    @ManyToMany(()=>Measure)
-    @JoinTable({name:"product_measure"})
-    measures: Measure[]
+    @Field(()=>[ProductMeasure])
+    @OneToMany(()=>ProductMeasure,productmeasure => productmeasure.product)
+    productmeasures: ProductMeasure[]
+
+    // @Field(()=>[Measure])
+    // // @ManyToMany(()=>Measure, measure => measure.products)
+    // @ManyToMany(()=>Measure)
+    // @JoinTable({name:"product_measure"})
+    // measures: Measure[]
 }

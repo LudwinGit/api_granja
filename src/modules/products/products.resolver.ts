@@ -1,12 +1,16 @@
-import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
+import { Resolver, Query, Args, Mutation, ResolveField, Parent, ResolveProperty } from '@nestjs/graphql';
 import { ProductsService } from './products.service';
 import { Product } from './product.entity';
 import { ProductInput } from "./input/product.input";
+import { ProductMeasure } from 'src/manytomany/productMeasure.entity';
+import { MeasuresService } from '../measures/measures.service';
+import { Measure } from '../measures/measure.entity';
 
-@Resolver()
+@Resolver(()=>Product)
 export class ProductsResolver {
     constructor(
         private readonly producService: ProductsService,
+        private readonly measureService: MeasuresService
     ){}
 
     @Query(()=>[Product],{name:"products",nullable:true})
@@ -17,6 +21,17 @@ export class ProductsResolver {
     @Query(()=>Product,{name:"product",nullable:true})
     async product(@Args('id') id:number){
         return this.producService.findOne(id);
+    }
+
+    @ResolveField(()=>[ProductMeasure])
+    async productmeasures(@Parent() product:Product)
+    {
+        let {productmeasures} = product
+        for(let element of productmeasures){
+            let measure:Measure = await this.measureService.find(element.measureId)
+            element.measure = measure
+        }
+        return productmeasures
     }
 
     @Mutation(()=>Product)
@@ -35,7 +50,19 @@ export class ProductsResolver {
     }
 
     @Mutation(()=>Product,{nullable:true})
-    async addMeasureToProduct(@Args('idproduct')idproduct:number,@Args('idmeasure')idmeasure:number){
-        return this.producService.addMeasureToProduct(idproduct,idmeasure)
+    async addMeasureToProduct(
+        @Args('idproduct')idproduct:number,
+        @Args('idmeasure')idmeasure:number,
+        @Args('price')price:number
+    ){
+        return this.producService.addMeasureToProduct(idproduct,idmeasure,price)
+    }
+
+    @Mutation(()=>Product)
+    async removeMeasureToProduct(
+        @Args('idproduct')idproduct:number,
+        @Args('idmeasure')idmeasure:number
+    ){
+        return this.producService.removeMeasureToProduct(idproduct,idmeasure)
     }
 }

@@ -31,6 +31,13 @@ type Measure {
   isActive: Boolean!
 }
 
+type ProductMeasure {
+  productId: Float!
+  measureId: Float!
+  price: Float!
+  measure: Measure!
+}
+
 type Product {
   id: Float!
   sku: String!
@@ -41,7 +48,7 @@ type Product {
   min_stock: Float!
   createdAt: DateTime!
   updatedAt: DateTime!
-  measures: [Measure!]!
+  productmeasures: [ProductMeasure!]!
 }
 
 type Query {
@@ -65,7 +72,8 @@ type Mutation {
   createProduct(data: ProductInput!): Product!
   updateProduct(data: ProductInput!, id: Float!): Product!
   removeProduct(id: Float!): Product
-  addMeasureToProduct(idmeasure: Float!, idproduct: Float!): Product
+  addMeasureToProduct(price: Float!, idmeasure: Float!, idproduct: Float!): Product
+  removeMeasureToProduct(idmeasure: Float!, idproduct: Float!): Product!
   createMeasure(data: MeasureInput!): Measure!
   updateMeasure(data: MeasureInput!, id: Float!): Measure!
   removeMeasure(id: Float!): Measure!

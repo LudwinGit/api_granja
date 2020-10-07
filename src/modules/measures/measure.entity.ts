@@ -1,6 +1,7 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable, OneToMany } from "typeorm";
 import { Product } from "../products/product.entity";
+import { ProductMeasure } from "src/manytomany/productMeasure.entity";
 
 @ObjectType()
 @Entity()
@@ -20,6 +21,9 @@ export class Measure{
     @Field()
     @Column({default:true})
     isActive: boolean
+
+    @OneToMany(()=>ProductMeasure,productmeasure => productmeasure.measure)
+    productmeasures: ProductMeasure[]
 
     // @ManyToMany(()=>Product, product => product.measures)
     //// @JoinTable({name:"product_measure"})
