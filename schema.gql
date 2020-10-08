@@ -36,6 +36,7 @@ type Product {
   image: String!
   isActive: Boolean!
   min_stock: Float!
+  warehouse_category_name: String!
   createdAt: DateTime!
   updatedAt: DateTime!
   productmeasures: [ProductMeasure!]!
@@ -116,6 +117,7 @@ input ProductInput {
   image: String
   isActive: Boolean = true
   min_stock: Float = 1
+  warehouse_category_name: String!
 }
 
 input MeasureInput {

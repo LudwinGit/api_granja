@@ -19,4 +19,7 @@ export class ProductInput {
 
     @Field({defaultValue: 1})
     min_stock: number
+
+    @Field()
+    warehouse_category_name:string
 }

@@ -38,6 +38,10 @@ export class Product{
     min_stock: number
 
     @Field()
+    @Column()
+    warehouse_category_name: string
+
+    @Field()
     @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;
 
