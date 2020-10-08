@@ -6,9 +6,16 @@ import { Product } from './product.entity';
 import { MeasuresModule } from '../measures/measures.module';
 import { Measure } from '../measures/measure.entity';
 import { ProductMeasure } from 'src/manytomany/productMeasure.entity';
+import { WarehouseProduct } from '../warehouses/entitys/warehouseProduct.entity';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([Product,Measure,ProductMeasure]),MeasuresModule],
+  imports:[TypeOrmModule.forFeature(
+    [
+      Product,Measure,ProductMeasure,
+      WarehouseProduct
+    ]
+  ),MeasuresModule],
+  exports:[ProductsService],
   providers: [ProductsResolver, ProductsService]
 })
 export class ProductsModule {}

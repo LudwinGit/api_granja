@@ -1,7 +1,7 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn, OneToMany } from "typeorm";
-import { Measure } from "../measures/measure.entity";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn, OneToMany } from "typeorm";
 import { ProductMeasure } from "src/manytomany/productMeasure.entity";
+import { WarehouseProduct } from "../warehouses/entitys/warehouseProduct.entity";
 
 @ObjectType()
 @Entity({name:'product'})
@@ -48,6 +48,9 @@ export class Product{
     @Field(()=>[ProductMeasure])
     @OneToMany(()=>ProductMeasure,productmeasure => productmeasure.product)
     productmeasures: ProductMeasure[]
+
+    @OneToMany(()=>WarehouseProduct,warehouseProduct => warehouseProduct.product)
+    warehouseProducts: WarehouseProduct[]
 
     // @Field(()=>[Measure])
     // // @ManyToMany(()=>Measure, measure => measure.products)

@@ -1,6 +1,6 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, UpdateDateColumn } from "typeorm";
-import { Warehouse } from "../warehouses/warehouse.entity";
+import { Warehouse } from "../warehouses/entitys/warehouse.entity";
 
 @ObjectType()
 @Entity('warehouse_category')

@@ -23,7 +23,7 @@ export class ProductsService {
     }
 
     async findOne(id: number): Promise<Product> {
-        return await this.productRepository.findOne(id, { relations: ["measures"] });
+        return await this.productRepository.findOne(id, { relations: ["productmeasures"] });
     }
 
     async create(input: ProductInput): Promise<Product> {
@@ -37,7 +37,7 @@ export class ProductsService {
     async update(id: number, updateInput: ProductInput): Promise<Product> {
         updateInput.description = updateInput.description.toUpperCase()
         updateInput.sku = updateInput.sku.toUpperCase()
-        let product: Product = await this.productRepository.findOne(id, { relations: ["measures"] });
+        let product: Product = await this.productRepository.findOne(id, { relations: ["productmeasures"] });
         if (!product)
             throw new HttpException('Product Not Found', HttpStatus.NOT_FOUND);
         await this.productRepository.update({ id }, { ...updateInput })

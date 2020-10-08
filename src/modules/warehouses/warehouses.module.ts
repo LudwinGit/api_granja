@@ -4,10 +4,15 @@ import { WarehousesResolver } from './warehouses.resolver';
 import { WarehouseCategoriesModule } from '../warehousecategories/warehousecategories.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WarehouseCategory } from '../warehousecategories/warehousecategories.entity';
-import { Warehouse } from './warehouse.entity';
+import { Warehouse } from './entitys/warehouse.entity';
+import { WarehouseProduct } from './entitys/warehouseProduct.entity';
+import { ProductsModule } from '../products/products.module';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([Warehouse,WarehouseCategory]),WarehouseCategoriesModule],
+  imports:[TypeOrmModule.forFeature(
+    [
+      Warehouse,WarehouseCategory,WarehouseProduct
+    ]),WarehouseCategoriesModule,ProductsModule],
   exports:[WarehousesService],
   providers: [WarehousesService, WarehousesResolver]
 })

@@ -1,6 +1,7 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { WarehouseCategory } from "../warehousecategories/warehousecategories.entity";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn, OneToMany } from "typeorm";
+import { WarehouseCategory } from "../../warehousecategories/warehousecategories.entity";
+import { WarehouseProduct } from "./warehouseProduct.entity";
 
 @ObjectType()
 @Entity()
@@ -32,4 +33,8 @@ export class Warehouse{
     @ManyToOne(()=>WarehouseCategory, category => category.warehouses,{onUpdate:"CASCADE"})
     @JoinColumn({name:"category_name"})
     warehouseCategory: WarehouseCategory
+
+    @Field(()=>[WarehouseProduct])
+    @OneToMany(() => WarehouseProduct, warehouseProduct => warehouseProduct.warehouse)
+    public warehouseProducts!: WarehouseProduct[];
 }
