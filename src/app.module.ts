@@ -9,6 +9,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConnectionOptions } from "typeorm";
 // import { warehousecategories } from './modules/warehousecategories';
 import { MeasuresModule } from './modules/measures/measures.module';
+import { SellersModule } from './modules/sellers/sellers.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { MeasuresModule } from './modules/measures/measures.module';
     EmployeesModule,
     ProductsModule,
     MeasuresModule,
+    SellersModule,
   ],
   controllers: [],
   providers: [],

@@ -76,6 +76,15 @@ type Employee {
   createdAt: DateTime!
 }
 
+type Seller {
+  id: Float!
+  isPresSale: Boolean!
+  isDirectSale: Boolean!
+  employee: Employee!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Query {
   warehouses: [Warehouse!]
   warehouse(id: Float!): Warehouse
@@ -87,6 +96,8 @@ type Query {
   measure(id: Float!): Measure
   employees: [Employee!]!
   employee(id: Float!): Employee!
+  sellers: [Seller!]
+  seller(id: Float!): Seller
 }
 
 type Mutation {
@@ -108,6 +119,9 @@ type Mutation {
   removeMeasure(id: Float!): Measure!
   createEmployee(data: createEmployeeInput!): Employee!
   updateEmployee(data: createEmployeeInput!, id: Float!): Employee!
+  createSeller(data: SellerInput!): Seller!
+  updateSeller(data: SellerInput!, id: Float!): Seller!
+  removeSeller(id: Float!): Seller
 }
 
 input WarehouseInput {
@@ -154,4 +168,10 @@ input createEmployeeInput {
   isActive: Boolean = true
   input_date: String
   output_date: String
+}
+
+input SellerInput {
+  isPresSale: Boolean!
+  isDirectSale: Boolean!
+  employeeId: Float!
 }
