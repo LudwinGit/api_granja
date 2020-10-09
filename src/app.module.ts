@@ -36,12 +36,11 @@ import { MeasuresModule } from './modules/measures/measures.module';
     ),
     WarehouseCategoriesModule,
     WarehouseModule,
-    // EmployeesModule,
+    EmployeesModule,
     ProductsModule,
     MeasuresModule,
   ],
   controllers: [],
   providers: [],
-  // providers: [Warehousecategories],
 })
 export class AppModule {}

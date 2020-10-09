@@ -1,14 +1,11 @@
 import { Module } from '@nestjs/common';
 import { EmployeesService } from './employees.service';
 import { EmployeesResolver } from './employees.resolver';
-import { MongooseModule } from '@nestjs/mongoose';
-import { EmployeeSchema } from './schema/employee.schema';
-import { WarehouseModule } from '../warehouses/warehouses.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Employee } from './entities/employees.entity';
 
 @Module({
-  imports:[MongooseModule.forFeature([
-    {name:"Employee",schema:EmployeeSchema}
-  ]),WarehouseModule],
+  imports:[TypeOrmModule.forFeature([Employee])],
   providers: [EmployeesService, EmployeesResolver]
 })
 export class EmployeesModule {}

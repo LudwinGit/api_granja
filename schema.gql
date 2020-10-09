@@ -62,6 +62,20 @@ type Warehouse {
   warehouseCategory: WarehouseCategory!
 }
 
+type Employee {
+  id: Float!
+  name: String!
+  lastname: String!
+  telephone: String!
+  dpi: String!
+  image: String!
+  address: String!
+  isActive: Boolean!
+  input_date: DateTime!
+  output_date: DateTime!
+  createdAt: DateTime!
+}
+
 type Query {
   warehouses: [Warehouse!]
   warehouse(id: Float!): Warehouse
@@ -71,12 +85,14 @@ type Query {
   product(id: Float!): Product
   measures: [Measure!]
   measure(id: Float!): Measure
+  employees: [Employee!]!
+  employee(id: Float!): Employee!
 }
 
 type Mutation {
   createWarehouse(data: WarehouseInput!): Warehouse!
   updateWarehouse(data: WarehouseInput!, id: Float!): Warehouse!
-  removeWarehouse(id: Float!): Warehouse!
+  removeWarehouse(id: Float!): Employee!
   addProductToWarehouse(data: WarehouseProductInput!): Warehouse!
   removeProductToWarehouse(data: WarehouseProductInput!): Warehouse!
   createWarehouseCategory(data: WarehouseCategoryInput!): WarehouseCategory!
@@ -90,6 +106,8 @@ type Mutation {
   createMeasure(data: MeasureInput!): Measure!
   updateMeasure(data: MeasureInput!, id: Float!): Measure!
   removeMeasure(id: Float!): Measure!
+  createEmployee(data: createEmployeeInput!): Employee!
+  updateEmployee(data: createEmployeeInput!, id: Float!): Employee!
 }
 
 input WarehouseInput {
@@ -124,4 +142,16 @@ input MeasureInput {
   name: String!
   unit: Float!
   isActive: Boolean = true
+}
+
+input createEmployeeInput {
+  name: String!
+  lastname: String!
+  telephone: String
+  dpi: String
+  image: String
+  address: String
+  isActive: Boolean = true
+  input_date: String
+  output_date: String
 }

@@ -1,40 +1,48 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Employee } from './interfaces/employees.interface';
-import { createEmployeeInput } from "./dto/create-employee.input";
+import { createEmployeeInput } from "./input/create-employee.input";
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Employee } from './entities/employees.entity';
 
 @Injectable()
 export class EmployeesService {
-    constructor(@InjectModel('Employee') private readonly modelEmployee: Model<Employee>,) { }
+    constructor(
+        @InjectRepository(Employee) private readonly employeeRepository: Repository<Employee>
+    ) { }
     
     async findAll(): Promise<Employee[]> {
-        return await this.modelEmployee.find().exec();
+        return await this.employeeRepository.find();
     }
 
-    async findOneById(id:String): Promise<Employee>{
-        return await this.modelEmployee.findById(id);
+    async find(id:number): Promise<Employee>{
+        return await this.employeeRepository.findOne(id)
     }
 
-    async create(newInput: createEmployeeInput): Promise<Employee>{
-        newInput.name = newInput.name.toUpperCase()
-        newInput.lastname = newInput.lastname.toUpperCase()
-        return await this.modelEmployee.create(newInput)
+    async create(input: createEmployeeInput): Promise<Employee>{
+        input.name = input.name.toUpperCase()
+        input.lastname = input.lastname.toUpperCase()
+        const employee = await this.employeeRepository.create(input)
+        await this.employeeRepository.save(employee)
+        return employee
     }
 
-    async update(id: String,updateInput: createEmployeeInput):Promise<Employee>{
-        updateInput.name = updateInput.name.toUpperCase()
-        updateInput.lastname = updateInput.lastname.toUpperCase()
-        return await this.modelEmployee.findByIdAndUpdate(id,updateInput,{new: false})
+    async update(id: number,input: createEmployeeInput):Promise<Employee>{
+        input.name = input.name.toUpperCase()
+        input.lastname = input.lastname.toUpperCase()
+        let employee: Employee = await this.employeeRepository.findOne(id)
+        if (!employee)
+            throw new HttpException('Employee Not Found', HttpStatus.NOT_FOUND);
+        await this.employeeRepository.update(id,input)
+        return employee
     }
 
-    async delete(id:String):Promise<Employee>{
-        return await this.modelEmployee.findByIdAndRemove(id)
+    async delete(id:number):Promise<Employee>{
+        let employee: Employee = await this.employeeRepository.findOne(id)
+        if (!employee)
+            throw new HttpException('Employee Not Found', HttpStatus.NOT_FOUND);
+        await this.employeeRepository.remove(employee)
+        return employee
     }
-
-    // async addWarehouse(idEmployee:String,warehouse:Warehouse):Promise<Employee>{
-    //     const employee = await this.modelEmployee.findById(idEmployee)
-    //     employee.warehouses.push(warehouse)
-    //     return await employee.save()
-    // }
 }

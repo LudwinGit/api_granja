@@ -1,44 +1,36 @@
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { EmployeesService } from './employees.service';
-import { EmployeeType } from './models/employees.model';
-import { createEmployeeInput } from './dto/create-employee.input';
-import { WarehousesService } from '../warehouses/warehouses.service';
+import { createEmployeeInput } from './input/create-employee.input';
+import { Employee } from './entities/employees.entity';
 
 @Resolver()
 export class EmployeesResolver {
     constructor(
         private readonly employeeService: EmployeesService,
-        private readonly warehouseService: WarehousesService
     ) { }
 
-    @Query(()=>[EmployeeType],{name:"employees"})
-    async getEmployees() {
+    @Query(()=>[Employee])
+    async employees() {
         return this.employeeService.findAll();
     }
 
-    @Query(()=>EmployeeType,{name:"employe"})
-    async getEmployee(@Args('id') id:String){
-        return this.employeeService.findOneById(id);
+    @Query(()=>Employee)
+    async employee(@Args('id') id:number){
+        return this.employeeService.find(id);
     }
 
-    @Mutation(()=>EmployeeType)
-    async createEmployee(@Args('input') input:createEmployeeInput){
+    @Mutation(()=>Employee)
+    async createEmployee(@Args('data') input:createEmployeeInput){
         return this.employeeService.create(input)
     }
 
-    @Mutation(()=>EmployeeType)
-    async updateEmployee(@Args('id') id:String, @Args('input') input:createEmployeeInput){
+    @Mutation(()=>Employee)
+    async updateEmployee(@Args('id') id:number, @Args('data') input:createEmployeeInput){
         return this.employeeService.update(id,input)
     }
 
-    @Mutation(()=>EmployeeType)
-    async removeWarehouse(@Args('id') id: String){
+    @Mutation(()=>Employee)
+    async removeWarehouse(@Args('id') id: number){
         return this.employeeService.delete(id);
     }
-
-    // @Mutation(()=>EmployeeType,{name :"employees_addWarehouse"})
-    // async addWarehouse(@Args('idEmployee') idEmployee:String,@Args('idWarehouse') idWarehouse:String){
-    //     const warehouse = await this.warehouseService.findOneById(idWarehouse)
-    //     return this.employeeService.addWarehouse(idEmployee,warehouse);
-    // }
 }
