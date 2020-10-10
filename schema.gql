@@ -85,6 +85,13 @@ type Seller {
   updatedAt: DateTime!
 }
 
+type Route {
+  id: Float!
+  description: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Query {
   warehouses: [Warehouse!]
   warehouse(id: Float!): Warehouse
@@ -98,6 +105,8 @@ type Query {
   employee(id: Float!): Employee!
   sellers: [Seller!]
   seller(id: Float!): Seller
+  routes: [Route!]
+  route(id: Float!): Route
 }
 
 type Mutation {
@@ -122,6 +131,9 @@ type Mutation {
   createSeller(data: SellerInput!): Seller!
   updateSeller(data: SellerInput!, id: Float!): Seller!
   removeSeller(id: Float!): Seller
+  createRoute(data: RouteInput!): Route
+  updateRoute(data: RouteInput!, id: Float!): Route
+  removeRoute(id: Float!): Route
 }
 
 input WarehouseInput {
@@ -174,4 +186,8 @@ input SellerInput {
   isPresSale: Boolean!
   isDirectSale: Boolean!
   employeeId: Float!
+}
+
+input RouteInput {
+  description: String!
 }

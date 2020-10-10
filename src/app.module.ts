@@ -10,6 +10,7 @@ import { ConnectionOptions } from "typeorm";
 // import { warehousecategories } from './modules/warehousecategories';
 import { MeasuresModule } from './modules/measures/measures.module';
 import { SellersModule } from './modules/sellers/sellers.module';
+import { RoutesModule } from './modules/routes/routes.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { SellersModule } from './modules/sellers/sellers.module';
     ProductsModule,
     MeasuresModule,
     SellersModule,
+    RoutesModule,
   ],
   controllers: [],
   providers: [],
