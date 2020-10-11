@@ -11,6 +11,7 @@ import { ConnectionOptions } from "typeorm";
 import { MeasuresModule } from './modules/measures/measures.module';
 import { SellersModule } from './modules/sellers/sellers.module';
 import { RoutesModule } from './modules/routes/routes.module';
+import { SalesModule } from './modules/sales/sales.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { RoutesModule } from './modules/routes/routes.module';
     MeasuresModule,
     SellersModule,
     RoutesModule,
+    SalesModule,
   ],
   controllers: [],
   providers: [],

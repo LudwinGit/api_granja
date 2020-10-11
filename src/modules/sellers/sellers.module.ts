@@ -13,6 +13,7 @@ import { Employee } from '../employees/entities/employees.entity';
       Employee
     ])
     ,EmployeesModule],
-  providers: [SellersService, SellersResolver]
+  providers: [SellersService, SellersResolver],
+  exports: [SellersService]
 })
 export class SellersModule {}

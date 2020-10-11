@@ -1,6 +1,7 @@
 import { ObjectType, Field } from "@nestjs/graphql";
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne, JoinColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne, JoinColumn, OneToMany } from "typeorm";
 import { Employee } from "src/modules/employees/entities/employees.entity";
+import { Sale } from "src/modules/sales/entities/sale.entity";
 
 @ObjectType()
 @Entity()
@@ -29,4 +30,7 @@ export class Seller{
     @Field()
     @UpdateDateColumn({ name: 'updated_at' })
     updatedAt: Date
+
+    @OneToMany(() => Sale, sale => sale.seller)
+    sales: Sale[];
 }
