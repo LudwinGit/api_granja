@@ -29,8 +29,8 @@ export class EmployeesResolver {
         return this.employeeService.update(id,input)
     }
 
-    @Mutation(()=>Employee)
-    async removeWarehouse(@Args('id') id: number){
+    @Mutation(()=>Employee,{nullable:true})
+    async removeEmployee(@Args('id') id: number){
         return this.employeeService.delete(id);
     }
 }

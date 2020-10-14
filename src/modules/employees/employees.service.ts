@@ -39,7 +39,7 @@ export class EmployeesService {
     }
 
     async delete(id:number):Promise<Employee>{
-        let employee: Employee = await this.employeeRepository.findOne(id)
+        const employee: Employee = await this.employeeRepository.findOne(id)
         if (!employee)
             throw new HttpException('Employee Not Found', HttpStatus.NOT_FOUND);
         await this.employeeRepository.remove(employee)

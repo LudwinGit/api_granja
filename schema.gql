@@ -18,13 +18,13 @@ type Employee {
   id: Float!
   name: String!
   lastname: String!
-  telephone: String!
-  dpi: String!
-  image: String!
-  address: String!
+  telephone: String
+  dpi: String
+  image: String
+  address: String
   isActive: Boolean!
-  input_date: DateTime!
-  output_date: DateTime!
+  input_date: DateTime
+  output_date: DateTime
   createdAt: DateTime!
 }
 
@@ -130,7 +130,7 @@ type Query {
 type Mutation {
   createWarehouse(data: WarehouseInput!): Warehouse!
   updateWarehouse(data: WarehouseInput!, id: Float!): Warehouse!
-  removeWarehouse(id: Float!): Employee!
+  removeWarehouse(id: Float!): Warehouse!
   addProductToWarehouse(data: WarehouseProductInput!): Warehouse!
   removeProductToWarehouse(data: WarehouseProductInput!): Warehouse!
   createWarehouseCategory(data: WarehouseCategoryInput!): WarehouseCategory!
@@ -146,6 +146,7 @@ type Mutation {
   removeMeasure(id: Float!): Measure!
   createEmployee(data: createEmployeeInput!): Employee!
   updateEmployee(data: createEmployeeInput!, id: Float!): Employee!
+  removeEmployee(id: Float!): Employee
   createSeller(data: SellerInput!): Seller!
   updateSeller(data: SellerInput!, id: Float!): Seller!
   removeSeller(id: Float!): Seller

@@ -16,31 +16,31 @@ export class Employee{
     @Column({length:100})
     lastname: string;
 
-    @Field()
+    @Field({nullable:true})
     @Column({length:20,nullable:true})
     telephone: string;
 
-    @Field()
+    @Field({nullable:true})
     @Column({length:20,nullable:true})
     dpi: string;
 
-    @Field()
+    @Field({nullable:true})
     @Column({length:150,nullable:true})
     image: string;
 
-    @Field()
+    @Field({nullable:true})
     @Column({length:150, nullable:true})
     address: string;
 
     @Field()
-    @Column({default:true})
+    @Column({default:true,name:"active"})
     isActive: boolean
 
-    @Field()
+    @Field({nullable:true})
     @Column({type:"date",nullable:true})
     input_date: Date;
     
-    @Field()
+    @Field({nullable:true})
     @Column({type:"date",nullable:true})
     output_date: Date;
 
