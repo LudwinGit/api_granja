@@ -51,7 +51,7 @@ export class ProductsService {
         if (!product)
             throw new HttpException('Product Not Found', HttpStatus.NOT_FOUND);
         await this.productRepository.remove(product)
-        return product
+        return null
     }
 
     async addMeasureToProduct(idproduct: number, idmeasure: number, price: number): Promise<Product> {

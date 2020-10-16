@@ -43,6 +43,6 @@ export class EmployeesService {
         if (!employee)
             throw new HttpException('Employee Not Found', HttpStatus.NOT_FOUND);
         await this.employeeRepository.remove(employee)
-        return employee
+        return null
     }
 }
