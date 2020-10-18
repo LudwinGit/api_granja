@@ -1,5 +1,6 @@
 import { Field, ObjectType, ID } from "@nestjs/graphql";
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from "typeorm";
+import { Seller } from "src/modules/sellers/entities/seller.entity";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToOne } from "typeorm";
 
 @ObjectType()
 @Entity()
@@ -47,4 +48,7 @@ export class Employee{
     @Field()
     @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;
+
+    @OneToOne(type => Seller, seller => seller.employee) // specify inverse side as a second parameter
+    seller: Seller;
 }

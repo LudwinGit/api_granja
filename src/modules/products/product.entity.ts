@@ -12,7 +12,7 @@ export class Product{
     id: number;
 
     @Field()
-    @Column({length:20})
+    @Column({length:20,unique:true})
     sku: string
 
     @Field()

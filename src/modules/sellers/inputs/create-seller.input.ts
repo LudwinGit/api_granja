@@ -3,7 +3,7 @@ import { InputType, Field } from "@nestjs/graphql";
 @InputType()
 export class SellerInput{
     @Field()
-    isPresSale: boolean
+    isPreSale: boolean
 
     @Field()
     isDirectSale: boolean

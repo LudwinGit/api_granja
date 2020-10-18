@@ -33,7 +33,7 @@ export class SellersService {
         let seller = await this.sellerRepository.findOne(id,{relations:["employee"]})
         if (!seller)
             throw new HttpException('Seller Not Found', HttpStatus.NOT_FOUND);
-        seller.isPresSale = input.isPresSale
+        seller.isPreSale = input.isPreSale
         seller.isDirectSale = input.isDirectSale
         seller.employee = employee
         await this.sellerRepository.update(id,seller)

@@ -14,6 +14,11 @@ export class EmployeesResolver {
         return this.employeeService.findAll();
     }
 
+    @Query(()=>[Employee])
+    async employeesWithoutSeller(){
+        return this.employeeService.withoutSeller();
+    }
+
     @Query(()=>Employee)
     async employee(@Args('id') id:number){
         return this.employeeService.find(id);

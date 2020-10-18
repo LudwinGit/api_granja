@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { createEmployeeInput } from "./input/create-employee.input";
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { createQueryBuilder, Repository } from 'typeorm';
 import { Employee } from './entities/employees.entity';
 
 @Injectable()
@@ -14,6 +14,16 @@ export class EmployeesService {
     
     async findAll(): Promise<Employee[]> {
         return await this.employeeRepository.find();
+    }
+
+    async withoutSeller(): Promise<Employee[]>{
+        const employees = await
+            this.employeeRepository
+            .createQueryBuilder("employee")
+            .leftJoinAndSelect("employee.seller","seller")
+            .where("seller.employee is null")
+            .getMany()
+        return employees
     }
 
     async find(id:number): Promise<Employee>{

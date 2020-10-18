@@ -12,7 +12,7 @@ export class Seller{
 
     @Field()
     @Column({name:"pre_sale"})
-    isPresSale: boolean;
+    isPreSale: boolean;
 
     @Field()
     @Column({name:"direct_sale"})

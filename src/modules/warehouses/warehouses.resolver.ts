@@ -53,7 +53,7 @@ export class WarehousesResolver {
         return this.warehouseService.update(id,input);
     }
     
-    @Mutation(() => Warehouse)
+    @Mutation(() => Warehouse,{nullable:true})
     async removeWarehouse(@Args('id') id: number){
         return this.warehouseService.delete(id);
     }

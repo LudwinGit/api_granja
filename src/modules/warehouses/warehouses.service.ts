@@ -24,7 +24,6 @@ export class WarehousesService {
     }
 
     async create(input: WarehouseInput): Promise<Warehouse> {
-        input.name = input.name.toUpperCase()
         const warehouseCategory: WarehouseCategory = await this.warehouseCategoryRepository.findOne({where: {name:input.category_name}});
         if(!warehouseCategory)
             throw new HttpException('Category Warehouse Not Found',HttpStatus.NOT_FOUND);
@@ -34,7 +33,6 @@ export class WarehousesService {
     }
 
     async update(id:number ,input: WarehouseInput): Promise<Warehouse>{
-        input.name = input.name.toUpperCase()
         let warehouse: Warehouse = await this.warehouseRepository.findOne(id,{relations:["warehouseProducts"]})
         let warehouseCategory: WarehouseCategory = await this.warehouseCategoryRepository.findOne({where: {name:input.category_name}});
         if(!warehouse)
@@ -50,7 +48,7 @@ export class WarehousesService {
         if(!warehouse)
             throw new HttpException('Warehouse Not Found',HttpStatus.NOT_FOUND);
         await this.warehouseRepository.remove(warehouse)
-        return warehouse;
+        return null;
     }
 
     async addProductToWarehouse(input:WarehouseProductInput):Promise<Warehouse>{
