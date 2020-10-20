@@ -99,6 +99,17 @@ type WarehouseProduct {
   warehouse: Warehouse!
 }
 
+type Transaction {
+  id: Float!
+  warehouseOrigin: Warehouse
+  warehouseDestiny: Warehouse
+  observation: String!
+  status: String!
+  type: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Warehouse {
   id: Float!
   name: String!
@@ -129,6 +140,8 @@ type Query {
   routes: [Route!]
   route(id: Float!): Route
   sales: [Sale!]!
+  transactions: [Transaction!]!
+  transaction(id: Float!): [Transaction!]!
 }
 
 type Mutation {
@@ -160,6 +173,9 @@ type Mutation {
   updateRoute(data: RouteInput!, id: Float!): Route
   removeRoute(id: Float!): Route
   createSale(data: SaleInput!): Sale!
+  createTransaction(data: TransactionInput!): Transaction!
+  updateTransaction(data: TransactionInput!, id: Float!): Transaction!
+  removeTransaction(id: Float!): Transaction
 }
 
 input WarehouseInput {
@@ -230,4 +246,12 @@ input SaleInput {
   observation: String
   sellerId: Float
   routeId: Float!
+}
+
+input TransactionInput {
+  warehouseOriginId: Float
+  warehouseDestinyId: Float
+  observation: String
+  status: String
+  type: String!
 }
