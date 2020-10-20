@@ -1,8 +1,9 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn, OneToMany } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn, OneToMany, ManyToMany, JoinTable } from "typeorm";
 import { WarehouseCategory } from "../../warehousecategories/warehousecategories.entity";
 import { WarehouseProduct } from "./warehouseProduct.entity";
 import { Sale } from "src/modules/sales/entities/sale.entity";
+import { Seller } from "src/modules/sellers/entities/seller.entity";
 
 @ObjectType()
 @Entity()
@@ -41,4 +42,8 @@ export class Warehouse{
     @Field(()=>[WarehouseProduct])
     @OneToMany(() => WarehouseProduct, warehouseProduct => warehouseProduct.warehouse)
     public warehouseProducts!: WarehouseProduct[];
+
+    @ManyToMany(()=> Seller)
+    @JoinTable({name:"seller_warehouse"})
+    sellers: Seller[]
 }

@@ -28,6 +28,11 @@ export class WarehousesResolver {
         return this.warehouseCategoryService.find(category_name);
     }
 
+    @Query(()=>[Warehouse],{nullable:true})
+    async warehousesWithoutAddingtoSeller(@Args('sellerId') sellerId:number){
+        return this.warehouseService.warehousesWithoutAddingtoSeller(sellerId)
+    }
+
     @ResolveField(()=>[WarehouseProduct])
     async warehouseProducts(@Parent() warehouse:Warehouse){
         let {warehouseProducts} = warehouse

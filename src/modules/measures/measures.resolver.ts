@@ -14,6 +14,12 @@ export class MeasuresResolver {
         return this.measureService.findAll();
     }
 
+    @Query(()=>[Measure],{nullable:true})
+    async withoutMeasure(@Args('productId') productId: number){
+        return this.measureService.withoutMeasure(productId);
+    }
+
+
     @Query(() => Measure,{nullable:true})
     async measure(@Args('id') id:number){
         return this.measureService.find(id);

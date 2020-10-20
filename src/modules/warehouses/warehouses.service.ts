@@ -23,6 +23,16 @@ export class WarehousesService {
         return await this.warehouseRepository.findOne(id,{relations:["warehouseProducts"]});
     }
 
+    async warehousesWithoutAddingtoSeller(sellerId:number):Promise<Warehouse[]>{
+        const warehouse = await
+            this.warehouseRepository
+            .createQueryBuilder("warehouse")
+            .leftJoinAndSelect("warehouse.sellers","seller")
+            .where("seller.id is null")
+            .getMany()
+        return warehouse
+    }
+
     async create(input: WarehouseInput): Promise<Warehouse> {
         const warehouseCategory: WarehouseCategory = await this.warehouseCategoryRepository.findOne({where: {name:input.category_name}});
         if(!warehouseCategory)
@@ -72,4 +82,6 @@ export class WarehousesService {
         await this.warehouseProductRepository.remove(warehouseProduct)
         return await this.warehouseRepository.findOne({id:input.warehouseId},{relations:["warehouseProducts"]})
     }
+
+    
 }

@@ -35,6 +35,7 @@ type Seller {
   employee: Employee!
   createdAt: DateTime!
   updatedAt: DateTime!
+  warehouses: [Warehouse!]!
 }
 
 type Route {
@@ -80,7 +81,7 @@ type Product {
   sku: String!
   description: String!
   price_cost: Float!
-  image: String!
+  image: String
   isActive: Boolean!
   min_stock: Float!
   warehouse_category_name: String!
@@ -111,12 +112,14 @@ type Warehouse {
 
 type Query {
   warehouses: [Warehouse!]
+  warehousesWithoutAddingtoSeller(sellerId: Float!): [Warehouse!]
   warehouse(id: Float!): Warehouse
   warehousesCategories: [WarehouseCategory!]
   warehouseCategory(id: String!): WarehouseCategory
   products: [Product!]
   product(id: Float!): Product
   measures: [Measure!]
+  withoutMeasure(productId: Float!): [Measure!]
   measure(id: Float!): Measure
   employees: [Employee!]!
   employeesWithoutSeller: [Employee!]!
@@ -151,6 +154,8 @@ type Mutation {
   createSeller(data: SellerInput!): Seller!
   updateSeller(data: SellerInput!, id: Float!): Seller!
   removeSeller(id: Float!): Seller
+  addWarehouseToSeller(data: SellerWarehouseInput!): Warehouse
+  removeWarehouseToSeller(data: SellerWarehouseInput!): Warehouse
   createRoute(data: RouteInput!): Route
   updateRoute(data: RouteInput!, id: Float!): Route
   removeRoute(id: Float!): Route
@@ -207,6 +212,11 @@ input SellerInput {
   isPreSale: Boolean!
   isDirectSale: Boolean!
   employeeId: Float!
+}
+
+input SellerWarehouseInput {
+  sellerId: Float!
+  warehouseId: Float!
 }
 
 input RouteInput {

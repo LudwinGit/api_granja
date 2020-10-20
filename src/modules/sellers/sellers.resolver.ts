@@ -4,6 +4,8 @@ import { EmployeesService } from '../employees/employees.service';
 import { Seller } from './entities/seller.entity';
 import { Employee } from '../employees/entities/employees.entity';
 import { SellerInput } from './inputs/create-seller.input';
+import { Warehouse } from '../warehouses/entitys/warehouse.entity';
+import { SellerWarehouseInput } from './inputs/addwarehouse.input';
 
 @Resolver(() => Seller)
 export class SellersResolver {
@@ -37,6 +39,16 @@ export class SellersResolver {
     @Mutation(() => Seller, { nullable: true })
     async removeSeller(@Args('id') id: number) {
         return this.sellerService.delete(id)
+    }
+
+    @Mutation(()=>Warehouse,{nullable:true})
+    async addWarehouseToSeller(@Args('data') input:SellerWarehouseInput){
+        return this.sellerService.addWarehouseToSeller(input)
+    }
+
+    @Mutation(()=>Warehouse,{nullable:true})
+    async removeWarehouseToSeller(@Args('data') input:SellerWarehouseInput){
+        return this.sellerService.removeWarehouseToSeller(input)
     }
 
     @ResolveField(() => Employee, { nullable: true })

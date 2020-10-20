@@ -5,14 +5,17 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Seller } from './entities/seller.entity';
 import { EmployeesModule } from '../employees/employees.module';
 import { Employee } from '../employees/entities/employees.entity';
+import { WarehouseModule } from '../warehouses/warehouses.module';
+import { Warehouse } from '../warehouses/entitys/warehouse.entity';
 
 @Module({
   imports:[
     TypeOrmModule.forFeature([
       Seller,
-      Employee
+      Employee,
+      Warehouse
     ])
-    ,EmployeesModule],
+    ,EmployeesModule,WarehouseModule],
   providers: [SellersService, SellersResolver],
   exports: [SellersService]
 })

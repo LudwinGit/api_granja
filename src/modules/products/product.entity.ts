@@ -26,7 +26,7 @@ export class Product{
     })
     price_cost: number
 
-    @Field()
+    @Field({nullable:true})
     @Column({nullable:true})
     image: string
 

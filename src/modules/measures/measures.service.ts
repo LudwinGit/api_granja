@@ -15,6 +15,16 @@ export class MeasuresService {
         return this.measureRepository.find()
     }
 
+    async withoutMeasure(productId:number): Promise<Measure[]>{
+        const measures = await
+            this.measureRepository
+            .createQueryBuilder("measure")
+            .leftJoinAndSelect("measure.productmeasures","product","product.productId=:productId",{productId})
+            .where("product.measureId is null")
+            .getMany()
+        return measures
+    }
+
     async find(id:number):Promise<Measure>{
         return await this.measureRepository.findOne({where:{id}});
     }
