@@ -132,6 +132,13 @@ type Warehouse {
   warehouseCategory: WarehouseCategory!
 }
 
+type User {
+  id: Float!
+  username: String!
+  password: String!
+  employee: Employee!
+}
+
 type Query {
   warehouses: [Warehouse!]
   warehousesWithoutAddingtoSeller(sellerId: Float!): [Warehouse!]
@@ -154,6 +161,8 @@ type Query {
   sales: [Sale!]!
   transactions: [Transaction!]
   transaction(id: Float!): Transaction
+  users: [User!]
+  user(id: Float!): User
 }
 
 type Mutation {
@@ -190,6 +199,7 @@ type Mutation {
   removeTransaction(id: Float!): Transaction
   addProductToTransaction(data: TransactionProductInput!): TransactionProduct
   removeProductToTransaction(transactionId: Float!, productId: Float!): TransactionProduct
+  createUser(data: UserInput!): User!
 }
 
 input WarehouseInput {
@@ -276,4 +286,10 @@ input TransactionProductInput {
   units: Float!
   packages: Float!
   units_per_package: Float!
+}
+
+input UserInput {
+  username: String!
+  password: String!
+  employeeId: Float!
 }

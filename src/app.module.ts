@@ -13,6 +13,7 @@ import { SellersModule } from './modules/sellers/sellers.module';
 import { RoutesModule } from './modules/routes/routes.module';
 import { SalesModule } from './modules/sales/sales.module';
 import { TransactionsModule } from './modules/transactions/transactions.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { TransactionsModule } from './modules/transactions/transactions.module';
     RoutesModule,
     SalesModule,
     TransactionsModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],
