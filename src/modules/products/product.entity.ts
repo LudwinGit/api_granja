@@ -3,6 +3,7 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateCol
 import { ProductMeasure } from "src/manytomany/productMeasure.entity";
 import { WarehouseProduct } from "../warehouses/entitys/warehouseProduct.entity";
 import { SaleProduct } from "../sales/entities/saleProduct.entity";
+import { TransactionProduct } from "../transactions/entities/transactionProduct.entity";
 
 @ObjectType()
 @Entity({name:'product'})
@@ -39,6 +40,10 @@ export class Product{
     min_stock: number
 
     @Field()
+    @Column({default:1})
+    units_per_package:number
+
+    @Field()
     @Column()
     warehouse_category_name: string
 
@@ -60,6 +65,9 @@ export class Product{
 
     @OneToMany(()=>WarehouseProduct,warehouseProduct => warehouseProduct.product)
     warehouseProducts: WarehouseProduct[]
+
+    @OneToMany(()=>TransactionProduct,transactionProduct => transactionProduct.product)
+    transactionProducts: TransactionProduct[]
 
     // @Field(()=>[Measure])
     // // @ManyToMany(()=>Measure, measure => measure.products)

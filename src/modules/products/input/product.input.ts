@@ -21,5 +21,8 @@ export class ProductInput {
     min_stock: number
 
     @Field()
+    units_per_package:number
+
+    @Field()
     warehouse_category_name:string
 }

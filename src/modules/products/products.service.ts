@@ -76,10 +76,16 @@ export class ProductsService {
     }
 
     async removeMeasureToProduct(idproduct: number, idmeasure: number): Promise<Product> {
-        let productMeasure: ProductMeasure = await this.productmeasureRepository.findOne({productId:idproduct,measureId:idmeasure})
-        if(!productMeasure)
-            throw new HttpException('Product Measure Not Found',HttpStatus.NOT_FOUND);
+        let productMeasure: ProductMeasure = await this.productmeasureRepository.findOne({ productId: idproduct, measureId: idmeasure })
+        if (!productMeasure)
+            throw new HttpException('Product Measure Not Found', HttpStatus.NOT_FOUND);
         await this.productmeasureRepository.remove(productMeasure)
-        return await this.productRepository.findOne(idproduct,{relations:["productmeasures"]})
+        return await this.productRepository.findOne(idproduct, { relations: ["productmeasures"] })
+    }
+
+    async productsByCategoryWarehouse(category: string): Promise<Product[]> {
+        let products = await this.productRepository
+            .find({ where: { warehouse_category_name: category }, relations: ["productmeasures"] })
+        return products
     }
 }

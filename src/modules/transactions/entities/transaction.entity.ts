@@ -1,6 +1,7 @@
 import { ObjectType, Field } from "@nestjs/graphql";
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, Column, OneToMany } from "typeorm";
 import { Warehouse } from "src/modules/warehouses/entitys/warehouse.entity";
+import { TransactionProduct } from "./transactionProduct.entity";
 
 @ObjectType()
 @Entity()
@@ -36,4 +37,8 @@ export class Transaction{
     @Field()
     @UpdateDateColumn({ name: 'updated_at' })
     updatedAt: Date   
+
+    @Field(()=>[TransactionProduct],{nullable:true})
+    @OneToMany(()=>TransactionProduct,transactionProduct => transactionProduct.transaction)
+    transactionProducts: TransactionProduct[]
 }

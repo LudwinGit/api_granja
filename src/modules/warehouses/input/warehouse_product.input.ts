@@ -8,9 +8,6 @@ export class WarehouseProductInput {
     @Field()
     warehouseId: number
     
-    @Field({nullable:true})
-    default_measure: number
-    
     @Field({nullable:true,defaultValue:0})
     stock: number
 }

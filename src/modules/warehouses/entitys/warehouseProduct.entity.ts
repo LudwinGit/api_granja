@@ -4,33 +4,29 @@ import { Product } from "src/modules/products/product.entity";
 import { Warehouse } from "src/modules/warehouses/entitys/warehouse.entity";
 
 @ObjectType()
-@Entity({name:"warehouse_product"})
-export class WarehouseProduct{
+@Entity({ name: "warehouse_product" })
+export class WarehouseProduct {
     @Field()
     @PrimaryColumn()
-    public productId!:number
+    public productId!: number
 
     @Field()
     @PrimaryColumn()
-    public warehouseId!:number
-
-    @Field({nullable:true})
-    @Column({nullable:true})
-    default_measure: number
+    public warehouseId!: number
 
     @Field()
-    @Column()
-    stock:number
+    @Column({ default: 0 })
+    stock: number
 
-    @Field(()=>Product)
-    @ManyToOne(()=>Product, product => product.warehouseProducts,{
-        primary:true
+    @Field(() => Product)
+    @ManyToOne(() => Product, product => product.warehouseProducts, {
+        primary: true
     })
     product!: Product
 
-    @Field(()=>Warehouse)
-    @ManyToOne(()=>Warehouse, Warehouse => Warehouse.warehouseProducts,{
-        primary:true
+    @Field(() => Warehouse)
+    @ManyToOne(() => Warehouse, Warehouse => Warehouse.warehouseProducts, {
+        primary: true
     })
     warehouse!: Warehouse
 }

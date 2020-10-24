@@ -8,11 +8,12 @@ import { Warehouse } from './entitys/warehouse.entity';
 import { Transaction } from '../transactions/entities/transaction.entity';
 import { WarehouseProduct } from './entitys/warehouseProduct.entity';
 import { ProductsModule } from '../products/products.module';
+import { Product } from '../products/product.entity';
 
 @Module({
   imports:[TypeOrmModule.forFeature(
     [
-      Warehouse,WarehouseCategory,WarehouseProduct,Transaction
+      Warehouse,WarehouseCategory,WarehouseProduct,Transaction,Product
     ]),WarehouseCategoriesModule,ProductsModule],
   exports:[WarehousesService],
   providers: [WarehousesService, WarehousesResolver]

@@ -76,29 +76,6 @@ type ProductMeasure {
   measure: Measure!
 }
 
-type Product {
-  id: Float!
-  sku: String!
-  description: String!
-  price_cost: Float!
-  image: String
-  isActive: Boolean!
-  min_stock: Float!
-  warehouse_category_name: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  productmeasures: [ProductMeasure!]!
-}
-
-type WarehouseProduct {
-  productId: Float!
-  warehouseId: Float!
-  default_measure: Float
-  stock: Float!
-  product: Product!
-  warehouse: Warehouse!
-}
-
 type Transaction {
   id: Float!
   warehouseOrigin: Warehouse
@@ -108,6 +85,40 @@ type Transaction {
   type: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+  transactionProducts: [TransactionProduct!]
+}
+
+type TransactionProduct {
+  transactionId: Float!
+  productId: Float!
+  units: Float!
+  packages: Float!
+  units_per_package: Float!
+  transaction: Transaction!
+  product: Product!
+}
+
+type Product {
+  id: Float!
+  sku: String!
+  description: String!
+  price_cost: Float!
+  image: String
+  isActive: Boolean!
+  min_stock: Float!
+  units_per_package: Float!
+  warehouse_category_name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  productmeasures: [ProductMeasure!]!
+}
+
+type WarehouseProduct {
+  productId: Float!
+  warehouseId: Float!
+  stock: Float!
+  product: Product!
+  warehouse: Warehouse!
 }
 
 type Warehouse {
@@ -129,6 +140,7 @@ type Query {
   warehouseCategory(id: String!): WarehouseCategory
   products: [Product!]
   product(id: Float!): Product
+  productsByCategoryWarehouse(category_name: String!): [Product!]
   measures: [Measure!]
   withoutMeasure(productId: Float!): [Measure!]
   measure(id: Float!): Measure
@@ -140,8 +152,8 @@ type Query {
   routes: [Route!]
   route(id: Float!): Route
   sales: [Sale!]!
-  transactions: [Transaction!]!
-  transaction(id: Float!): [Transaction!]!
+  transactions: [Transaction!]
+  transaction(id: Float!): Transaction
 }
 
 type Mutation {
@@ -176,6 +188,8 @@ type Mutation {
   createTransaction(data: TransactionInput!): Transaction!
   updateTransaction(data: TransactionInput!, id: Float!): Transaction!
   removeTransaction(id: Float!): Transaction
+  addProductToTransaction(data: TransactionProductInput!): TransactionProduct
+  removeProductToTransaction(transactionId: Float!, productId: Float!): TransactionProduct
 }
 
 input WarehouseInput {
@@ -187,7 +201,6 @@ input WarehouseInput {
 input WarehouseProductInput {
   productId: Float!
   warehouseId: Float!
-  default_measure: Float
   stock: Float = 0
 }
 
@@ -203,6 +216,7 @@ input ProductInput {
   image: String
   isActive: Boolean = true
   min_stock: Float = 1
+  units_per_package: Float!
   warehouse_category_name: String!
 }
 
@@ -254,4 +268,12 @@ input TransactionInput {
   observation: String
   status: String
   type: String!
+}
+
+input TransactionProductInput {
+  transactionId: Float!
+  productId: Float!
+  units: Float!
+  packages: Float!
+  units_per_package: Float!
 }
