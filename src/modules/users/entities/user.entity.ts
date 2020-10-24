@@ -17,6 +17,10 @@ export class User {
     @Column({ length: 250 })
     password: string
 
+    @Field()
+    @Column({default:true,name:"active"})
+    isActive: boolean
+
     @Field(() => Employee)
     @OneToOne(() => Employee)
     @JoinColumn()

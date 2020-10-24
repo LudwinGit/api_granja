@@ -1,5 +1,6 @@
 import { Field, ObjectType, ID } from "@nestjs/graphql";
 import { Seller } from "src/modules/sellers/entities/seller.entity";
+import { User } from "src/modules/users/entities/user.entity";
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToOne } from "typeorm";
 
 @ObjectType()
@@ -51,4 +52,7 @@ export class Employee{
 
     @OneToOne(type => Seller, seller => seller.employee) // specify inverse side as a second parameter
     seller: Seller;
+
+    @OneToOne(type => User, user => user.employee) // specify inverse side as a second parameter
+    user: User;
 }

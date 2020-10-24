@@ -10,4 +10,7 @@ export class UserInput {
 
     @Field()
     employeeId: number
+
+    @Field()
+    isActive: boolean
 }

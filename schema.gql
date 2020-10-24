@@ -14,6 +14,14 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type User {
+  id: Float!
+  username: String!
+  password: String!
+  isActive: Boolean!
+  employee: Employee!
+}
+
 type Employee {
   id: Float!
   name: String!
@@ -132,13 +140,6 @@ type Warehouse {
   warehouseCategory: WarehouseCategory!
 }
 
-type User {
-  id: Float!
-  username: String!
-  password: String!
-  employee: Employee!
-}
-
 type Query {
   warehouses: [Warehouse!]
   warehousesWithoutAddingtoSeller(sellerId: Float!): [Warehouse!]
@@ -200,6 +201,9 @@ type Mutation {
   addProductToTransaction(data: TransactionProductInput!): TransactionProduct
   removeProductToTransaction(transactionId: Float!, productId: Float!): TransactionProduct
   createUser(data: UserInput!): User!
+  updateUser(data: UserInput!, id: Float!): User!
+  removeUser(id: Float!): User
+  deactivateUser(id: Float!): User!
 }
 
 input WarehouseInput {
@@ -292,4 +296,5 @@ input UserInput {
   username: String!
   password: String!
   employeeId: Float!
+  isActive: Boolean!
 }
