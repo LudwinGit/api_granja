@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { UserInput } from './input/user.input';
-import { genSaltSync, hashSync, compareSync } from "bcryptjs";
 import { PasswordService } from '../common/services/password.service';
 import { EmployeesService } from '../employees/employees.service';
 
@@ -53,11 +52,15 @@ export class UsersService {
     }
 
     async deactivate(id: number) {
-        const user: User = await this.userRepository.findOne(id,{ relations: ['employee']})
+        const user: User = await this.userRepository.findOne(id, { relations: ['employee'] })
         if (!user)
             throw new HttpException('User Not Found', HttpStatus.NOT_FOUND);
         user.isActive = false
         await this.userRepository.update(id, user)
         return user;
+    }
+
+    async findByUsername(username: string): Promise<User> {
+        return this.userRepository.findOne({ username })
     }
 }

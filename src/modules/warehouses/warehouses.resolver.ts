@@ -35,9 +35,9 @@ export class WarehousesResolver {
 
     @ResolveField(()=>[WarehouseProduct])
     async warehouseProducts(@Parent() warehouse:Warehouse){
-        let {warehouseProducts} = warehouse
-        for(let element of warehouseProducts){
-            let product:Product = await this.productService.findOne(element.productId)
+        const {warehouseProducts} = warehouse
+        for(const element of warehouseProducts){
+            const product:Product = await this.productService.findOne(element.productId)
             element.product = product
         }
         return warehouseProducts

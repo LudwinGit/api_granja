@@ -14,6 +14,8 @@ import { RoutesModule } from './modules/routes/routes.module';
 import { SalesModule } from './modules/sales/sales.module';
 import { TransactionsModule } from './modules/transactions/transactions.module';
 import { UsersModule } from './modules/users/users.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { WarehouseproductModule } from './modules/warehouseproduct/warehouseproduct.module';
 
 @Module({
   imports: [
@@ -49,6 +51,8 @@ import { UsersModule } from './modules/users/users.module';
     SalesModule,
     TransactionsModule,
     UsersModule,
+    AuthModule,
+    WarehouseproductModule,
   ],
   controllers: [],
   providers: [],

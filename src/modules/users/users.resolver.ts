@@ -2,9 +2,6 @@ import { Resolver, Query, Args, Mutation, ResolveField, Parent } from '@nestjs/g
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 import { UserInput } from './input/user.input';
-import { Employee } from '../employees/entities/employees.entity';
-import { EmployeesService } from '../employees/employees.service';
-
 @Resolver(() => User)
 export class UsersResolver {
     constructor(

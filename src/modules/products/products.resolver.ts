@@ -24,16 +24,16 @@ export class ProductsResolver {
     }
 
     @Query(()=>[Product],{nullable:true})
-    async productsByCategoryWarehouse(@Args('category_name') category: string){
-        return this.producService.productsByCategoryWarehouse(category);
+    async productsByWarehouse(@Args('id') id: number){
+        return this.producService.productsByCategoryWarehouse(id);
     }
 
     @ResolveField(()=>[ProductMeasure])
     async productmeasures(@Parent() product:Product)
     {
-        let {productmeasures} = product
-        for(let element of productmeasures){
-            let measure:Measure = await this.measureService.find(element.measureId)
+        const {productmeasures} = product
+        for(const element of productmeasures){
+            const measure:Measure = await this.measureService.find(element.measureId)
             element.measure = measure
         }
         return productmeasures

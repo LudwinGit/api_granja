@@ -24,6 +24,16 @@ export class EmployeesService {
         return employees
     }
 
+    async withoutUser(): Promise<Employee[]>{
+        const employees = await
+            this.employeeRepository
+            .createQueryBuilder("employee")
+            .leftJoinAndSelect("employee.user","user")
+            .where("user.employee is null")
+            .getMany()
+        return employees
+    }
+
     async find(id:number): Promise<Employee>{
         return await this.employeeRepository.findOne(id)
     }

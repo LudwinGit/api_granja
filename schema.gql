@@ -18,6 +18,7 @@ type User {
   id: Float!
   username: String!
   password: String!
+  type: String!
   isActive: Boolean!
   employee: Employee!
 }
@@ -148,12 +149,13 @@ type Query {
   warehouseCategory(id: String!): WarehouseCategory
   products: [Product!]
   product(id: Float!): Product
-  productsByCategoryWarehouse(category_name: String!): [Product!]
+  productsByWarehouse(id: Float!): [Product!]
   measures: [Measure!]
   withoutMeasure(productId: Float!): [Measure!]
   measure(id: Float!): Measure
   employees: [Employee!]!
   employeesWithoutSeller: [Employee!]!
+  employeesWithoutUser: [Employee!]!
   employee(id: Float!): Employee!
   sellers: [Seller!]
   seller(id: Float!): Seller
@@ -182,7 +184,7 @@ type Mutation {
   removeMeasureToProduct(idmeasure: Float!, idproduct: Float!): Product!
   createMeasure(data: MeasureInput!): Measure!
   updateMeasure(data: MeasureInput!, id: Float!): Measure!
-  removeMeasure(id: Float!): Measure!
+  removeMeasure(id: Float!): Measure
   createEmployee(data: createEmployeeInput!): Employee!
   updateEmployee(data: createEmployeeInput!, id: Float!): Employee!
   removeEmployee(id: Float!): Employee
@@ -200,10 +202,12 @@ type Mutation {
   removeTransaction(id: Float!): Transaction
   addProductToTransaction(data: TransactionProductInput!): TransactionProduct
   removeProductToTransaction(transactionId: Float!, productId: Float!): TransactionProduct
+  applyTransaction(id: Float!): Boolean
   createUser(data: UserInput!): User!
   updateUser(data: UserInput!, id: Float!): User!
   removeUser(id: Float!): User
   deactivateUser(id: Float!): User!
+  login(data: AuthInput!): User
 }
 
 input WarehouseInput {
@@ -296,5 +300,11 @@ input UserInput {
   username: String!
   password: String!
   employeeId: Float!
+  type: String!
   isActive: Boolean!
+}
+
+input AuthInput {
+  username: String!
+  password: String!
 }

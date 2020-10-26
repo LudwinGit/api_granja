@@ -38,7 +38,7 @@ export class MeasuresService {
 
     async update(id:number ,input: MeasureInput): Promise<Measure>{
         input.name = input.name.toUpperCase()
-        let measure: Measure = await this.measureRepository.findOne({id})
+        const measure: Measure = await this.measureRepository.findOne({id})
         if(!measure)
             throw new HttpException('Measure Not Found',HttpStatus.NOT_FOUND);
         await this.measureRepository.update({id},{...input})
@@ -50,6 +50,6 @@ export class MeasuresService {
         if(!measure)
             throw new HttpException('Measure Not Found',HttpStatus.NOT_FOUND);
         await this.measureRepository.remove(measure)
-        return measure;
+        return null;
     }
 }

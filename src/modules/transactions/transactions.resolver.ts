@@ -50,16 +50,22 @@ export class TransactionsResolver {
 
     @Mutation(() => TransactionProduct, { nullable: true })
     async removeProductToTransaction(@Args('productId') productId: number, @Args('transactionId') transactionId: number) {
-        return this.transactionService.removeProduct(productId,transactionId)
+        return this.transactionService.removeProduct(productId, transactionId)
     }
 
     @ResolveField(() => [TransactionProduct])
     async transactionProducts(@Parent() transaction: Transaction) {
-        let { transactionProducts } = transaction
-        for (let element of transactionProducts) {
-            let product: Product = await this.productService.findOne(element.productId)
+        const { transactionProducts } = transaction
+        for (const element of transactionProducts) {
+            const product: Product = await this.productService.findOne(element.productId)
             element.product = product
         }
         return transactionProducts
     }
+
+    @Mutation(() => Boolean, { nullable: true })
+    async applyTransaction(@Args('id') id: number) {
+        return this.transactionService.applyTransaction(id)
+    }
+
 }

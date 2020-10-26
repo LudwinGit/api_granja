@@ -12,5 +12,8 @@ export class UserInput {
     employeeId: number
 
     @Field()
+    type: string
+
+    @Field()
     isActive: boolean
 }

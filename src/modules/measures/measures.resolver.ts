@@ -7,21 +7,21 @@ import { MeasuresService } from './measures.service';
 export class MeasuresResolver {
     constructor(
         private readonly measureService: MeasuresService
-    ){}
+    ) { }
 
-    @Query(()=>[Measure],{nullable:true})
-    async measures(){
+    @Query(() => [Measure], { nullable: true })
+    async measures() {
         return this.measureService.findAll();
     }
 
-    @Query(()=>[Measure],{nullable:true})
-    async withoutMeasure(@Args('productId') productId: number){
+    @Query(() => [Measure], { nullable: true })
+    async withoutMeasure(@Args('productId') productId: number) {
         return this.measureService.withoutMeasure(productId);
     }
 
 
-    @Query(() => Measure,{nullable:true})
-    async measure(@Args('id') id:number){
+    @Query(() => Measure, { nullable: true })
+    async measure(@Args('id') id: number) {
         return this.measureService.find(id);
     }
 
@@ -30,13 +30,13 @@ export class MeasuresResolver {
         return this.measureService.create(input);
     }
 
-    @Mutation(()=>Measure)
-    async updateMeasure(@Args('id') id: number, @Args('data') input:MeasureInput){
-        return this.measureService.update(id,input);
-    }
-    
     @Mutation(() => Measure)
-    async removeMeasure(@Args('id') id: number){
+    async updateMeasure(@Args('id') id: number, @Args('data') input: MeasureInput) {
+        return this.measureService.update(id, input);
+    }
+
+    @Mutation(() => Measure, { nullable: true })
+    async removeMeasure(@Args('id') id: number) {
         return this.measureService.delete(id);
     }
 }

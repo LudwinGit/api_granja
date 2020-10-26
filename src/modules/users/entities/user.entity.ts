@@ -18,7 +18,11 @@ export class User {
     password: string
 
     @Field()
-    @Column({default:true,name:"active"})
+    @Column({ default: "U", type: "char", length: 1 })
+    type: string
+
+    @Field()
+    @Column({ default: true, name: "active" })
     isActive: boolean
 
     @Field(() => Employee)

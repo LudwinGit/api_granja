@@ -25,6 +25,10 @@ export class WarehousesService {
         return await this.warehouseRepository.findOne(id, { relations: ["warehouseProducts"] });
     }
 
+    async findByCategory(category: string): Promise<Warehouse[]> {
+        return await this.warehouseRepository.find({ category_name: category });
+    }
+
     async warehousesWithoutAddingtoSeller(sellerId: number): Promise<Warehouse[]> {
         const warehouse = await
             this.warehouseRepository
@@ -53,8 +57,8 @@ export class WarehousesService {
     }
 
     async update(id: number, input: WarehouseInput): Promise<Warehouse> {
-        let warehouse: Warehouse = await this.warehouseRepository.findOne(id, { relations: ["warehouseProducts"] })
-        let warehouseCategory: WarehouseCategory = await this.warehouseCategoryRepository.findOne({ where: { name: input.category_name } });
+        const warehouse: Warehouse = await this.warehouseRepository.findOne(id, { relations: ["warehouseProducts"] })
+        const warehouseCategory: WarehouseCategory = await this.warehouseCategoryRepository.findOne({ where: { name: input.category_name } });
         if (!warehouse)
             throw new HttpException('Warehouse Not Found', HttpStatus.NOT_FOUND);
         if (!warehouseCategory)
@@ -72,7 +76,7 @@ export class WarehousesService {
     }
 
     async addProductToWarehouse(input: WarehouseProductInput): Promise<Warehouse> {
-        let warehouse: Warehouse = await this.warehouseRepository.findOne({ id: input.warehouseId }, { relations: ["warehouseProducts"] })
+        const warehouse: Warehouse = await this.warehouseRepository.findOne({ id: input.warehouseId }, { relations: ["warehouseProducts"] })
         if (!warehouse)
             throw new HttpException('Warehouse Not Found', HttpStatus.NOT_FOUND);
         const warehouseProduct = new WarehouseProduct()
@@ -85,7 +89,7 @@ export class WarehousesService {
     }
 
     async removeProductToWarehouse(input: WarehouseProductInput): Promise<Warehouse> {
-        let warehouseProduct = await this.warehouseProductRepository.findOne({ productId: input.productId, warehouseId: input.warehouseId })
+        const warehouseProduct = await this.warehouseProductRepository.findOne({ productId: input.productId, warehouseId: input.warehouseId })
         if (!warehouseProduct)
             throw new HttpException('Product Warehouse Not Found', HttpStatus.NOT_FOUND);
         await this.warehouseProductRepository.remove(warehouseProduct)
