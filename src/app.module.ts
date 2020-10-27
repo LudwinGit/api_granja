@@ -16,6 +16,7 @@ import { TransactionsModule } from './modules/transactions/transactions.module';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { WarehouseproductModule } from './modules/warehouseproduct/warehouseproduct.module';
+import { ClientsModule } from './modules/clients/clients.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { WarehouseproductModule } from './modules/warehouseproduct/warehouseprod
     UsersModule,
     AuthModule,
     WarehouseproductModule,
+    ClientsModule,
   ],
   controllers: [],
   providers: [],

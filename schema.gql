@@ -47,6 +47,15 @@ type Seller {
   warehouses: [Warehouse!]!
 }
 
+type Client {
+  id: Float!
+  name: String!
+  nit: String!
+  address: String!
+  route: Route!
+  createdAt: DateTime!
+}
+
 type Route {
   id: Float!
   description: String!
@@ -62,11 +71,10 @@ type Sale {
   discount: Float!
   status: String!
   observation: String!
-  cashier: Float!
   seller: Seller!
+  client: Client!
   route: Route!
   invoiced: Boolean!
-  consolidated: Float!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -162,6 +170,11 @@ type Query {
   routes: [Route!]
   route(id: Float!): Route
   sales: [Sale!]!
+  salesBySeller(sellerId: Float!): [Sale!]!
+  sale(id: Float!): Sale!
+  clients: [Client!]
+  client: Client
+  clientsByRoute(routeId: Float!): [Client!]
   transactions: [Transaction!]
   transaction(id: Float!): Transaction
   users: [User!]
@@ -197,6 +210,9 @@ type Mutation {
   updateRoute(data: RouteInput!, id: Float!): Route
   removeRoute(id: Float!): Route
   createSale(data: SaleInput!): Sale!
+  createClient(data: ClientInput!): Client!
+  updateClient(data: ClientInput!, id: Float!): Client!
+  removeClient(id: Float!): Client
   createTransaction(data: TransactionInput!): Transaction!
   updateTransaction(data: TransactionInput!, id: Float!): Transaction!
   removeTransaction(id: Float!): Transaction
@@ -273,10 +289,19 @@ input RouteInput {
 
 input SaleInput {
   type_sale: String!
+  warehouseId: Float!
   discount: Float
   status: String
   observation: String
-  sellerId: Float
+  sellerId: Float!
+  routeId: Float!
+  clientId: Float
+}
+
+input ClientInput {
+  name: String!
+  nit: String!
+  address: String!
   routeId: Float!
 }
 

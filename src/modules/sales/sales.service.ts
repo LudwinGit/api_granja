@@ -5,29 +5,47 @@ import { Repository } from 'typeorm';
 import { SaleInput } from './input/sale.input';
 import { Route } from '../routes/entities/route.entity';
 import { Seller } from '../sellers/entities/seller.entity';
+import { ClientsService } from '../clients/clients.service';
+import { SellersService } from '../sellers/sellers.service';
+import { RoutesService } from '../routes/routes.service';
+import { WarehousesService } from '../warehouses/warehouses.service';
 
 @Injectable()
 export class SalesService {
     constructor(
-        @InjectRepository(Sale) private readonly saleRepository:Repository<Sale>,
-        @InjectRepository(Route) private readonly routeRepository:Repository<Route>,
-        @InjectRepository(Seller) private readonly sellerRepository:Repository<Seller>
-    ){}
+        @InjectRepository(Sale) private readonly saleRepository: Repository<Sale>,
+        private readonly clientService: ClientsService,
+        private readonly sellerService: SellersService,
+        private readonly routeService: RoutesService,
+        private readonly warehouseService: WarehousesService,
+    ) { }
 
-    async findAll():Promise<Sale[]>{
-        return await this.saleRepository.find({relations:["seller","route"]})
+    async findAll(): Promise<Sale[]> {
+        return await this.saleRepository.find({ relations: ["seller", "route", "client", "warehouse"] })
     }
 
-    async create(input:SaleInput):Promise<Sale>{
-        const route:Route = await this.routeRepository.findOne(input.routeId)
+    async find(id: number): Promise<Sale> {
+        return await this.saleRepository.findOne(id, { relations: ["seller", "route", "client", "warehouse"] })
+    }
+
+    async findBySeller(sellerId: number): Promise<Sale[]> {
+        return await this.saleRepository.find({ where: { seller: sellerId }, relations: ["seller", "route", "client", "warehouse"] })
+    }
+
+    async create(input: SaleInput): Promise<Sale> {
+        const route: Route = await this.routeService.find(input.routeId)
         if (!route)
             throw new HttpException('Route Not Found', HttpStatus.NOT_FOUND);
-        const seller:Seller = await this.sellerRepository.findOne(input.sellerId)
+        const seller: Seller = await this.sellerService.find(input.sellerId)
         if (!seller)
             throw new HttpException('Seller Not Found', HttpStatus.NOT_FOUND);
-        const sale:Sale = this.saleRepository.create(input)
+        const client = input.clientId ? await this.clientService.find(input.clientId) : null
+        const warehouse = await this.warehouseService.find(input.warehouseId)
+        const sale: Sale = this.saleRepository.create(input)
+        sale.client = client
         sale.route = route
         sale.seller = seller
+        sale.warehouse = warehouse
         await this.saleRepository.save(sale)
         return sale
     }

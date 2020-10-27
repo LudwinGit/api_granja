@@ -13,18 +13,28 @@ export class SalesResolver {
     ) { }
 
     @Query(() => [Sale])
-    async sales() {
+    async sales(): Promise<Sale[]> {
         return this.salesService.findAll()
     }
 
+    @Query(() => [Sale])
+    async salesBySeller(@Args('sellerId') id: number): Promise<Sale[]> {
+        return this.salesService.findBySeller(id)
+    }
+
+    @Query(() => Sale)
+    async sale(@Args('id') id: number): Promise<Sale> {
+        return this.salesService.find(id)
+    }
+
     @Mutation(() => Sale)
-    async createSale(@Args('data') input: SaleInput) {
+    async createSale(@Args('data') input: SaleInput): Promise<Sale> {
         return this.salesService.create(input)
     }
 
     @ResolveField(() => Seller, { nullable: true })
-    async seller(@Parent() sale: Sale) {
-        const seller:Seller = await this.sellerService.find(sale.seller.id)
+    async seller(@Parent() sale: Sale): Promise<Seller> {
+        const seller: Seller = await this.sellerService.find(sale.seller.id)
         console.log(seller);
         return seller
     }

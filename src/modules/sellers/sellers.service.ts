@@ -6,12 +6,15 @@ import { SellerInput } from './inputs/create-seller.input';
 import { Employee } from '../employees/entities/employees.entity';
 import { Warehouse } from '../warehouses/entitys/warehouse.entity';
 import { SellerWarehouseInput } from './inputs/addwarehouse.input';
+import { EmployeesService } from '../employees/employees.service';
 
 @Injectable()
 export class SellersService {
     constructor(
         @InjectRepository(Seller) private readonly sellerRepository: Repository<Seller>,
-        @InjectRepository(Warehouse) private readonly warehouseRepository: Repository<Warehouse>
+        @InjectRepository(Warehouse) private readonly warehouseRepository: Repository<Warehouse>,
+        private readonly employeeService: EmployeesService
+
     ) { }
 
     async findAll(): Promise<Seller[]> {
@@ -67,7 +70,7 @@ export class SellersService {
         let seller: Seller = await this.sellerRepository.findOne({ id: input.sellerId }, { relations: ["warehouses"] })
         if (!seller)
             throw new HttpException('Seller Measure Not Found', HttpStatus.NOT_FOUND);
-        seller.warehouses = seller.warehouses.filter(warehouse => 
+        seller.warehouses = seller.warehouses.filter(warehouse =>
             warehouse.id !== input.warehouseId
         );
         await this.sellerRepository.save(seller)

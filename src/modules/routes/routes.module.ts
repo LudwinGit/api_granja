@@ -3,9 +3,10 @@ import { RoutesResolver } from './routes.resolver';
 import { RoutesService } from './routes.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Route } from './entities/route.entity';
+import { Client } from '../clients/client.entity';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([Route])],
+  imports:[TypeOrmModule.forFeature([Route,Client])],
   providers: [RoutesResolver, RoutesService],
   exports: [RoutesService]
 })
