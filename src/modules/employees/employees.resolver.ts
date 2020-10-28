@@ -1,12 +1,15 @@
-import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
+import { Resolver, Query, Args, Mutation, ResolveField, Parent } from '@nestjs/graphql';
 import { EmployeesService } from './employees.service';
 import { createEmployeeInput } from './input/create-employee.input';
 import { Employee } from './entities/employees.entity';
+// import { Seller } from '../sellers/entities/seller.entity';
+// import { SellersService } from '../sellers/sellers.service';
 
-@Resolver()
+@Resolver(()=>Employee)
 export class EmployeesResolver {
     constructor(
         private readonly employeeService: EmployeesService,
+        // private readonly sellerService: SellersService
     ) { }
 
     @Query(()=>[Employee])
@@ -43,4 +46,10 @@ export class EmployeesResolver {
     async removeEmployee(@Args('id') id: number){
         return this.employeeService.delete(id);
     }
+
+    // @ResolveField(()=>Seller)
+    // async seller(@Parent() employee:Employee)
+    // {
+    //     return this.sellerService.find(employee.seller.id)
+    // }
 }

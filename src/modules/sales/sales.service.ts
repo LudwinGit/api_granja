@@ -9,6 +9,7 @@ import { ClientsService } from '../clients/clients.service';
 import { SellersService } from '../sellers/sellers.service';
 import { RoutesService } from '../routes/routes.service';
 import { WarehousesService } from '../warehouses/warehouses.service';
+import { Float } from '@nestjs/graphql';
 
 @Injectable()
 export class SalesService {
@@ -48,5 +49,11 @@ export class SalesService {
         sale.warehouse = warehouse
         await this.saleRepository.save(sale)
         return sale
+    }
+
+    async updateTotal(id:number,total:number){
+        const sale = await this.saleRepository.findOne(id)
+        sale.total = parseFloat(sale.total.toString()) + parseFloat(total.toString())
+        await this.saleRepository.update(id,sale)
     }
 }

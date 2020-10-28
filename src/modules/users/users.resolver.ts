@@ -2,10 +2,13 @@ import { Resolver, Query, Args, Mutation, ResolveField, Parent } from '@nestjs/g
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 import { UserInput } from './input/user.input';
+import { Employee } from '../employees/entities/employees.entity';
+import { EmployeesService } from '../employees/employees.service';
 @Resolver(() => User)
 export class UsersResolver {
     constructor(
         private readonly userService: UsersService,
+        private readonly employeeService: EmployeesService
     ) { }
 
     @Query(() => [User], { nullable: true })
@@ -36,5 +39,12 @@ export class UsersResolver {
     @Mutation(() => User)
     async deactivateUser(@Args('id') id: number) {
         return this.userService.deactivate(id)
+    }
+
+    @ResolveField(()=>Employee)
+    async employee(@Parent() user:User)
+    {
+        const employee = await this.employeeService.find(user.employee.id)
+        return employee
     }
 }

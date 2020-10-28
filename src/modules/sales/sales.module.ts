@@ -13,6 +13,7 @@ import { ClientsModule } from '../clients/clients.module';
     TypeOrmModule.forFeature([Sale]),
     SellersModule, RoutesModule, WarehouseModule,ClientsModule
   ],
+  exports:[SalesService],
   providers: [SalesResolver, SalesService]
 })
 export class SalesModule { }

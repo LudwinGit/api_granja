@@ -35,6 +35,8 @@ type Employee {
   input_date: DateTime
   output_date: DateTime
   createdAt: DateTime!
+  seller: Seller!
+  user: User!
 }
 
 type Seller {
@@ -77,6 +79,18 @@ type Sale {
   invoiced: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+type SaleProduct {
+  saleId: Float!
+  productId: Float!
+  measureId: Float!
+  unit_measure: Float!
+  quantity: Float!
+  price: Float!
+  product: Product!
+  sale: Sale!
+  measure: Measure!
 }
 
 type Measure {
@@ -179,6 +193,7 @@ type Query {
   transaction(id: Float!): Transaction
   users: [User!]
   user(id: Float!): User
+  productsSale(saleId: Float!): [SaleProduct!]!
 }
 
 type Mutation {
@@ -224,6 +239,8 @@ type Mutation {
   removeUser(id: Float!): User
   deactivateUser(id: Float!): User!
   login(data: AuthInput!): User
+  addProductToSale(data: SaleProductInput!): SaleProduct!
+  removeProducttoSale(measureId: Float!, productId: Float!, saleId: Float!): Boolean!
 }
 
 input WarehouseInput {
@@ -332,4 +349,13 @@ input UserInput {
 input AuthInput {
   username: String!
   password: String!
+}
+
+input SaleProductInput {
+  saleId: Float!
+  productId: Float!
+  measureId: Float!
+  unit_measure: Float!
+  quantity: Float!
+  price: Float!
 }

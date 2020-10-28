@@ -1,10 +1,10 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne } from "typeorm";
 import { ObjectType, Field } from "@nestjs/graphql";
 import { Warehouse } from "src/modules/warehouses/entitys/warehouse.entity";
-import { SaleProduct } from "./saleProduct.entity";
 import { Seller } from "src/modules/sellers/entities/seller.entity";
 import { Route } from "src/modules/routes/entities/route.entity";
 import { Client } from "src/modules/clients/client.entity";
+import { SaleProduct } from "src/modules/saleproduct/saleproduct.entity";
 
 @ObjectType()
 @Entity()

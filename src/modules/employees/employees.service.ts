@@ -7,11 +7,11 @@ import { Employee } from './entities/employees.entity';
 @Injectable()
 export class EmployeesService {
     constructor(
-        @InjectRepository(Employee) private readonly employeeRepository: Repository<Employee>
+        @InjectRepository(Employee) private readonly employeeRepository: Repository<Employee>,
     ) { }
     
     async findAll(): Promise<Employee[]> {
-        return await this.employeeRepository.find();
+        return await this.employeeRepository.find({relations:["seller"]});
     }
 
     async withoutSeller(): Promise<Employee[]>{
@@ -35,7 +35,7 @@ export class EmployeesService {
     }
 
     async find(id:number): Promise<Employee>{
-        return await this.employeeRepository.findOne(id)
+        return await this.employeeRepository.findOne(id,{relations:["seller"]})
     }
 
     async create(input: createEmployeeInput): Promise<Employee>{

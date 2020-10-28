@@ -17,6 +17,7 @@ import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { WarehouseproductModule } from './modules/warehouseproduct/warehouseproduct.module';
 import { ClientsModule } from './modules/clients/clients.module';
+import { SaleproductModule } from './modules/saleproduct/saleproduct.module';
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { ClientsModule } from './modules/clients/clients.module';
     AuthModule,
     WarehouseproductModule,
     ClientsModule,
+    SaleproductModule,
   ],
   controllers: [],
   providers: [],

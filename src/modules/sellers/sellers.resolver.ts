@@ -55,4 +55,11 @@ export class SellersResolver {
     async employee(@Parent() seller: Seller) {
         return this.employeeService.find(seller.employee.id)
     }
+
+    // @ResolveField(() => [Warehouse], { nullable: true })
+    // async warehouses(@Parent() seller: Seller) {
+    //     console.log(seller);
+    //     return null
+    //     // return this.employeeService.find(seller.employee.id)
+    // }
 }

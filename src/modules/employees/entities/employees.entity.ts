@@ -50,9 +50,11 @@ export class Employee{
     @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;
 
+    @Field(()=>Seller)
     @OneToOne(type => Seller, seller => seller.employee) // specify inverse side as a second parameter
     seller: Seller;
 
+    @Field(()=>User)
     @OneToOne(type => User, user => user.employee) // specify inverse side as a second parameter
     user: User;
 }

@@ -7,10 +7,10 @@ import { MeasuresModule } from '../measures/measures.module';
 import { Measure } from '../measures/measure.entity';
 import { ProductMeasure } from 'src/manytomany/productMeasure.entity';
 import { WarehouseProduct } from '../warehouses/entitys/warehouseProduct.entity';
-import { SaleProduct } from '../sales/entities/saleProduct.entity';
 import { TransactionProduct } from '../transactions/entities/transactionProduct.entity';
 import { WarehouseModule } from '../warehouses/warehouses.module';
 import { WarehouseproductModule } from '../warehouseproduct/warehouseproduct.module';
+import { SaleProduct } from '../saleproduct/saleproduct.entity';
 
 @Module({
   imports:[TypeOrmModule.forFeature(
