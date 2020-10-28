@@ -12,7 +12,7 @@ services:
             - ${DB_LISTEN_PORT_OUT}:${DB_PORT}
         volumes: 
             - postgres:/var/lib/postgresql/data
-            # - ${DB_VOLUME_PATH}:/var/lib/postgresql/data
+            - ${DB_VOLUME_PATH}:/var/lib/postgresql/data
 
 volumes:
     postgres:
