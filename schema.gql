@@ -1,0 +1,361 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type WarehouseCategory {
+  name: String!
+  isActive: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type User {
+  id: Float!
+  username: String!
+  password: String!
+  type: String!
+  isActive: Boolean!
+  employee: Employee!
+}
+
+type Employee {
+  id: Float!
+  name: String!
+  lastname: String!
+  telephone: String
+  dpi: String
+  image: String
+  address: String
+  isActive: Boolean!
+  input_date: DateTime
+  output_date: DateTime
+  createdAt: DateTime!
+  seller: Seller!
+  user: User!
+}
+
+type Seller {
+  id: Float!
+  isPreSale: Boolean!
+  isDirectSale: Boolean!
+  employee: Employee!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  warehouses: [Warehouse!]!
+}
+
+type Client {
+  id: Float!
+  name: String!
+  nit: String!
+  address: String!
+  route: Route!
+  createdAt: DateTime!
+}
+
+type Route {
+  id: Float!
+  description: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Sale {
+  id: Float!
+  type_sale: String!
+  warehouse: Warehouse!
+  total: Float!
+  discount: Float!
+  status: String!
+  observation: String!
+  seller: Seller!
+  client: Client!
+  route: Route!
+  invoiced: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type SaleProduct {
+  saleId: Float!
+  productId: Float!
+  measureId: Float!
+  unit_measure: Float!
+  quantity: Float!
+  price: Float!
+  product: Product!
+  sale: Sale!
+  measure: Measure!
+}
+
+type Measure {
+  id: Float!
+  name: String!
+  unit: Float!
+  isActive: Boolean!
+}
+
+type ProductMeasure {
+  productId: Float!
+  measureId: Float!
+  price: Float!
+  measure: Measure!
+}
+
+type Transaction {
+  id: Float!
+  warehouseOrigin: Warehouse
+  warehouseDestiny: Warehouse
+  observation: String!
+  status: String!
+  type: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  transactionProducts: [TransactionProduct!]
+}
+
+type TransactionProduct {
+  transactionId: Float!
+  productId: Float!
+  units: Float!
+  packages: Float!
+  units_per_package: Float!
+  transaction: Transaction!
+  product: Product!
+}
+
+type Product {
+  id: Float!
+  sku: String!
+  description: String!
+  price_cost: Float!
+  image: String
+  isActive: Boolean!
+  min_stock: Float!
+  units_per_package: Float!
+  warehouse_category_name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  productmeasures: [ProductMeasure!]!
+}
+
+type WarehouseProduct {
+  productId: Float!
+  warehouseId: Float!
+  stock: Float!
+  product: Product!
+  warehouse: Warehouse!
+}
+
+type Warehouse {
+  id: Float!
+  name: String!
+  invoicing: Boolean!
+  category_name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  warehouseProducts: [WarehouseProduct!]!
+  warehouseCategory: WarehouseCategory!
+}
+
+type Query {
+  warehouses: [Warehouse!]
+  warehousesWithoutAddingtoSeller(sellerId: Float!): [Warehouse!]
+  warehouse(id: Float!): Warehouse
+  warehousesCategories: [WarehouseCategory!]
+  warehouseCategory(id: String!): WarehouseCategory
+  products: [Product!]
+  product(id: Float!): Product
+  productsByWarehouse(id: Float!): [Product!]
+  measures: [Measure!]
+  withoutMeasure(productId: Float!): [Measure!]
+  measure(id: Float!): Measure
+  employees: [Employee!]!
+  employeesWithoutSeller: [Employee!]!
+  employeesWithoutUser: [Employee!]!
+  employee(id: Float!): Employee!
+  sellers: [Seller!]
+  seller(id: Float!): Seller
+  routes: [Route!]
+  route(id: Float!): Route
+  sales: [Sale!]!
+  salesBySeller(sellerId: Float!): [Sale!]!
+  sale(id: Float!): Sale!
+  clients: [Client!]
+  client: Client
+  clientsByRoute(routeId: Float!): [Client!]
+  transactions: [Transaction!]
+  transaction(id: Float!): Transaction
+  users: [User!]
+  user(id: Float!): User
+  productsSale(saleId: Float!): [SaleProduct!]!
+}
+
+type Mutation {
+  createWarehouse(data: WarehouseInput!): Warehouse!
+  updateWarehouse(data: WarehouseInput!, id: Float!): Warehouse!
+  removeWarehouse(id: Float!): Warehouse
+  addProductToWarehouse(data: WarehouseProductInput!): Warehouse!
+  removeProductToWarehouse(data: WarehouseProductInput!): Warehouse!
+  createWarehouseCategory(data: WarehouseCategoryInput!): WarehouseCategory!
+  updateWarehouseCategory(data: WarehouseCategoryInput!, id: String!): WarehouseCategory!
+  removeWarehouseCategory(id: String!): WarehouseCategory
+  createProduct(data: ProductInput!): Product!
+  updateProduct(data: ProductInput!, id: Float!): Product!
+  removeProduct(id: Float!): Product
+  addMeasureToProduct(price: Float!, idmeasure: Float!, idproduct: Float!): Product
+  removeMeasureToProduct(idmeasure: Float!, idproduct: Float!): Product!
+  createMeasure(data: MeasureInput!): Measure!
+  updateMeasure(data: MeasureInput!, id: Float!): Measure!
+  removeMeasure(id: Float!): Measure
+  createEmployee(data: createEmployeeInput!): Employee!
+  updateEmployee(data: createEmployeeInput!, id: Float!): Employee!
+  removeEmployee(id: Float!): Employee
+  createSeller(data: SellerInput!): Seller!
+  updateSeller(data: SellerInput!, id: Float!): Seller!
+  removeSeller(id: Float!): Seller
+  addWarehouseToSeller(data: SellerWarehouseInput!): Warehouse
+  removeWarehouseToSeller(data: SellerWarehouseInput!): Warehouse
+  createRoute(data: RouteInput!): Route
+  updateRoute(data: RouteInput!, id: Float!): Route
+  removeRoute(id: Float!): Route
+  createSale(data: SaleInput!): Sale!
+  createClient(data: ClientInput!): Client!
+  updateClient(data: ClientInput!, id: Float!): Client!
+  removeClient(id: Float!): Client
+  createTransaction(data: TransactionInput!): Transaction!
+  updateTransaction(data: TransactionInput!, id: Float!): Transaction!
+  removeTransaction(id: Float!): Transaction
+  addProductToTransaction(data: TransactionProductInput!): TransactionProduct
+  removeProductToTransaction(transactionId: Float!, productId: Float!): TransactionProduct
+  applyTransaction(id: Float!): Boolean
+  createUser(data: UserInput!): User!
+  updateUser(data: UserInput!, id: Float!): User!
+  removeUser(id: Float!): User
+  deactivateUser(id: Float!): User!
+  login(data: AuthInput!): User
+  addProductToSale(data: SaleProductInput!): SaleProduct!
+  removeProducttoSale(measureId: Float!, productId: Float!, saleId: Float!): Boolean!
+}
+
+input WarehouseInput {
+  name: String!
+  invoicing: Boolean!
+  category_name: String!
+}
+
+input WarehouseProductInput {
+  productId: Float!
+  warehouseId: Float!
+  stock: Float = 0
+}
+
+input WarehouseCategoryInput {
+  name: String!
+  isActive: Boolean = true
+}
+
+input ProductInput {
+  sku: String!
+  description: String!
+  price_cost: Float!
+  image: String
+  isActive: Boolean = true
+  min_stock: Float = 1
+  units_per_package: Float!
+  warehouse_category_name: String!
+}
+
+input MeasureInput {
+  name: String!
+  unit: Float!
+  isActive: Boolean = true
+}
+
+input createEmployeeInput {
+  name: String!
+  lastname: String!
+  telephone: String
+  dpi: String
+  image: String
+  address: String
+  isActive: Boolean = true
+  input_date: String
+  output_date: String
+}
+
+input SellerInput {
+  isPreSale: Boolean!
+  isDirectSale: Boolean!
+  employeeId: Float!
+}
+
+input SellerWarehouseInput {
+  sellerId: Float!
+  warehouseId: Float!
+}
+
+input RouteInput {
+  description: String!
+}
+
+input SaleInput {
+  type_sale: String!
+  warehouseId: Float!
+  discount: Float
+  status: String
+  observation: String
+  sellerId: Float!
+  routeId: Float!
+  clientId: Float
+}
+
+input ClientInput {
+  name: String!
+  nit: String!
+  address: String!
+  routeId: Float!
+}
+
+input TransactionInput {
+  warehouseOriginId: Float
+  warehouseDestinyId: Float
+  observation: String
+  status: String
+  type: String!
+}
+
+input TransactionProductInput {
+  transactionId: Float!
+  productId: Float!
+  units: Float!
+  packages: Float!
+  units_per_package: Float!
+}
+
+input UserInput {
+  username: String!
+  password: String!
+  employeeId: Float!
+  type: String!
+  isActive: Boolean!
+}
+
+input AuthInput {
+  username: String!
+  password: String!
+}
+
+input SaleProductInput {
+  saleId: Float!
+  productId: Float!
+  measureId: Float!
+  unit_measure: Float!
+  quantity: Float!
+  price: Float!
+}

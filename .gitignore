@@ -2,6 +2,12 @@
 /dist
 /node_modules
 
+#Configuration
+.env
+docker
+#Schemas Graphql
+.gql
+
 # Logs
 logs
 *.log
