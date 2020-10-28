@@ -37,7 +37,7 @@ import { SaleproductModule } from './modules/saleproduct/saleproduct.module';
             port: +config.get('DB_PORT'),
             database: config.get('DB_NAME'),
             autoLoadEntities: true,
-            synchronize: true, //Solo en desarrollo
+            synchronize: config.get('DB_SYNCHRONIZE'), //Solo en desarrollo
             // ssl: true,
           } as ConnectionOptions;
         },
