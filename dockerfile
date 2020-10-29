@@ -6,8 +6,6 @@ COPY package*.json ./
 
 RUN yarn install
 
-RUN npm install rimraf
-
 COPY . .
 
 RUN yarn run build
@@ -25,6 +23,6 @@ RUN yarn install
 
 COPY . .
 
-COPY --from=development /usr/src/app/dist ./dist
+COPY --from=developmest /usr/src/app/dist ./dist
 
 CMD ["node", "dist/main"]
