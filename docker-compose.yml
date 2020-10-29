@@ -3,9 +3,10 @@ version: "3.7"
 services:
     main:
         container_name: api
+        restart: always
         build:
             context: .
-            target: production
+            target: development
         volumes:
             - .:/usr/src/app
             - /usr/src/app/node_modules

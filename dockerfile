@@ -6,6 +6,8 @@ COPY package*.json ./
 
 RUN yarn install
 
+RUN npm install rimraf
+
 COPY . .
 
 RUN yarn run build
