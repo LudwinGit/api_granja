@@ -1,7 +1,8 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn, OneToMany } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn, OneToMany, ManyToMany, JoinTable } from "typeorm";
 import { Sale } from "src/modules/sales/entities/sale.entity";
 import { Client } from "src/modules/clients/client.entity";
+import { Seller } from "src/modules/sellers/entities/seller.entity";
 
 @ObjectType()
 @Entity({ name: 'route' })
@@ -27,4 +28,8 @@ export class Route {
 
     @OneToMany(() => Client, client => client.route)
     clients: Client[];
+
+    @ManyToMany(()=> Seller)
+    @JoinTable({name:"seller_route"})
+    sellers: Seller[]
 }

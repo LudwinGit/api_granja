@@ -7,6 +7,7 @@ import { EmployeesModule } from '../employees/employees.module';
 import { Employee } from '../employees/entities/employees.entity';
 import { WarehouseModule } from '../warehouses/warehouses.module';
 import { Warehouse } from '../warehouses/entitys/warehouse.entity';
+import { RoutesModule } from '../routes/routes.module';
 
 @Module({
   imports:[
@@ -15,7 +16,7 @@ import { Warehouse } from '../warehouses/entitys/warehouse.entity';
       Employee,
       Warehouse
     ])
-    ,EmployeesModule,WarehouseModule],
+    ,EmployeesModule,WarehouseModule,RoutesModule],
   providers: [SellersService, SellersResolver],
   exports: [SellersService]
 })

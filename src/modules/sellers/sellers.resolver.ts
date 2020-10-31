@@ -6,6 +6,7 @@ import { Employee } from '../employees/entities/employees.entity';
 import { SellerInput } from './inputs/create-seller.input';
 import { Warehouse } from '../warehouses/entitys/warehouse.entity';
 import { SellerWarehouseInput } from './inputs/addwarehouse.input';
+import { Route } from '../routes/entities/route.entity';
 
 @Resolver(() => Seller)
 export class SellersResolver {
@@ -54,6 +55,16 @@ export class SellersResolver {
     @ResolveField(() => Employee, { nullable: true })
     async employee(@Parent() seller: Seller) {
         return this.employeeService.find(seller.employee.id)
+    }
+
+    @Mutation(()=>Route,{nullable:true})
+    async addRouteToSeller(@Args('sellerId') sellerId:number,@Args('routeId') routeId:number){
+        return this.sellerService.addRouteToSeller(sellerId,routeId)
+    }
+
+    @Mutation(()=>Route,{nullable:true})
+    async removeRouteToSeller(@Args('sellerId') sellerId:number,@Args('routeId') routeId:number){
+        return this.sellerService.removeRouteToSeller(sellerId,routeId)
     }
 
     // @ResolveField(() => [Warehouse], { nullable: true })

@@ -7,13 +7,16 @@ import { Employee } from '../employees/entities/employees.entity';
 import { Warehouse } from '../warehouses/entitys/warehouse.entity';
 import { SellerWarehouseInput } from './inputs/addwarehouse.input';
 import { EmployeesService } from '../employees/employees.service';
+import { RoutesService } from '../routes/routes.service';
+import { Route } from '../routes/entities/route.entity';
 
 @Injectable()
 export class SellersService {
     constructor(
         @InjectRepository(Seller) private readonly sellerRepository: Repository<Seller>,
         @InjectRepository(Warehouse) private readonly warehouseRepository: Repository<Warehouse>,
-        private readonly employeeService: EmployeesService
+        private readonly employeeService: EmployeesService,
+        private readonly routeService: RoutesService
 
     ) { }
 
@@ -72,6 +75,29 @@ export class SellersService {
             throw new HttpException('Seller Measure Not Found', HttpStatus.NOT_FOUND);
         seller.warehouses = seller.warehouses.filter(warehouse =>
             warehouse.id !== input.warehouseId
+        );
+        await this.sellerRepository.save(seller)
+        return null
+    }
+
+    async addRouteToSeller(sellerId, routeId) {
+        const seller: Seller = await this.sellerRepository.findOne({ id: sellerId }, { relations: ["warehouses", "routes"] })
+        if (!seller)
+            throw new HttpException('Seller Measure Not Found', HttpStatus.NOT_FOUND);
+        const route: Route = await this.routeService.find(routeId)
+        if (!route)
+            throw new HttpException('Route Not Found', HttpStatus.NOT_FOUND);
+        seller.routes = [...seller.routes, route]
+        await this.sellerRepository.save(seller)
+        return route
+    }
+
+    async removeRouteToSeller(sellerId, routeId) {
+        let seller: Seller = await this.sellerRepository.findOne({ id: sellerId }, { relations: ["warehouses","routes"] })
+        if (!seller)
+            throw new HttpException('Seller Measure Not Found', HttpStatus.NOT_FOUND);
+        seller.routes = seller.routes.filter(route =>
+            route.id !== routeId
         );
         await this.sellerRepository.save(seller)
         return null

@@ -39,16 +39,6 @@ type Employee {
   user: User!
 }
 
-type Seller {
-  id: Float!
-  isPreSale: Boolean!
-  isDirectSale: Boolean!
-  employee: Employee!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  warehouses: [Warehouse!]!
-}
-
 type Client {
   id: Float!
   name: String!
@@ -63,6 +53,17 @@ type Route {
   description: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+type Seller {
+  id: Float!
+  isPreSale: Boolean!
+  isDirectSale: Boolean!
+  employee: Employee!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  warehouses: [Warehouse!]!
+  routes: [Route!]!
 }
 
 type Sale {
@@ -221,6 +222,8 @@ type Mutation {
   removeSeller(id: Float!): Seller
   addWarehouseToSeller(data: SellerWarehouseInput!): Warehouse
   removeWarehouseToSeller(data: SellerWarehouseInput!): Warehouse
+  addRouteToSeller(routeId: Float!, sellerId: Float!): Route
+  removeRouteToSeller(routeId: Float!, sellerId: Float!): Route
   createRoute(data: RouteInput!): Route
   updateRoute(data: RouteInput!, id: Float!): Route
   removeRoute(id: Float!): Route

@@ -3,6 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 import { Employee } from "src/modules/employees/entities/employees.entity";
 import { Sale } from "src/modules/sales/entities/sale.entity";
 import { Warehouse } from "src/modules/warehouses/entitys/warehouse.entity";
+import { Route } from "src/modules/routes/entities/route.entity";
 
 @ObjectType()
 @Entity()
@@ -39,4 +40,9 @@ export class Seller{
     @ManyToMany(()=> Warehouse)
     @JoinTable({name:"seller_warehouse"})
     warehouses: Warehouse[]
+
+    @Field(()=>[Route])
+    @ManyToMany(()=>Route)
+    @JoinTable({name:"seller_route"})
+    routes: Route[]
 }

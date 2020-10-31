@@ -3,6 +3,7 @@
 /node_modules
 
 /data
+/db
 #Configuration
 .env
 docker
