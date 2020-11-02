@@ -21,11 +21,11 @@ export class SellersService {
     ) { }
 
     async findAll(): Promise<Seller[]> {
-        return await this.sellerRepository.find({ relations: ["employee", "warehouses"] })
+        return await this.sellerRepository.find({ relations: ["employee", "warehouses","routes"] })
     }
 
     async find(id: number): Promise<Seller> {
-        return await this.sellerRepository.findOne(id, { relations: ["employee", "warehouses"] })
+        return await this.sellerRepository.findOne(id, { relations: ["employee", "warehouses","routes"] })
     }
 
     async create(employee: Employee, input: SellerInput): Promise<Seller> {

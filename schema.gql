@@ -182,6 +182,7 @@ type Query {
   employee(id: Float!): Employee!
   sellers: [Seller!]
   seller(id: Float!): Seller
+  routesWithoutAddingtoSeller(sellerId: Float!): [Route!]
   routes: [Route!]
   route(id: Float!): Route
   sales: [Sale!]!

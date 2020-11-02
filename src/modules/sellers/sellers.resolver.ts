@@ -67,10 +67,15 @@ export class SellersResolver {
         return this.sellerService.removeRouteToSeller(sellerId,routeId)
     }
 
-    // @ResolveField(() => [Warehouse], { nullable: true })
-    // async warehouses(@Parent() seller: Seller) {
-    //     console.log(seller);
-    //     return null
-    //     // return this.employeeService.find(seller.employee.id)
-    // }
+    @ResolveField(()=>[Route],{nullable:true})
+    async routes(@Parent() seller:Seller){
+        const {routes} = await this.sellerService.find(seller.id)
+        return routes
+    }
+
+    @ResolveField(()=>[Warehouse],{nullable:true})
+    async warehouses(@Parent() seller:Seller){
+        const {warehouses} = await this.sellerService.find(seller.id)
+        return warehouses
+    }
 }

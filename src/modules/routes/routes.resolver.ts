@@ -9,6 +9,11 @@ export class RoutesResolver {
         private readonly routeService: RoutesService,
     ) { }
 
+    @Query(()=>[Route],{nullable:true})
+    async routesWithoutAddingtoSeller(@Args('sellerId') sellerId:number){
+        return this.routeService.routesWithoutAddingtoSeller(sellerId)
+    }
+
     @Query(() => [Route], { nullable: true })
     async routes() {
         return this.routeService.findAll()

@@ -18,6 +18,16 @@ export class RoutesService {
         return await this.routeRepository.findOne(id)
     }
 
+    async routesWithoutAddingtoSeller(sellerId:number){
+        const routes = await
+            this.routeRepository
+                .createQueryBuilder("route")
+                .leftJoinAndSelect("route.sellers", "seller","seller.id=:sellerId",{sellerId})
+                .where("seller.id is null")
+                .getMany()
+        return routes
+    }
+
     async create(input:RouteInput):Promise<Route>{
         input.description = input.description.toUpperCase()
         const route = this.routeRepository.create(input)

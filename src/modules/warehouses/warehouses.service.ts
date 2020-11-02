@@ -33,7 +33,7 @@ export class WarehousesService {
         const warehouse = await
             this.warehouseRepository
                 .createQueryBuilder("warehouse")
-                .leftJoinAndSelect("warehouse.sellers", "seller")
+                .leftJoinAndSelect("warehouse.sellers", "seller","seller.id=:sellerId",{sellerId})
                 .where("seller.id is null")
                 .getMany()
         return warehouse
