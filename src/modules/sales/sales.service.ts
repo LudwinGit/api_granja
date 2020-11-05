@@ -55,4 +55,9 @@ export class SalesService {
         sale.total = parseFloat(sale.total.toString()) + parseFloat(total.toString())
         await this.saleRepository.update(id,sale)
     }
+
+    async updateStatus(id:number,status:string):Promise<boolean>{
+        await this.saleRepository.update(id,{status})
+        return true
+    }
 }

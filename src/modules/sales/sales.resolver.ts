@@ -37,6 +37,11 @@ export class SalesResolver {
         return this.salesService.create(input)
     }
 
+    @Mutation(() => Boolean)
+    async updateStatusSale(@Args('id') id: number, @Args('status') status: string): Promise<boolean> {
+        return this.salesService.updateStatus(id, status)
+    }
+
     @ResolveField(() => Seller, { nullable: true })
     async seller(@Parent() sale: Sale): Promise<Seller> {
         const seller: Seller = await this.sellerService.find(sale.seller.id)
@@ -45,19 +50,19 @@ export class SalesResolver {
 
     @ResolveField(() => Client, { nullable: true })
     async client(@Parent() sale: Sale): Promise<Client> {
-        const {client} = await this.salesService.find(sale.id)
+        const { client } = await this.salesService.find(sale.id)
         return client
     }
 
     @ResolveField(() => Route, { nullable: true })
     async route(@Parent() sale: Sale): Promise<Route> {
-        const {route} = await this.salesService.find(sale.id)
+        const { route } = await this.salesService.find(sale.id)
         return route
     }
 
     @ResolveField(() => Warehouse, { nullable: true })
     async warehouse(@Parent() sale: Sale): Promise<Warehouse> {
-        const {warehouse} = await this.salesService.find(sale.id)
+        const { warehouse } = await this.salesService.find(sale.id)
         return warehouse
     }
 }

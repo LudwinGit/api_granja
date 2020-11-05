@@ -96,11 +96,4 @@ export class ProductsService {
         await this.productmeasureRepository.remove(productMeasure)
         return await this.productRepository.findOne(idproduct, { relations: ["productmeasures"] })
     }
-
-    async productsByCategoryWarehouse(id: number): Promise<Product[]> {
-        const {category_name} = await this.warehouseService.find(id)
-        const products = await this.productRepository
-            .find({ where: { warehouse_category_name: category_name }, relations: ["productmeasures"] })
-        return products
-    }
 }

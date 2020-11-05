@@ -179,7 +179,6 @@ type Query {
   warehouseCategory(id: String!): WarehouseCategory
   products: [Product!]
   product(id: Float!): Product
-  productsByWarehouse(id: Float!): [Product!]
   measures: [Measure!]
   withoutMeasure(productId: Float!): [Measure!]
   measure(id: Float!): Measure
@@ -238,6 +237,7 @@ type Mutation {
   updateRoute(data: RouteInput!, id: Float!): Route
   removeRoute(id: Float!): Route
   createSale(data: SaleInput!): Sale!
+  updateStatusSale(status: String!, id: Float!): Boolean!
   createClient(data: ClientInput!): Client!
   updateClient(data: ClientInput!, id: Float!): Client!
   removeClient(id: Float!): Client

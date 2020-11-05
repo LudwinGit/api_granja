@@ -23,11 +23,6 @@ export class ProductsResolver {
         return this.producService.findOne(id);
     }
 
-    @Query(()=>[Product],{nullable:true})
-    async productsByWarehouse(@Args('id') id: number){
-        return this.producService.productsByCategoryWarehouse(id);
-    }
-
     @ResolveField(()=>[ProductMeasure])
     async productmeasures(@Parent() product:Product)
     {
