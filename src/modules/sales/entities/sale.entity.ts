@@ -33,7 +33,7 @@ export class Sale {
     @Column({ type: "char", length: 1, default: "I" })
     status: string
 
-    @Field()
+    @Field({nullable:true})
     @Column({ type: "varchar", length: 200, nullable: true })
     observation: string
 

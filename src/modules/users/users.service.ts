@@ -5,6 +5,8 @@ import { Repository } from 'typeorm';
 import { UserInput } from './input/user.input';
 import { PasswordService } from '../common/services/password.service';
 import { EmployeesService } from '../employees/employees.service';
+import { PermissionsService } from '../permissions/permissions.service';
+import { Permission } from '../permissions/permission.entity';
 
 @Injectable()
 export class UsersService {
@@ -12,14 +14,15 @@ export class UsersService {
         @InjectRepository(User) private readonly userRepository: Repository<User>,
         private readonly pwdService: PasswordService,
         private readonly employeeService: EmployeesService,
+        private readonly permissionService: PermissionsService
     ) { }
 
     async findAll(): Promise<User[]> {
-        return this.userRepository.find({ relations: ['employee'] })
+        return this.userRepository.find({ relations: ['employee', 'permissions'] })
     }
 
     async find(id: number): Promise<User> {
-        return this.userRepository.findOne({ id }, { relations: ['employee'] })
+        return this.userRepository.findOne({ id }, { relations: ['employee', 'permissions'] })
     }
 
     async create(input: UserInput): Promise<User> {
@@ -43,7 +46,7 @@ export class UsersService {
         return user
     }
 
-    async remove(id: number) {
+    async remove(id: number): Promise<User> {
         const user: User = await this.userRepository.findOne(id)
         if (!user)
             throw new HttpException('User Not Found', HttpStatus.NOT_FOUND);
@@ -51,7 +54,7 @@ export class UsersService {
         return null
     }
 
-    async deactivate(id: number) {
+    async deactivate(id: number): Promise<User> {
         const user: User = await this.userRepository.findOne(id, { relations: ['employee'] })
         if (!user)
             throw new HttpException('User Not Found', HttpStatus.NOT_FOUND);
@@ -62,5 +65,25 @@ export class UsersService {
 
     async findByUsername(username: string): Promise<User> {
         return this.userRepository.findOne({ username })
+    }
+
+    async addPermission(userId: number, permissionId: number): Promise<Permission> {
+        const user = await this.userRepository.findOne({ id: userId }, { relations: ["permissions"] })
+        const permission = await this.permissionService.find(permissionId)
+        const a = user.permissions.filter((e) => e.id === permissionId)
+
+        if (a.length !== 0)
+            throw new HttpException('¡El permiso ya ha sido agregado!', HttpStatus.INTERNAL_SERVER_ERROR);
+        user.permissions = [...user.permissions, permission]
+        await this.userRepository.save(user)
+        return permission
+    }
+
+    async removePermission(userId: number, permissionId: number): Promise<Permission> {
+        const user = await this.userRepository.findOne({ id: userId }, { relations: ["permissions"] })
+        const permissions = user.permissions.filter((e) => e.id !== permissionId)
+        user.permissions = permissions
+        await this.userRepository.save(user)
+        return null
     }
 }

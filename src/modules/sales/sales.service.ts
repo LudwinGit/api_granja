@@ -9,7 +9,6 @@ import { ClientsService } from '../clients/clients.service';
 import { SellersService } from '../sellers/sellers.service';
 import { RoutesService } from '../routes/routes.service';
 import { WarehousesService } from '../warehouses/warehouses.service';
-import { Float } from '@nestjs/graphql';
 
 @Injectable()
 export class SalesService {

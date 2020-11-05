@@ -7,6 +7,7 @@ import { SellerInput } from './inputs/create-seller.input';
 import { Warehouse } from '../warehouses/entitys/warehouse.entity';
 import { SellerWarehouseInput } from './inputs/addwarehouse.input';
 import { Route } from '../routes/entities/route.entity';
+import { Sale } from '../sales/entities/sale.entity';
 
 @Resolver(() => Seller)
 export class SellersResolver {
@@ -77,5 +78,11 @@ export class SellersResolver {
     async warehouses(@Parent() seller:Seller){
         const {warehouses} = await this.sellerService.find(seller.id)
         return warehouses
+    }
+
+    @ResolveField(()=>[Sale],{nullable:true})
+    async sales(@Parent() seller:Seller):Promise<Sale[]>{
+        const {sales} = await this.sellerService.find(seller.id)
+        return sales
     }
 }

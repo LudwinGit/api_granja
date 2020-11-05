@@ -18,20 +18,27 @@ export class WarehouseproductService {
         return wp
     }
 
+    async getStock(productId: number, warehouseId: number): Promise<number> {
+        const { stock } = await this.warehouseproductRepository.findOne({ where: { productId, warehouseId } })
+        return stock
+    }
+
     async updateStock(products: TransactionProduct[], warehouseId: number, operation: string): Promise<boolean> {
         try {
             if (operation === "-") {
                 for (const tp of products) {
-                    const wp: WarehouseProduct = await this.warehouseproductRepository.findOne({ where: { productId: tp.productId, warehouseId } })
-                    wp.stock = wp.stock - ((tp.units + (tp.packages * tp.units_per_package)))
-                    this.warehouseproductRepository.update({ warehouseId, productId: wp.productId }, { ...wp })
+                    this.subtractStock(tp.productId, warehouseId, ((tp.units + (tp.packages * tp.units_per_package))))
+                    // const wp: WarehouseProduct = await this.warehouseproductRepository.findOne({ where: { productId: tp.productId, warehouseId } })
+                    // wp.stock = wp.stock - ((tp.units + (tp.packages * tp.units_per_package)))
+                    // this.warehouseproductRepository.update({ warehouseId, productId: wp.productId }, { ...wp })
                 }
             }
             else if (operation === "+") {
                 for (const tp of products) {
-                    const wp: WarehouseProduct = await this.warehouseproductRepository.findOne({ where: { productId: tp.productId, warehouseId } })
-                    wp.stock = wp.stock + ((tp.units + (tp.packages * tp.units_per_package)))
-                    this.warehouseproductRepository.update({ warehouseId, productId: wp.productId }, { ...wp })
+                    this.addStock(tp.productId, warehouseId, ((tp.units + (tp.packages * tp.units_per_package))))
+                    // const wp: WarehouseProduct = await this.warehouseproductRepository.findOne({ where: { productId: tp.productId, warehouseId } })
+                    // wp.stock = wp.stock + ((tp.units + (tp.packages * tp.units_per_package)))
+                    // this.warehouseproductRepository.update({ warehouseId, productId: wp.productId }, { ...wp })
                 }
             }
             return true
@@ -41,5 +48,26 @@ export class WarehouseproductService {
         }
     }
 
+    async subtractStock(productId: number, warehouseId: number, units: number): Promise<boolean> {
+        try {
+            const wp: WarehouseProduct = await this.warehouseproductRepository.findOne({ where: { productId, warehouseId } })
+            wp.stock = wp.stock - units
+            this.warehouseproductRepository.update({ warehouseId, productId }, { ...wp })
+            return true
+        } catch (error) {
+            return false
+        }
+    }
+
+    async addStock(productId: number, warehouseId: number, units: number): Promise<boolean> {
+        try {
+            const wp: WarehouseProduct = await this.warehouseproductRepository.findOne({ where: { productId, warehouseId } })
+            wp.stock = wp.stock + units
+            this.warehouseproductRepository.update({ warehouseId, productId }, { ...wp })
+            return true
+        } catch (error) {
+            return false
+        }
+    }
 
 }

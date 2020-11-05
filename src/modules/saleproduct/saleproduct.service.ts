@@ -7,6 +7,7 @@ import { SaleProductInput } from './input/saleproduct.input';
 import { ProductsService } from '../products/products.service';
 import { MeasuresService } from '../measures/measures.service';
 import { SalesService } from '../sales/sales.service';
+import { WarehouseproductService } from '../warehouseproduct/warehouseproduct.service';
 
 @Injectable()
 export class SaleproductService {
@@ -15,7 +16,8 @@ export class SaleproductService {
         private readonly saleProductRepository: Repository<SaleProduct>,
         private readonly productService: ProductsService,
         private readonly measureService: MeasuresService,
-        private readonly saleService: SalesService
+        private readonly saleService: SalesService,
+        private readonly warehouseProductService: WarehouseproductService
     ) { }
 
     async findBySale(saleId: number): Promise<SaleProduct[]> {
@@ -23,6 +25,8 @@ export class SaleproductService {
     }
 
     async create(input: SaleProductInput): Promise<SaleProduct> {
+        const sale = await this.saleService.find(input.saleId)
+        const measure = await this.measureService.find(input.measureId)
         const saleProduct = await this.saleProductRepository.findOne({
             where: {
                 measureId: input.measureId,
@@ -31,12 +35,14 @@ export class SaleproductService {
             }
         })
         if (saleProduct)
-            throw new HttpException('El producto con la unidad de medida ya ha sido agregado', HttpStatus.CONFLICT);
+            throw new HttpException('El producto con la unidad de medida ya ha sido agregado', HttpStatus.INTERNAL_SERVER_ERROR);
 
+        const stock = await this.warehouseProductService.getStock(input.productId, sale.warehouse.id)
+
+        if (stock < (input.quantity * measure.unit))
+            throw new HttpException(`La existencia es menor a lo solicitado (existencia: ${stock})`, HttpStatus.INTERNAL_SERVER_ERROR);
         const sp = await this.saleProductRepository.create(input)
         const product = await this.productService.findOne(input.productId)
-        const measure = await this.measureService.find(input.measureId)
-        const sale = await this.saleService.find(input.saleId)
         const subtotal = parseFloat((input.price * input.quantity).toString())
         sale.total = parseFloat(sale.total.toString()) + subtotal
         sp.product = product
@@ -44,11 +50,13 @@ export class SaleproductService {
         sp.sale = sale
         await this.saleService.updateTotal(sale.id, subtotal)
         await this.saleProductRepository.save(sp)
+        await this.warehouseProductService.subtractStock(input.productId,sale.warehouse.id,(input.quantity*measure.unit))
         return sp
     }
 
     async remove(saleId: number, productId: number, measureId: number): Promise<boolean> {
         try {
+            const {warehouse} = await this.saleService.find(saleId)
             const saleProduct = await this.saleProductRepository.findOne({
                 where: {
                     measureId,
@@ -57,6 +65,7 @@ export class SaleproductService {
                 }
             })
             const subtotal = parseFloat((saleProduct.price * saleProduct.quantity).toString())
+            await this.warehouseProductService.addStock(productId,warehouse.id, saleProduct.quantity*saleProduct.unit_measure)
             await this.saleProductRepository.remove(saleProduct)
             await this.saleService.updateTotal(saleId, -subtotal)
             return true;

@@ -25,13 +25,13 @@ export class SellersService {
     }
 
     async find(id: number): Promise<Seller> {
-        return await this.sellerRepository.findOne(id, { relations: ["employee", "warehouses","routes"] })
+        return await this.sellerRepository.findOne(id, { relations: ["employee", "warehouses","routes","sales"] })
     }
 
     async create(employee: Employee, input: SellerInput): Promise<Seller> {
         if (!employee)
             throw new HttpException('Employee Not Found', HttpStatus.NOT_FOUND);
-        let seller = this.sellerRepository.create(input)
+        const seller = this.sellerRepository.create(input)
         seller.employee = employee
         return await this.sellerRepository.save(seller)
     }
@@ -39,7 +39,7 @@ export class SellersService {
     async update(id: number, employee: Employee, input: SellerInput): Promise<Seller> {
         if (!employee)
             throw new HttpException('Employee Not Found', HttpStatus.NOT_FOUND);
-        let seller = await this.sellerRepository.findOne(id, { relations: ["employee"] })
+        const seller = await this.sellerRepository.findOne(id, { relations: ["employee"] })
         if (!seller)
             throw new HttpException('Seller Not Found', HttpStatus.NOT_FOUND);
         seller.isPreSale = input.isPreSale
@@ -50,7 +50,7 @@ export class SellersService {
     }
 
     async delete(id: number): Promise<Seller> {
-        let seller = await this.sellerRepository.findOne(id)
+        const seller = await this.sellerRepository.findOne(id)
         if (!seller)
             throw new HttpException('Seller Not Found', HttpStatus.NOT_FOUND);
         await this.sellerRepository.remove(seller)
@@ -61,7 +61,7 @@ export class SellersService {
         const warehouse: Warehouse = await this.warehouseRepository.findOne({ id: input.warehouseId })
         if (!warehouse)
             throw new HttpException('Warehouse Not Found', HttpStatus.NOT_FOUND);
-        let seller: Seller = await this.sellerRepository.findOne({ id: input.sellerId }, { relations: ["warehouses"] })
+        const seller: Seller = await this.sellerRepository.findOne({ id: input.sellerId }, { relations: ["warehouses"] })
         if (!seller)
             throw new HttpException('Seller Not Found', HttpStatus.NOT_FOUND);
         seller.warehouses = [...seller.warehouses, warehouse]
@@ -70,7 +70,7 @@ export class SellersService {
     }
 
     async removeWarehouseToSeller(input: SellerWarehouseInput): Promise<Warehouse> {
-        let seller: Seller = await this.sellerRepository.findOne({ id: input.sellerId }, { relations: ["warehouses"] })
+        const seller: Seller = await this.sellerRepository.findOne({ id: input.sellerId }, { relations: ["warehouses"] })
         if (!seller)
             throw new HttpException('Seller Measure Not Found', HttpStatus.NOT_FOUND);
         seller.warehouses = seller.warehouses.filter(warehouse =>
@@ -80,7 +80,7 @@ export class SellersService {
         return null
     }
 
-    async addRouteToSeller(sellerId, routeId) {
+    async addRouteToSeller(sellerId:number, routeId:number):Promise<Route> {
         const seller: Seller = await this.sellerRepository.findOne({ id: sellerId }, { relations: ["warehouses", "routes"] })
         if (!seller)
             throw new HttpException('Seller Measure Not Found', HttpStatus.NOT_FOUND);
@@ -92,8 +92,8 @@ export class SellersService {
         return route
     }
 
-    async removeRouteToSeller(sellerId, routeId) {
-        let seller: Seller = await this.sellerRepository.findOne({ id: sellerId }, { relations: ["warehouses","routes"] })
+    async removeRouteToSeller(sellerId:number, routeId:number):Promise<Route> {
+        const seller: Seller = await this.sellerRepository.findOne({ id: sellerId }, { relations: ["warehouses","routes"] })
         if (!seller)
             throw new HttpException('Seller Measure Not Found', HttpStatus.NOT_FOUND);
         seller.routes = seller.routes.filter(route =>

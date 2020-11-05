@@ -6,9 +6,11 @@ import { User } from './entities/user.entity';
 import { PasswordService } from '../common/services/password.service';
 import { EmployeesService } from '../employees/employees.service';
 import { Employee } from '../employees/entities/employees.entity';
+import { Permission } from '../permissions/permission.entity';
+import { PermissionsModule } from '../permissions/permissions.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Employee])],
+  imports: [TypeOrmModule.forFeature([User, Employee,Permission]),PermissionsModule],
   providers: [UsersResolver, UsersService, PasswordService, EmployeesService],
   exports: [UsersService]
 })

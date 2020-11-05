@@ -18,6 +18,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { WarehouseproductModule } from './modules/warehouseproduct/warehouseproduct.module';
 import { ClientsModule } from './modules/clients/clients.module';
 import { SaleproductModule } from './modules/saleproduct/saleproduct.module';
+import { PermissionsModule } from './modules/permissions/permissions.module';
 
 @Module({
   imports: [
@@ -57,6 +58,7 @@ import { SaleproductModule } from './modules/saleproduct/saleproduct.module';
     WarehouseproductModule,
     ClientsModule,
     SaleproductModule,
+    PermissionsModule,
   ],
   controllers: [],
   providers: [],

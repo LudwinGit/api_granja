@@ -4,12 +4,17 @@ import { Sale } from './entities/sale.entity';
 import { SaleInput } from "./input/sale.input";
 import { Seller } from '../sellers/entities/seller.entity';
 import { SellersService } from '../sellers/sellers.service';
+import { Client } from '../clients/client.entity';
+import { ClientsService } from '../clients/clients.service';
+import { Route } from '../routes/entities/route.entity';
+import { Warehouse } from '../warehouses/entitys/warehouse.entity';
 
 @Resolver(() => Sale)
 export class SalesResolver {
     constructor(
         private readonly salesService: SalesService,
-        private readonly sellerService: SellersService
+        private readonly sellerService: SellersService,
+        private readonly clientService: ClientsService
     ) { }
 
     @Query(() => [Sale])
@@ -35,7 +40,24 @@ export class SalesResolver {
     @ResolveField(() => Seller, { nullable: true })
     async seller(@Parent() sale: Sale): Promise<Seller> {
         const seller: Seller = await this.sellerService.find(sale.seller.id)
-        console.log(seller);
         return seller
+    }
+
+    @ResolveField(() => Client, { nullable: true })
+    async client(@Parent() sale: Sale): Promise<Client> {
+        const {client} = await this.salesService.find(sale.id)
+        return client
+    }
+
+    @ResolveField(() => Route, { nullable: true })
+    async route(@Parent() sale: Sale): Promise<Route> {
+        const {route} = await this.salesService.find(sale.id)
+        return route
+    }
+
+    @ResolveField(() => Warehouse, { nullable: true })
+    async warehouse(@Parent() sale: Sale): Promise<Warehouse> {
+        const {warehouse} = await this.salesService.find(sale.id)
+        return warehouse
     }
 }

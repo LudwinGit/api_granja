@@ -33,6 +33,7 @@ export class Seller{
     @UpdateDateColumn({ name: 'updated_at' })
     updatedAt: Date
 
+    @Field(()=>[Sale])
     @OneToMany(() => Sale, sale => sale.seller)
     sales: Sale[];
 

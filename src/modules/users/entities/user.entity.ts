@@ -1,6 +1,7 @@
 import { ObjectType, Field } from "@nestjs/graphql";
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, ManyToMany, JoinTable } from "typeorm";
 import { Employee } from "src/modules/employees/entities/employees.entity";
+import { Permission } from "src/modules/permissions/permission.entity";
 
 @ObjectType()
 @Entity({ name: "user" })
@@ -29,4 +30,9 @@ export class User {
     @OneToOne(() => Employee)
     @JoinColumn()
     employee: Employee
+
+    @Field(()=>[Permission])
+    @ManyToMany(()=>Permission)
+    @JoinTable({name:"user_permission"})
+    permissions: Permission[]
 }

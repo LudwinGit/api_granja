@@ -14,6 +14,11 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Permission {
+  id: Float!
+  name: String!
+}
+
 type User {
   id: Float!
   username: String!
@@ -21,6 +26,7 @@ type User {
   type: String!
   isActive: Boolean!
   employee: Employee!
+  permissions: [Permission!]!
 }
 
 type Employee {
@@ -62,6 +68,7 @@ type Seller {
   employee: Employee!
   createdAt: DateTime!
   updatedAt: DateTime!
+  sales: [Sale!]!
   warehouses: [Warehouse!]!
   routes: [Route!]!
 }
@@ -73,7 +80,7 @@ type Sale {
   total: Float!
   discount: Float!
   status: String!
-  observation: String!
+  observation: String
   seller: Seller!
   client: Client!
   route: Route!
@@ -195,6 +202,8 @@ type Query {
   transaction(id: Float!): Transaction
   users: [User!]
   user(id: Float!): User
+  permissions: [Permission!]!
+  permissionsWithoutAddingtoUser(userId: Float!): [Permission!]!
   productsSale(saleId: Float!): [SaleProduct!]!
 }
 
@@ -242,6 +251,8 @@ type Mutation {
   updateUser(data: UserInput!, id: Float!): User!
   removeUser(id: Float!): User
   deactivateUser(id: Float!): User!
+  addPermissionToUser(permissionId: Float!, userId: Float!): Permission!
+  removePermissionToUser(permissionId: Float!, userId: Float!): Permission
   login(data: AuthInput!): User
   addProductToSale(data: SaleProductInput!): SaleProduct!
   removeProducttoSale(measureId: Float!, productId: Float!, saleId: Float!): Boolean!
