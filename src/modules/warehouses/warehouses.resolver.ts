@@ -8,12 +8,14 @@ import { WarehouseProductInput } from './input/warehouse_product.input';
 import { WarehouseProduct } from './entitys/warehouseProduct.entity';
 import { Product } from '../products/product.entity';
 import { ProductsService } from '../products/products.service';
+import { WarehouseproductService } from '../warehouseproduct/warehouseproduct.service';
 
 @Resolver(() => Warehouse)
 export class WarehousesResolver {
     constructor(
         private readonly warehouseService:WarehousesService,
         private readonly warehouseCategoryService:WarehouseCategoriesService,
+        private readonly warehouseProductService:WarehouseproductService,
         private readonly productService:ProductsService
     ){}
 
@@ -35,12 +37,8 @@ export class WarehousesResolver {
 
     @ResolveField(()=>[WarehouseProduct])
     async warehouseProducts(@Parent() warehouse:Warehouse){
-        const {warehouseProducts} = warehouse
-        for(const element of warehouseProducts){
-            const product:Product = await this.productService.findOne(element.productId)
-            element.product = product
-        }
-        return warehouseProducts
+        const {id} = warehouse
+        return this.warehouseProductService.findByWarehouse(id)
     }
 
     @Query(() => Warehouse,{nullable:true})

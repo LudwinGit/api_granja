@@ -12,6 +12,17 @@ export class WarehouseproductService {
         private readonly warehouseproductRepository: Repository<WarehouseProduct>
     ) { }
 
+    async findByWarehouse(warehouseId: number): Promise<WarehouseProduct[]> {
+        const products = await
+            this.warehouseproductRepository
+                .createQueryBuilder("warehouse_product")
+                .leftJoinAndSelect("warehouse_product.product", "product")
+                .where(`warehouse_product.warehouseId=${warehouseId}`)
+                .orderBy("product.description")
+                .getMany()
+        return products
+    }
+
     async create(input: WarehouseProductInput): Promise<WarehouseProduct> {
         const wp: WarehouseProduct = await this.warehouseproductRepository.create(input)
         this.warehouseproductRepository.save(wp)

@@ -9,12 +9,13 @@ import { Transaction } from '../transactions/entities/transaction.entity';
 import { WarehouseProduct } from './entitys/warehouseProduct.entity';
 import { ProductsModule } from '../products/products.module';
 import { Product } from '../products/product.entity';
+import { WarehouseproductModule } from '../warehouseproduct/warehouseproduct.module';
 
 @Module({
   imports:[TypeOrmModule.forFeature(
     [
       Warehouse,WarehouseCategory,WarehouseProduct,Transaction,Product
-    ]),WarehouseCategoriesModule,ProductsModule],
+    ]),WarehouseCategoriesModule,ProductsModule,WarehouseproductModule],
   exports:[WarehousesService],
   providers: [WarehousesService, WarehousesResolver]
 })

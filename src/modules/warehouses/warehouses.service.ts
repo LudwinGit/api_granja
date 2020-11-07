@@ -22,7 +22,7 @@ export class WarehousesService {
     }
 
     async find(id: number): Promise<Warehouse> {
-        return await this.warehouseRepository.findOne(id, { relations: ["warehouseProducts"] });
+        return await this.warehouseRepository.findOne(id);
     }
 
     async findByCategory(category: string): Promise<Warehouse[]> {
