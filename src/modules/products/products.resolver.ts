@@ -26,11 +26,7 @@ export class ProductsResolver {
     @ResolveField(()=>[ProductMeasure])
     async productmeasures(@Parent() product:Product)
     {
-        const {productmeasures} = product
-        for(const element of productmeasures){
-            const measure:Measure = await this.measureService.find(element.measureId)
-            element.measure = measure
-        }
+        const {productmeasures} = await this.producService.findOne(product.id)
         return productmeasures
     }
 
