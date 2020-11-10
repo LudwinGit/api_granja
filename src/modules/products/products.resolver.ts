@@ -27,6 +27,10 @@ export class ProductsResolver {
     async productmeasures(@Parent() product:Product)
     {
         const {productmeasures} = await this.producService.findOne(product.id)
+        for(const element of productmeasures){
+            const measure:Measure = await this.measureService.find(element.measureId)
+            element.measure = measure
+        }
         return productmeasures
     }
 
