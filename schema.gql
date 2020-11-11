@@ -73,6 +73,23 @@ type Seller {
   routes: [Route!]!
 }
 
+type UnificationProduct {
+  unit: Float!
+  package: Float!
+  unit_package: Float!
+  product: Product!
+  unification: Unification!
+}
+
+type Unification {
+  id: Float!
+  observation: String!
+  date: DateTime!
+  status: String!
+  unificationproducts: [UnificationProduct!]!
+  sales: [Sale!]!
+}
+
 type Sale {
   id: Float!
   type_sale: String!
@@ -192,6 +209,7 @@ type Query {
   routes: [Route!]
   route(id: Float!): Route
   sales: [Sale!]!
+  salesPendingByRoutes(routes: [Float!]!): [Sale!]
   salesBySeller(sellerId: Float!): [Sale!]!
   sale(id: Float!): Sale!
   clients: [Client!]
@@ -204,6 +222,8 @@ type Query {
   permissions: [Permission!]!
   permissionsWithoutAddingtoUser(userId: Float!): [Permission!]!
   productsSale(saleId: Float!): [SaleProduct!]!
+  unifications: [Unification!]!
+  unification(id: Float!): Unification!
 }
 
 type Mutation {
@@ -256,6 +276,11 @@ type Mutation {
   login(data: AuthInput!): User
   addProductToSale(data: SaleProductInput!): SaleProduct!
   removeProducttoSale(measureId: Float!, productId: Float!, saleId: Float!): Boolean!
+  createUnification(data: UnificationInput!): Unification!
+  updateUnification(data: UnificationInput!, id: Float!): Unification!
+  removeUnification(id: Float!): Unification!
+  addSaleToUnification(saleId: Float!, unificationId: Float!): Unification!
+  addSalesToUnification(data: [Float!]!, id: Float!): Unification!
 }
 
 input WarehouseInput {
@@ -373,4 +398,10 @@ input SaleProductInput {
   unit_measure: Float!
   quantity: Float!
   price: Float!
+}
+
+input UnificationInput {
+  observation: String!
+  date: DateTime!
+  status: String
 }

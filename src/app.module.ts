@@ -19,6 +19,8 @@ import { WarehouseproductModule } from './modules/warehouseproduct/warehouseprod
 import { ClientsModule } from './modules/clients/clients.module';
 import { SaleproductModule } from './modules/saleproduct/saleproduct.module';
 import { PermissionsModule } from './modules/permissions/permissions.module';
+import { UnificationsModule } from './modules/unifications/unifications.module';
+import { UnificationproductModule } from './modules/unificationproduct/unificationproduct.module';
 
 @Module({
   imports: [
@@ -59,6 +61,8 @@ import { PermissionsModule } from './modules/permissions/permissions.module';
     ClientsModule,
     SaleproductModule,
     PermissionsModule,
+    UnificationsModule,
+    UnificationproductModule,
   ],
   controllers: [],
   providers: [],

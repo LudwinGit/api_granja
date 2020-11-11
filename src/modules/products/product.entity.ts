@@ -4,6 +4,7 @@ import { ProductMeasure } from "src/manytomany/productMeasure.entity";
 import { WarehouseProduct } from "../warehouses/entitys/warehouseProduct.entity";
 import { TransactionProduct } from "../transactions/entities/transactionProduct.entity";
 import { SaleProduct } from "../saleproduct/saleproduct.entity";
+import { UnificationProduct } from "../unificationproduct/unificationproduct.entity";
 
 @ObjectType()
 @Entity({name:'product'})
@@ -62,6 +63,9 @@ export class Product{
     // @Field(()=>[ProductMeasure])
     @OneToMany(()=>SaleProduct,saleProduct => saleProduct.product)
     saleproducts: SaleProduct[]
+
+    @OneToMany(() => UnificationProduct, unificationProduct => unificationProduct.product)
+    unificationproducts: UnificationProduct[]
 
     @OneToMany(()=>WarehouseProduct,warehouseProduct => warehouseProduct.product)
     warehouseProducts: WarehouseProduct[]

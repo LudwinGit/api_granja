@@ -50,14 +50,24 @@ export class SalesService {
         return sale
     }
 
-    async updateTotal(id:number,total:number){
+    async updateTotal(id: number, total: number) {
         const sale = await this.saleRepository.findOne(id)
         sale.total = parseFloat(sale.total.toString()) + parseFloat(total.toString())
-        await this.saleRepository.update(id,sale)
+        await this.saleRepository.update(id, sale)
     }
 
-    async updateStatus(id:number,status:string):Promise<boolean>{
-        await this.saleRepository.update(id,{status})
+    async updateStatus(id: number, status: string): Promise<boolean> {
+        await this.saleRepository.update(id, { status })
         return true
+    }
+
+    async findPendingByRoutes(routes: number[]): Promise<Sale[]> {
+
+        const sales = await this.saleRepository
+            .createQueryBuilder("sale")
+            .where(`sale."routeId" IN (:...routes) and sale.status='P' and sale."unificationId" is null`, {routes})
+            .orderBy("sale.id", "ASC")
+            .getMany()
+        return sales
     }
 }

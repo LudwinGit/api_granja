@@ -22,6 +22,11 @@ export class SalesResolver {
         return this.salesService.findAll()
     }
 
+    @Query(() => [Sale], { nullable: true })
+    async salesPendingByRoutes(@Args({ name: 'routes', type: () => [Number] }) routes: number[]): Promise<Sale[]> {
+        return this.salesService.findPendingByRoutes(routes)
+    }
+
     @Query(() => [Sale])
     async salesBySeller(@Args('sellerId') id: number): Promise<Sale[]> {
         return this.salesService.findBySeller(id)

@@ -5,6 +5,7 @@ import { Seller } from "src/modules/sellers/entities/seller.entity";
 import { Route } from "src/modules/routes/entities/route.entity";
 import { Client } from "src/modules/clients/client.entity";
 import { SaleProduct } from "src/modules/saleproduct/saleproduct.entity";
+import { Unification } from "src/modules/unifications/unification.entity";
 
 @ObjectType()
 @Entity()
@@ -71,4 +72,7 @@ export class Sale {
 
     @OneToMany(() => SaleProduct, saleProduct => saleProduct.sale)
     saleproducts: SaleProduct[]
+
+    @ManyToOne(type=>Unification, unification => unification.sales)
+    unification: Unification
 }
