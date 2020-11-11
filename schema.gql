@@ -357,7 +357,7 @@ input SaleInput {
 
 input ClientInput {
   name: String!
-  nit: String!
+  nit: String
   address: String!
   routeId: Float!
 }

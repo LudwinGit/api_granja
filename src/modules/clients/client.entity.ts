@@ -15,7 +15,7 @@ export class Client {
     name: string
 
     @Field()
-    @Column({ length: 20, unique: true })
+    @Column({ length: 20, unique: true,nullable:true })
     nit: string
 
     @Field()

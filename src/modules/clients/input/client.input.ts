@@ -5,7 +5,7 @@ export class ClientInput {
     @Field()
     name: string
 
-    @Field()
+    @Field({nullable:true})
     nit: string
 
     @Field()
