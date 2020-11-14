@@ -7,9 +7,10 @@ import { SalesModule } from '../sales/sales.module';
 import { ProductsModule } from '../products/products.module';
 import { MeasuresModule } from '../measures/measures.module';
 import { WarehouseproductModule } from '../warehouseproduct/warehouseproduct.module';
+import { Measure } from '../measures/measure.entity';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([SaleProduct]),SalesModule,MeasuresModule,ProductsModule,WarehouseproductModule],
+  imports: [TypeOrmModule.forFeature([SaleProduct,Measure]), SalesModule, MeasuresModule, ProductsModule, WarehouseproductModule],
   providers: [SaleproductService, SaleproductResolver]
 })
-export class SaleproductModule {}
+export class SaleproductModule { }

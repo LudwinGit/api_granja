@@ -104,6 +104,7 @@ type Sale {
   invoiced: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
+  saleproducts: [SaleProduct!]!
 }
 
 type SaleProduct {

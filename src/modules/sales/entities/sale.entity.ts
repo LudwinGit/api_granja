@@ -34,7 +34,7 @@ export class Sale {
     @Column({ type: "char", length: 1, default: "I" })
     status: string
 
-    @Field({nullable:true})
+    @Field({ nullable: true })
     @Column({ type: "varchar", length: 200, nullable: true })
     observation: string
 
@@ -70,9 +70,10 @@ export class Sale {
     @UpdateDateColumn({ name: 'updated_at' })
     updatedAt: Date
 
+    @Field(() => [SaleProduct])
     @OneToMany(() => SaleProduct, saleProduct => saleProduct.sale)
     saleproducts: SaleProduct[]
 
-    @ManyToOne(type=>Unification, unification => unification.sales)
+    @ManyToOne(() => Unification, unification => unification.sales)
     unification: Unification
 }

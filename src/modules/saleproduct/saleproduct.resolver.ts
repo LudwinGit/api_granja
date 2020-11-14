@@ -1,12 +1,18 @@
-import { Resolver, Mutation, Query, Args } from '@nestjs/graphql';
+import { Resolver, Mutation, Query, Args, ResolveField, Parent } from '@nestjs/graphql';
 import { SaleproductService } from './saleproduct.service';
 import { SaleProductInput } from './input/saleproduct.input';
 import { SaleProduct } from './saleproduct.entity';
+import { Measure } from '../measures/measure.entity';
+import { MeasuresService } from '../measures/measures.service';
+import { Product } from '../products/product.entity';
+import { ProductsService } from '../products/products.service';
 
-@Resolver()
+@Resolver(() => SaleProduct)
 export class SaleproductResolver {
     constructor(
-        private readonly saleProductService: SaleproductService
+        private readonly saleProductService: SaleproductService,
+        private readonly measureService: MeasuresService,
+        private readonly productService: ProductsService
     ) { }
 
     @Query(() => [SaleProduct])
@@ -20,8 +26,18 @@ export class SaleproductResolver {
     }
 
     @Mutation(() => Boolean)
-    async removeProducttoSale(@Args('saleId') saleId: number, @Args('productId') productId: number, @Args('measureId') measureId: number) {
-        return this.saleProductService.remove(saleId,productId,measureId)
+    async removeProducttoSale(@Args('saleId') saleId: number, @Args('productId') productId: number, @Args('measureId') measureId: number): Promise<boolean> {
+        return this.saleProductService.remove(saleId, productId, measureId)
+    }
+
+    @ResolveField(() => Measure)
+    async measure(@Parent() saleproduct: SaleProduct): Promise<Measure> {
+        return await this.measureService.find(saleproduct.measureId)
+    }
+
+    @ResolveField(() => Product)
+    async product(@Parent() saleproduct: SaleProduct): Promise<Product> {
+        return await this.productService.findOne(saleproduct.productId)
     }
 
 }

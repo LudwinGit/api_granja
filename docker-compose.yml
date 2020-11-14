@@ -29,6 +29,7 @@ services:
             POSTGRES_USER: ${DB_USER}
             POSTGRES_DB: ${DB_NAME}
             PG_DATA: /var/lib/postgresql/data
+            TZ: 'America/Guatemala'
         ports:
             - ${DB_LISTEN_PORT_OUT}:${DB_PORT}
         volumes:
