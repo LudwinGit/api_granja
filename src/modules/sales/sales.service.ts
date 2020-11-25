@@ -21,15 +21,25 @@ export class SalesService {
     ) { }
 
     async findAll(): Promise<Sale[]> {
-        return await this.saleRepository.find({ relations: ["seller", "route", "client", "warehouse"] })
+        return await this.saleRepository.find({ relations: ["seller", "route", "client", "warehouse"], order: { id: "DESC" } })
     }
 
     async find(id: number): Promise<Sale> {
-        return await this.saleRepository.findOne(id, { relations: ["seller", "route", "client", "warehouse","saleproducts"] })
+        return await this.saleRepository.findOne(id, { relations: ["seller", "route", "client", "warehouse", "saleproducts"] })
     }
 
     async findBySeller(sellerId: number): Promise<Sale[]> {
         return await this.saleRepository.find({ where: { seller: sellerId }, relations: ["seller", "route", "client", "warehouse"] })
+    }
+
+    async findByDate(date: Date): Promise<Sale[]> {
+        const sales = await this.saleRepository
+            .createQueryBuilder("sale")
+            .where(`sale."created_at"::date = '${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()+1}'`)
+            .andWhere(`sale.status IN ('P')`)
+            .orderBy("sale.id", "DESC")
+            .getMany()
+        return sales
     }
 
     async create(input: SaleInput): Promise<Sale> {
@@ -65,7 +75,7 @@ export class SalesService {
 
         const sales = await this.saleRepository
             .createQueryBuilder("sale")
-            .where(`sale."routeId" IN (:...routes) and sale.status='P' and sale."unificationId" is null`, {routes})
+            .where(`sale."routeId" IN (:...routes) and sale.status='P' and sale."unificationId" is null`, { routes })
             .orderBy("sale.id", "ASC")
             .getMany()
         return sales

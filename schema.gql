@@ -213,6 +213,7 @@ type Query {
   salesPendingByRoutes(routes: [Float!]!): [Sale!]
   salesBySeller(sellerId: Float!): [Sale!]!
   sale(id: Float!): Sale!
+  saleByDate(date: DateTime!): [Sale!]!
   clients: [Client!]
   client: Client
   clientsByRoute(routeId: Float!): [Client!]

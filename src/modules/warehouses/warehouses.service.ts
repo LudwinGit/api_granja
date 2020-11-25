@@ -33,7 +33,7 @@ export class WarehousesService {
         const warehouse = await
             this.warehouseRepository
                 .createQueryBuilder("warehouse")
-                .leftJoinAndSelect("warehouse.sellers", "seller","seller.id=:sellerId",{sellerId})
+                .leftJoinAndSelect("warehouse.sellers", "seller", "seller.id=:sellerId", { sellerId })
                 .where("seller.id is null")
                 .getMany()
         return warehouse
@@ -68,9 +68,14 @@ export class WarehousesService {
     }
 
     async delete(id: number): Promise<Warehouse> {
-        const warehouse: Warehouse = await this.warehouseRepository.findOne(id, { relations: ["warehouseProducts"] });
+        const warehouse: Warehouse = await this.warehouseRepository.findOne(id, { relations: ["warehouseProducts", "sales"] });
+
         if (!warehouse)
             throw new HttpException('Warehouse Not Found', HttpStatus.NOT_FOUND);
+        if (warehouse.sales.length > 0)
+            throw new HttpException('No puede eliminar el registro por que ya tiene relacion con ventas', HttpStatus.INTERNAL_SERVER_ERROR);
+            if (warehouse.warehouseProducts.length > 0)
+            throw new HttpException('No puede eliminar el registro por que ya tiene relacion con ventas', HttpStatus.INTERNAL_SERVER_ERROR);
         await this.warehouseRepository.remove(warehouse)
         return null;
     }
