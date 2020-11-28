@@ -189,6 +189,15 @@ type Warehouse {
   warehouseCategory: WarehouseCategory!
 }
 
+type ProductSale {
+  sku: String!
+  description: String!
+  units: Float!
+  price_cost: Float!
+  price_sale: Float!
+  category: String!
+}
+
 type Query {
   warehouses: [Warehouse!]
   warehousesWithoutAddingtoSeller(sellerId: Float!): [Warehouse!]
@@ -224,6 +233,7 @@ type Query {
   permissions: [Permission!]!
   permissionsWithoutAddingtoUser(userId: Float!): [Permission!]!
   productsSale(saleId: Float!): [SaleProduct!]!
+  reportSaleProductByDates(date_b: DateTime!, date_a: DateTime!): [ProductSale!]
   unifications: [Unification!]!
   unification(id: Float!): Unification!
 }

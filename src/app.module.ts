@@ -21,6 +21,7 @@ import { SaleproductModule } from './modules/saleproduct/saleproduct.module';
 import { PermissionsModule } from './modules/permissions/permissions.module';
 import { UnificationsModule } from './modules/unifications/unifications.module';
 import { UnificationproductModule } from './modules/unificationproduct/unificationproduct.module';
+import { ReportsModule } from './modules/reports/reports.module';
 
 @Module({
   imports: [
@@ -63,6 +64,7 @@ import { UnificationproductModule } from './modules/unificationproduct/unificati
     PermissionsModule,
     UnificationsModule,
     UnificationproductModule,
+    ReportsModule,
   ],
   controllers: [],
   providers: [],

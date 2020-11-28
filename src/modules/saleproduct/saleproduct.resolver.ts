@@ -6,6 +6,7 @@ import { Measure } from '../measures/measure.entity';
 import { MeasuresService } from '../measures/measures.service';
 import { Product } from '../products/product.entity';
 import { ProductsService } from '../products/products.service';
+import { ProductSale } from '../reports/type/productSale';
 
 @Resolver(() => SaleProduct)
 export class SaleproductResolver {
@@ -38,6 +39,12 @@ export class SaleproductResolver {
     @ResolveField(() => Product)
     async product(@Parent() saleproduct: SaleProduct): Promise<Product> {
         return await this.productService.findOne(saleproduct.productId)
+    }
+
+
+    @Query(() => [ProductSale],{nullable:true})
+    async reportSaleProductByDates(@Args('date_a') date_a: Date,@Args('date_b') date_b: Date): Promise<ProductSale[]> {
+        return this.saleProductService.reportSaleProductByDatese(date_a,date_b)
     }
 
 }

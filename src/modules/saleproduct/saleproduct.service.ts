@@ -1,6 +1,5 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Sale } from '../sales/entities/sale.entity';
 import { SaleProduct } from './saleproduct.entity';
 import { Repository } from 'typeorm';
 import { SaleProductInput } from './input/saleproduct.input';
@@ -8,6 +7,7 @@ import { ProductsService } from '../products/products.service';
 import { MeasuresService } from '../measures/measures.service';
 import { SalesService } from '../sales/sales.service';
 import { WarehouseproductService } from '../warehouseproduct/warehouseproduct.service';
+import { ProductSale } from '../reports/type/productSale';
 
 @Injectable()
 export class SaleproductService {
@@ -50,13 +50,13 @@ export class SaleproductService {
         sp.sale = sale
         await this.saleService.updateTotal(sale.id, subtotal)
         await this.saleProductRepository.save(sp)
-        await this.warehouseProductService.subtractStock(input.productId,sale.warehouse.id,(input.quantity*measure.unit))
+        await this.warehouseProductService.subtractStock(input.productId, sale.warehouse.id, (input.quantity * measure.unit))
         return sp
     }
 
     async remove(saleId: number, productId: number, measureId: number): Promise<boolean> {
         try {
-            const {warehouse} = await this.saleService.find(saleId)
+            const { warehouse } = await this.saleService.find(saleId)
             const saleProduct = await this.saleProductRepository.findOne({
                 where: {
                     measureId,
@@ -65,7 +65,7 @@ export class SaleproductService {
                 }
             })
             const subtotal = parseFloat((saleProduct.price * saleProduct.quantity).toString())
-            await this.warehouseProductService.addStock(productId,warehouse.id, saleProduct.quantity*saleProduct.unit_measure)
+            await this.warehouseProductService.addStock(productId, warehouse.id, saleProduct.quantity * saleProduct.unit_measure)
             await this.saleProductRepository.remove(saleProduct)
             await this.saleService.updateTotal(saleId, -subtotal)
             return true;
@@ -73,5 +73,11 @@ export class SaleproductService {
             console.log(error);
             return false;
         }
+    }
+
+    async reportSaleProductByDatese(date_a:Date,date_b:Date): Promise<ProductSale[]> {
+        const dateA = date_a.getFullYear()+'-' + (date_a.getMonth()+1) + '-'+date_a.getDate()
+        const dateB = date_b.getFullYear()+'-' + (date_b.getMonth()+1) + '-'+date_b.getDate()
+        return await this.saleProductRepository.query(`select * from salesByDate('${dateA}','${dateB}')`)
     }
 }
