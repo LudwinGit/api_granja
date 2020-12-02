@@ -42,6 +42,11 @@ export class SalesResolver {
         return this.salesService.findByDate(date)
     }
 
+    @Query(() => [Sale], { nullable: true })
+    async salesBySellerAndDate(@Args('date') date: Date, @Args('sellerId') sellerId: number): Promise<Sale[]> {
+        return this.salesService.findBySellerAndDate(date, sellerId)
+    }
+
     @Mutation(() => Sale)
     async createSale(@Args('data') input: SaleInput): Promise<Sale> {
         return this.salesService.create(input)

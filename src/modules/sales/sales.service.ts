@@ -35,8 +35,21 @@ export class SalesService {
     async findByDate(date: Date): Promise<Sale[]> {
         const sales = await this.saleRepository
             .createQueryBuilder("sale")
-            .where(`sale."created_at"::date = '${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()+1}'`)
+            .where(`sale."created_at"::date = '${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate() + 1}'`)
             .andWhere(`sale.status IN ('P')`)
+            .orderBy("sale.id", "DESC")
+            .getMany()
+        return sales
+    }
+
+    async findBySellerAndDate(date: Date, sellerId: number): Promise<Sale[]> {
+        const moment = require('moment-timezone')
+        const fecha = moment(date).tz("America/Guatemala")
+
+        const sales = await this.saleRepository
+            .createQueryBuilder("sale")
+            .where(`sale."created_at"::date = '${fecha.format("YYYY-MM-DD")}'`)
+            .andWhere(`sale."sellerId" = ${sellerId}`)
             .orderBy("sale.id", "DESC")
             .getMany()
         return sales

@@ -76,6 +76,14 @@ export class SaleproductService {
     }
 
     async reportSaleProductByDatese(date_a:Date,date_b:Date): Promise<ProductSale[]> {
+        process.env.TZ = 'America/Guatemala'
+        console.log(date_a);
+
+        var isoDate = new Date().toISOString()
+
+        console.log(isoDate);
+        
+        
         const dateA = date_a.getFullYear()+'-' + (date_a.getMonth()+1) + '-'+date_a.getDate()
         const dateB = date_b.getFullYear()+'-' + (date_b.getMonth()+1) + '-'+date_b.getDate()
         return await this.saleProductRepository.query(`select * from salesByDate('${dateA}','${dateB}')`)
