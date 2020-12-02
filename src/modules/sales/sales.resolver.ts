@@ -47,6 +47,11 @@ export class SalesResolver {
         return this.salesService.findBySellerAndDate(date, sellerId)
     }
 
+    @Query(() => [Sale], { nullable: true })
+    async salesByRange(@Args('dateA') dateA: Date, @Args('dateB') dateB: Date) {
+        return this.salesService.findByRangeDate(dateA, dateB)
+    }
+
     @Mutation(() => Sale)
     async createSale(@Args('data') input: SaleInput): Promise<Sale> {
         return this.salesService.create(input)
@@ -59,7 +64,7 @@ export class SalesResolver {
 
     @ResolveField(() => Seller, { nullable: true })
     async seller(@Parent() sale: Sale): Promise<Seller> {
-        const seller: Seller = await this.sellerService.find(sale.seller.id)
+        const { seller } = await this.salesService.find(sale.id)
         return seller
     }
 

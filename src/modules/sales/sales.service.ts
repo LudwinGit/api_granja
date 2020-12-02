@@ -45,11 +45,32 @@ export class SalesService {
     async findBySellerAndDate(date: Date, sellerId: number): Promise<Sale[]> {
         const moment = require('moment-timezone')
         const fecha = moment(date).tz("America/Guatemala")
+        if (sellerId === 0) {
+            const sales = await this.saleRepository
+                .createQueryBuilder("sale")
+                .where(`sale."created_at"::date = '${fecha.format("YYYY-MM-DD")}'`)
+                .orderBy("sale.id", "DESC")
+                .getMany()
+            return sales
+        }
+        else {
+            const sales = await this.saleRepository
+                .createQueryBuilder("sale")
+                .where(`sale."created_at"::date = '${fecha.format("YYYY-MM-DD")}'`)
+                .andWhere(`sale."sellerId" = ${sellerId}`)
+                .orderBy("sale.id", "DESC")
+                .getMany()
+            return sales
+        }
+    }
 
+    async findByRangeDate(dateA: Date, dateB: Date): Promise<Sale[]> {
+        const moment = require('moment-timezone')
+        const datea = moment(dateA).tz("America/Guatemala")
+        const dateb = moment(dateB).tz("America/Guatemala")
         const sales = await this.saleRepository
             .createQueryBuilder("sale")
-            .where(`sale."created_at"::date = '${fecha.format("YYYY-MM-DD")}'`)
-            .andWhere(`sale."sellerId" = ${sellerId}`)
+            .where(`sale."created_at"::date between '${datea.format("YYYY-MM-DD")}' and '${dateb.format("YYYY-MM-DD")}'`)
             .orderBy("sale.id", "DESC")
             .getMany()
         return sales

@@ -224,6 +224,7 @@ type Query {
   sale(id: Float!): Sale!
   saleByDate(date: DateTime!): [Sale!]!
   salesBySellerAndDate(sellerId: Float!, date: DateTime!): [Sale!]
+  salesByRange(dateB: DateTime!, dateA: DateTime!): [Sale!]
   clients: [Client!]
   client: Client
   clientsByRoute(routeId: Float!): [Client!]
