@@ -8,6 +8,7 @@ import { Client } from '../clients/client.entity';
 import { ClientsService } from '../clients/clients.service';
 import { Route } from '../routes/entities/route.entity';
 import { Warehouse } from '../warehouses/entitys/warehouse.entity';
+import { SaleCost } from '../reports/type/saleCost';
 
 @Resolver(() => Sale)
 export class SalesResolver {
@@ -47,7 +48,7 @@ export class SalesResolver {
         return this.salesService.findBySellerAndDate(date, sellerId)
     }
 
-    @Query(() => [Sale], { nullable: true })
+    @Query(() => [SaleCost], { nullable: true })
     async salesByRange(@Args('dateA') dateA: Date, @Args('dateB') dateB: Date) {
         return this.salesService.findByRangeDate(dateA, dateB)
     }

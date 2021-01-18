@@ -9,6 +9,7 @@ import { ClientsService } from '../clients/clients.service';
 import { SellersService } from '../sellers/sellers.service';
 import { RoutesService } from '../routes/routes.service';
 import { WarehousesService } from '../warehouses/warehouses.service';
+import { SaleCost } from '../reports/type/saleCost';
 
 @Injectable()
 export class SalesService {
@@ -64,15 +65,12 @@ export class SalesService {
         }
     }
 
-    async findByRangeDate(dateA: Date, dateB: Date): Promise<Sale[]> {
+    async findByRangeDate(dateA: Date, dateB: Date): Promise<SaleCost[]> {
         const moment = require('moment-timezone')
         const datea = moment(dateA).tz("America/Guatemala")
         const dateb = moment(dateB).tz("America/Guatemala")
-        const sales = await this.saleRepository
-            .createQueryBuilder("sale")
-            .where(`sale."created_at"::date between '${datea.format("YYYY-MM-DD")}' and '${dateb.format("YYYY-MM-DD")}'`)
-            .orderBy("sale.id", "DESC")
-            .getMany()
+        console.log(`select * from vw_sales_cost where date between '${datea.format("YYYY-MM-DD")}' and '${dateb.format("YYYY-MM-DD")}'`);
+        const sales = await this.saleRepository.query(`select * from vw_sales_cost where date between '${datea.format("YYYY-MM-DD")}' and '${dateb.format("YYYY-MM-DD")}'`)
         return sales
     }
 
