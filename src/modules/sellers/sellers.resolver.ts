@@ -55,7 +55,8 @@ export class SellersResolver {
 
     @ResolveField(() => Employee, { nullable: true })
     async employee(@Parent() seller: Seller) {
-        return this.employeeService.find(seller.employee.id)
+        const { employee } = await this.sellerService.find(seller.id)
+        return employee
     }
 
     @Mutation(()=>Route,{nullable:true})

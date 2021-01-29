@@ -192,6 +192,16 @@ type Warehouse {
   warehouseCategory: WarehouseCategory!
 }
 
+type SaleCost {
+  id: Float!
+  date: DateTime!
+  total: Float!
+  total_cost: Float!
+  clientname: String!
+  sellername: String!
+  routename: String!
+}
+
 type ProductSale {
   sku: String!
   description: String!
@@ -227,6 +237,7 @@ type Query {
   sale(id: Float!): Sale!
   saleByDate(date: DateTime!): [Sale!]!
   salesBySellerAndDate(sellerId: Float!, date: DateTime!): [Sale!]
+  salesByRange(dateB: DateTime!, dateA: DateTime!): [SaleCost!]
   clients: [Client!]
   client: Client
   clientsByRoute(routeId: Float!): [Client!]
