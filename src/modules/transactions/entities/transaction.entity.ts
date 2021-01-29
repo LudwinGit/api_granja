@@ -31,6 +31,17 @@ export class Transaction{
     type: string
 
     @Field()
+    date: Date;
+
+    //Warehouse Origin name
+    @Field({nullable:true})
+    won: string;
+
+    //Warehouse Destiny name
+    @Field({nullable:true})
+    wdn: string;
+
+    @Field()
     @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;
 

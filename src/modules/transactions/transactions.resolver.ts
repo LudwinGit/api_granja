@@ -18,8 +18,8 @@ export class TransactionsResolver {
     ) { }
 
     @Query(() => [Transaction], { nullable: true })
-    async transactions() {
-        return this.transactionService.findAll()
+    async transactions(@Args('sellerId') seller:number, @Args('date_a') date_a:Date,@Args('date_b') date_b:Date) {
+        return this.transactionService.findAll(seller,date_a,date_b)
     }
 
     @Query(() => Transaction, { nullable: true })

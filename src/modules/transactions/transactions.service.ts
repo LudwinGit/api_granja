@@ -24,8 +24,13 @@ export class TransactionsService {
 
     ) { }
 
-    async findAll(): Promise<Transaction[]> {
-        return await this.transactionRepository.find({ relations: ["warehouseOrigin", "warehouseDestiny", "transactionProducts"], order: { id: "DESC" } })
+    async findAll(seller: number, date_a: Date, date_b: Date): Promise<Transaction[]> {
+        const moment = require('moment-timezone')
+        const dateA = moment(date_a).tz("America/Guatemala")
+        const dateB = moment(date_b).tz("America/Guatemala")
+        return await this.transactionRepository.query(`select * from vw_transaction_seller where seller = ${seller} 
+                                                        and date between '${dateA.format("YYYY-MM-DD")}' and '${dateB.format("YYYY-MM-DD")}'`);
+        
     }
 
     async find(id: number): Promise<Transaction> {

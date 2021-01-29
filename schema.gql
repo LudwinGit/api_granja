@@ -140,6 +140,9 @@ type Transaction {
   observation: String!
   status: String!
   type: String!
+  date: DateTime!
+  won: String
+  wdn: String
   createdAt: DateTime!
   updatedAt: DateTime!
   transactionProducts: [TransactionProduct!]
@@ -227,7 +230,7 @@ type Query {
   clients: [Client!]
   client: Client
   clientsByRoute(routeId: Float!): [Client!]
-  transactions: [Transaction!]
+  transactions(date_b: DateTime!, date_a: DateTime!, sellerId: Float!): [Transaction!]
   transaction(id: Float!): Transaction
   users: [User!]
   user(id: Float!): User
