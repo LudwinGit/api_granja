@@ -3,10 +3,10 @@ import { Field, ObjectType } from "@nestjs/graphql";
 @ObjectType()
 export class ProductSale{
     @Field()
-    sku: string
+    sku: String
 
     @Field()
-    description: string
+    description: String
 
     @Field()
     units: number
@@ -18,5 +18,5 @@ export class ProductSale{
     price_sale: number
 
     @Field()
-    category: string
+    category: String
 }

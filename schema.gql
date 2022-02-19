@@ -211,6 +211,16 @@ type ProductSale {
   category: String!
 }
 
+type ProductKardex {
+  id: Float!
+  observation: String!
+  created: DateTime!
+  type: String!
+  origin: String
+  destiny: String
+  quantity: Float!
+}
+
 type Query {
   warehouses: [Warehouse!]
   warehousesWithoutAddingtoSeller(sellerId: Float!): [Warehouse!]
@@ -251,6 +261,7 @@ type Query {
   reportSaleProductByDates(date_b: DateTime!, date_a: DateTime!): [ProductSale!]
   unifications: [Unification!]!
   unification(id: Float!): Unification!
+  kardex(sku: String!, warehouseId: Float!, date: DateTime!): [ProductKardex!]
 }
 
 type Mutation {

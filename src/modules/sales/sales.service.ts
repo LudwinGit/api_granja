@@ -69,7 +69,6 @@ export class SalesService {
         const moment = require('moment-timezone')
         const datea = moment(dateA).tz("America/Guatemala")
         const dateb = moment(dateB).tz("America/Guatemala")
-        console.log(`select * from vw_sales_cost where date between '${datea.format("YYYY-MM-DD")}' and '${dateb.format("YYYY-MM-DD")}'`);
         const sales = await this.saleRepository.query(`select * from vw_sales_cost where date between '${datea.format("YYYY-MM-DD")}' and '${dateb.format("YYYY-MM-DD")}'`)
         return sales
     }
