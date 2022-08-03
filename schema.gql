@@ -119,6 +119,29 @@ type SaleProduct {
   measure: Measure!
 }
 
+type Consolidate {
+  id: Float!
+  warehouse: Warehouse!
+  total: Float!
+  discount: Float!
+  status: String!
+  observation: String
+  consolidateProducts: [ConsolidateProduct!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ConsolidateProduct {
+  consolidateId: Float!
+  productId: Float!
+  measureId: Float!
+  unit_measure: Float!
+  quantity: Float!
+  product: Product!
+  consolidate: Consolidate!
+  measure: Measure!
+}
+
 type Measure {
   id: Float!
   name: String!
@@ -244,6 +267,7 @@ type Query {
   sales: [Sale!]!
   salesPendingByRoutes(routes: [Float!]!): [Sale!]
   salesBySeller(sellerId: Float!): [Sale!]!
+  preSalesBySeller(sellerId: Float!): [Sale!]!
   sale(id: Float!): Sale!
   saleByDate(date: DateTime!): [Sale!]!
   salesBySellerAndDate(sellerId: Float!, date: DateTime!): [Sale!]
@@ -262,6 +286,7 @@ type Query {
   unifications: [Unification!]!
   unification(id: Float!): Unification!
   kardex(sku: String!, warehouseId: Float!, date: DateTime!): [ProductKardex!]
+  consolidate(id: Int!): Consolidate!
 }
 
 type Mutation {
@@ -319,6 +344,9 @@ type Mutation {
   removeUnification(id: Float!): Unification!
   addSaleToUnification(saleId: Float!, unificationId: Float!): Unification!
   addSalesToUnification(data: [Float!]!, id: Float!): Unification!
+  createConsolidate(createConsolidateInput: CreateConsolidateInput!): Consolidate!
+  updateConsolidate(updateConsolidateInput: UpdateConsolidateInput!): Consolidate!
+  removeConsolidate(id: Int!): Consolidate!
 }
 
 input WarehouseInput {
@@ -442,4 +470,13 @@ input UnificationInput {
   observation: String!
   date: DateTime!
   status: String
+}
+
+input CreateConsolidateInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateConsolidateInput {
+  id: Int!
 }

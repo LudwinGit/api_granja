@@ -33,6 +33,11 @@ export class SalesResolver {
         return this.salesService.findBySeller(id)
     }
 
+    @Query(()=>[Sale])
+    async preSalesBySeller(@Args('sellerId') sellerId:number): Promise<Sale[]>{
+        return this.salesService.findPreSaleBySeller(sellerId)
+    }
+
     @Query(() => Sale)
     async sale(@Args('id') id: number): Promise<Sale> {
         return this.salesService.find(id)

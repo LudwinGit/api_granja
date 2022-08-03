@@ -14,26 +14,26 @@ import { SaleCost } from '../reports/type/saleCost';
 @Injectable()
 export class SalesService {
     constructor(
-        @InjectRepository(Sale) private readonly saleRepository: Repository<Sale>,
+        @InjectRepository(Sale) private readonly saleRepository: Repository < Sale > ,
         private readonly clientService: ClientsService,
         private readonly sellerService: SellersService,
         private readonly routeService: RoutesService,
         private readonly warehouseService: WarehousesService,
-    ) { }
+    ) {}
 
-    async findAll(): Promise<Sale[]> {
-        return await this.saleRepository.find({ relations: ["seller", "route", "client", "warehouse"], order: { id: "DESC" } })
+    async findAll(): Promise < Sale[] > {
+        return await this.saleRepository.find({ relations: ["seller", "route", "client", "warehouse"], order: { id: "DESC" } });
     }
 
-    async find(id: number): Promise<Sale> {
+    async find(id: number): Promise < Sale > {
         return await this.saleRepository.findOne(id, { relations: ["seller", "route", "client", "warehouse", "saleproducts"] })
     }
 
-    async findBySeller(sellerId: number): Promise<Sale[]> {
+    async findBySeller(sellerId: number): Promise < Sale[] > {
         return await this.saleRepository.find({ where: { seller: sellerId }, relations: ["seller", "route", "client", "warehouse"] })
     }
 
-    async findByDate(date: Date): Promise<Sale[]> {
+    async findByDate(date: Date): Promise < Sale[] > {
         const sales = await this.saleRepository
             .createQueryBuilder("sale")
             .where(`sale."created_at"::date = '${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate() + 1}'`)
@@ -43,7 +43,15 @@ export class SalesService {
         return sales
     }
 
-    async findBySellerAndDate(date: Date, sellerId: number): Promise<Sale[]> {
+    async findPreSaleBySeller(sellerId: number){
+        return await this.saleRepository
+        .createQueryBuilder("sale")
+        .where(`sale."sellerId" = ${sellerId} and sale.status='P' and sale.type_sale = 'P' and sale.total>0`)
+        .orderBy("sale.id","ASC")
+        .getMany()
+    }
+
+    async findBySellerAndDate(date: Date, sellerId: number): Promise < Sale[] > {
         const moment = require('moment-timezone')
         const fecha = moment(date).tz("America/Guatemala")
         if (sellerId === 0) {
@@ -53,8 +61,7 @@ export class SalesService {
                 .orderBy("sale.id", "DESC")
                 .getMany()
             return sales
-        }
-        else {
+        } else {
             const sales = await this.saleRepository
                 .createQueryBuilder("sale")
                 .where(`sale."created_at"::date = '${fecha.format("YYYY-MM-DD")}'`)
@@ -65,7 +72,7 @@ export class SalesService {
         }
     }
 
-    async findByRangeDate(dateA: Date, dateB: Date): Promise<SaleCost[]> {
+    async findByRangeDate(dateA: Date, dateB: Date): Promise < SaleCost[] > {
         const moment = require('moment-timezone')
         const datea = moment(dateA).tz("America/Guatemala")
         const dateb = moment(dateB).tz("America/Guatemala")
@@ -73,7 +80,7 @@ export class SalesService {
         return sales
     }
 
-    async create(input: SaleInput): Promise<Sale> {
+    async create(input: SaleInput): Promise < Sale > {
         const route: Route = await this.routeService.find(input.routeId)
         if (!route)
             throw new HttpException('Route Not Found', HttpStatus.NOT_FOUND);
@@ -97,12 +104,12 @@ export class SalesService {
         await this.saleRepository.update(id, sale)
     }
 
-    async updateStatus(id: number, status: string): Promise<boolean> {
+    async updateStatus(id: number, status: string): Promise < boolean > {
         await this.saleRepository.update(id, { status })
         return true
     }
 
-    async findPendingByRoutes(routes: number[]): Promise<Sale[]> {
+    async findPendingByRoutes(routes: number[]): Promise < Sale[] > {
 
         const sales = await this.saleRepository
             .createQueryBuilder("sale")

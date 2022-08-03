@@ -2,6 +2,7 @@ import { Field, ObjectType } from "@nestjs/graphql";
 import { Column, Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable, OneToMany } from "typeorm";
 import { ProductMeasure } from "src/manytomany/productMeasure.entity";
 import { SaleProduct } from "../saleproduct/saleproduct.entity";
+import { ConsolidateProduct } from "../consolidate/entities/consolidateProduct.entity";
 
 @ObjectType()
 @Entity()
@@ -27,6 +28,10 @@ export class Measure{
 
     @OneToMany(()=>SaleProduct,saleProduct => saleProduct.measure)
     saleproducts: SaleProduct[]
+
+
+    @OneToMany(()=>ConsolidateProduct,consolidateProduct => consolidateProduct.measure)
+    consolidateProducts: ConsolidateProduct[]
 
     // @ManyToMany(()=>Product, product => product.measures)
     //// @JoinTable({name:"product_measure"})
