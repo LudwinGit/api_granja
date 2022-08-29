@@ -1,4 +1,6 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { Route } from 'src/modules/routes/entities/route.entity';
+import { Seller } from 'src/modules/sellers/entities/seller.entity';
 import { Warehouse } from 'src/modules/warehouses/entitys/warehouse.entity';
 import {
   Column,
@@ -24,6 +26,20 @@ export class Consolidate {
     warehouse => warehouse.sales,
   )
   warehouse: Warehouse;
+
+  @Field(() => Seller)
+  @ManyToOne(
+    () => Seller,
+    seller => seller.consolidates,
+  )
+  seller: Seller;
+
+  @Field(() => Route)
+  @ManyToOne(
+    () => Route,
+    route => route.consolidates,
+  )
+  route: Route;
 
   @Field()
   @Column({ type: 'decimal', default: 0 })

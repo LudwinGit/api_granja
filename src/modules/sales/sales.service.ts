@@ -51,6 +51,14 @@ export class SalesService {
         .getMany()
     }
 
+    async findPreSaleBySellerAndRoute(sellerId: number, routeId: number) : Promise <Sale[]> {
+        return await this.saleRepository
+        .createQueryBuilder("sale")
+        .where(`sale."sellerId" = ${sellerId} and sale."routeId" = ${routeId} and sale."status"='P' and sale."type_sale" = 'P' and sale."total">0`)
+        .orderBy("sale.id","ASC")
+        .getMany()
+    }
+
     async findBySellerAndDate(date: Date, sellerId: number): Promise < Sale[] > {
         const moment = require('moment-timezone')
         const fecha = moment(date).tz("America/Guatemala")

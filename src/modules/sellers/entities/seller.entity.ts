@@ -4,6 +4,7 @@ import { Employee } from "src/modules/employees/entities/employees.entity";
 import { Sale } from "src/modules/sales/entities/sale.entity";
 import { Warehouse } from "src/modules/warehouses/entitys/warehouse.entity";
 import { Route } from "src/modules/routes/entities/route.entity";
+import { Consolidate } from "src/modules/consolidate/entities/consolidate.entity";
 
 @ObjectType()
 @Entity()
@@ -36,6 +37,10 @@ export class Seller{
     @Field(()=>[Sale])
     @OneToMany(() => Sale, sale => sale.seller)
     sales: Sale[];
+
+    @Field(()=>[Consolidate])
+    @OneToMany(() => Consolidate, consolidate => consolidate.seller)
+    consolidates: Consolidate[];
 
     @Field(()=>[Warehouse])
     @ManyToMany(()=> Warehouse)

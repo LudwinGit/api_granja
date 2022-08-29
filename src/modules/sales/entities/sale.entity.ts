@@ -6,6 +6,7 @@ import { Route } from "src/modules/routes/entities/route.entity";
 import { Client } from "src/modules/clients/client.entity";
 import { SaleProduct } from "src/modules/saleproduct/saleproduct.entity";
 import { Unification } from "src/modules/unifications/unification.entity";
+import { ConsolidateSale } from "src/modules/consolidate/entities/consolidateSale.entity";
 
 @ObjectType()
 @Entity()
@@ -73,6 +74,10 @@ export class Sale {
     @Field(() => [SaleProduct])
     @OneToMany(() => SaleProduct, saleProduct => saleProduct.sale)
     saleproducts: SaleProduct[]
+
+    @Field(() => [ConsolidateSale])
+    @OneToMany(() => ConsolidateSale, consolidateSale => consolidateSale.consolidate)
+    saleConsolidates: ConsolidateSale[]
 
     @ManyToOne(() => Unification, unification => unification.sales)
     unification: Unification

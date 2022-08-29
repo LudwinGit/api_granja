@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Product } from '../products/product.entity';
 import { ProductKardex } from './type/productKardex';
 import { ProductSale } from './type/productSale';
+import { StockWarehouse } from './type/stockWarehouse';
 
 @Injectable()
 export class ReportsService {
@@ -20,5 +21,10 @@ export class ReportsService {
         const _date = moment(date).tz("America/Guatemala")
         const products = await this.productRepository.query(`select * from kardex('${_date.format("YYYY-MM-DD")}',${warehouseId},'${sku}')`)
         return products;
+    }
+
+    async stockWarehouse(warehouseId: number): Promise<StockWarehouse[]>{
+        const stocks = await this.productRepository.query(`select *  from stock(${warehouseId})`)
+        return stocks
     }
 }
