@@ -35,10 +35,16 @@ export class ConsolidateService {
       throw new HttpException('Warehouse Not Found', HttpStatus.NOT_FOUND);
     let seller = await this.sellerService.find(create.sellerId);
     if (!seller)
-      throw new HttpException('Seller Not Found', HttpStatus.NOT_FOUND);
+      throw new HttpException('El vendedor no existe', HttpStatus.NOT_FOUND);
     let route = await this.routeService.find(create.routeId);
     if (!route)
-      throw new HttpException('Route Not Found', HttpStatus.NOT_FOUND);
+      throw new HttpException('La ruta no existe', HttpStatus.NOT_FOUND);
+
+    const sales = await this.saleService.findPreSaleBySellerAndRoute(create.sellerId,create.routeId)
+
+    if(sales.length===0)
+      throw new HttpException('La ruta no tiene pre-ventas pendientes', HttpStatus.NOT_FOUND);
+
     const consolidate = this.consolidateRepository.create(create);
     consolidate.warehouse = warehouse;
     consolidate.route = route;
@@ -124,6 +130,7 @@ export class ConsolidateService {
     return await this.consolidateRepository.find({
       relations: ['seller', 'route'],
       order: { id: 'DESC' },
+      take: 100
     });
   }
 
