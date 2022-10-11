@@ -31,6 +31,11 @@ export class SaleproductResolver {
         return this.saleProductService.remove(saleId, productId, measureId)
     }
 
+    @Mutation(()=>Boolean)
+    async anulateProductsSale(@Args('saleId') saleId: number):Promise<boolean>{
+        return this.saleProductService.cancelAllProductsBySale(saleId)
+    }
+
     @ResolveField(() => Measure)
     async measure(@Parent() saleproduct: SaleProduct): Promise<Measure> {
         return await this.measureService.find(saleproduct.measureId)

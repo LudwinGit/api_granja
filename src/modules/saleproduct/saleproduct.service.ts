@@ -75,10 +75,27 @@ export class SaleproductService {
         }
     }
 
-    async reportSaleProductByDatese(date_a:Date,date_b:Date): Promise<ProductSale[]> {
+    async cancelAllProductsBySale(saleId: number): Promise<boolean> {
+        const result = await this.saleService.cancelSale(saleId)
+        if (result) {
+            const sale = await this.saleService.find(saleId)
+            const productsSale = await this.saleProductRepository.find({ where: { saleId } })
+            try {
+                productsSale.map(async (product) => {
+                    await this.warehouseProductService.addStock(product.productId, sale.warehouse.id, product.quantity * product.unit_measure)
+                })
+                return true
+            } catch (error) {
+                throw new HttpException("Ocurrio un problema al anular las lineas el pedido.", HttpStatus.BAD_REQUEST)
+            }
+        }
+        throw new HttpException("Ocurrio un problema al anular el pedido.", HttpStatus.BAD_REQUEST)
+    }
+
+    async reportSaleProductByDatese(date_a: Date, date_b: Date): Promise<ProductSale[]> {
         process.env.TZ = 'America/Guatemala'
-        const dateA = date_a.getFullYear()+'-' + (date_a.getMonth()+1) + '-'+date_a.getDate()
-        const dateB = date_b.getFullYear()+'-' + (date_b.getMonth()+1) + '-'+date_b.getDate()
+        const dateA = date_a.getFullYear() + '-' + (date_a.getMonth() + 1) + '-' + date_a.getDate()
+        const dateB = date_b.getFullYear() + '-' + (date_b.getMonth() + 1) + '-' + date_b.getDate()
         return await this.saleProductRepository.query(`select * from salesByDate('${dateA}','${dateB}')`)
     }
 }
