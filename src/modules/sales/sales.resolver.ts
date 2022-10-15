@@ -68,6 +68,11 @@ export class SalesResolver {
         return this.salesService.updateStatus(id, status)
     }
 
+    @Mutation(()=> Boolean)
+    async setEditSale(@Args('id') id: number): Promise<boolean>{
+        return this.salesService.updateStatus(id,'I')
+    }
+
     @ResolveField(() => Seller, { nullable: true })
     async seller(@Parent() sale: Sale): Promise<Seller> {
         const { seller } = await this.salesService.find(sale.id)
