@@ -40,10 +40,16 @@ export class ConsolidateService {
     if (!route)
       throw new HttpException('La ruta no existe', HttpStatus.NOT_FOUND);
 
-    const sales = await this.saleService.findPreSaleBySellerAndRoute(create.sellerId,create.routeId)
+    const sales = await this.saleService.findPreSaleBySellerAndRoute(
+      create.sellerId,
+      create.routeId,
+    );
 
-    if(sales.length===0)
-      throw new HttpException('La ruta no tiene pre-ventas pendientes', HttpStatus.NOT_FOUND);
+    if (sales.length === 0)
+      throw new HttpException(
+        'La ruta no tiene pre-ventas pendientes',
+        HttpStatus.NOT_FOUND,
+      );
 
     const consolidate = this.consolidateRepository.create(create);
     consolidate.warehouse = warehouse;
@@ -120,23 +126,26 @@ export class ConsolidateService {
   findAllProductsByConsolidate(
     idConsolidate: number,
   ): Promise<ConsolidateProduct[]> {
-    return this.consolidateProductRepository.find({
-      where: { consolidateId: idConsolidate },
-      relations: ['product'],
-    });
+    let productos = this.consolidateProductRepository
+      .createQueryBuilder('consolidate_product')
+      .innerJoinAndSelect('consolidate_product.product', 'product')
+      .where('consolidate_product.consolidateId =' + idConsolidate)
+      .orderBy('product.description', 'ASC')
+      .getMany();
+    return productos;
   }
 
   async findAll(): Promise<Consolidate[]> {
     return await this.consolidateRepository.find({
       relations: ['seller', 'route'],
       order: { id: 'DESC' },
-      take: 100
+      take: 100,
     });
   }
 
   async find(id: number): Promise<Consolidate> {
     return await this.consolidateRepository.findOne(id, {
-      relations: ['seller', 'route','consolidateProducts'],
+      relations: ['seller', 'route', 'consolidateProducts'],
     });
   }
 

@@ -112,8 +112,8 @@ export class SalesService {
         await this.saleRepository.update(id, sale)
     }
 
-    async updateStatus(id: number, status: string): Promise < boolean > {
-        await this.saleRepository.update(id, { status })
+    async updateStatus(id: number, status: string, observation): Promise < boolean > {
+        await this.saleRepository.update(id, { status,observation })
         return true
     }
 
