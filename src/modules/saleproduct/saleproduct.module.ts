@@ -11,6 +11,7 @@ import { Measure } from '../measures/measure.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([SaleProduct,Measure]), SalesModule, MeasuresModule, ProductsModule, WarehouseproductModule],
-  providers: [SaleproductService, SaleproductResolver]
+  providers: [SaleproductService, SaleproductResolver],
+  exports: [SaleproductService]
 })
 export class SaleproductModule { }

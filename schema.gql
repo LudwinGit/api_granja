@@ -366,6 +366,7 @@ type Mutation {
   login(data: AuthInput!): User
   addProductToSale(data: SaleProductInput!): SaleProduct!
   removeProducttoSale(measureId: Float!, productId: Float!, saleId: Float!): Boolean!
+  anulateProductsSale(saleId: Float!): Boolean!
   createUnification(data: UnificationInput!): Unification!
   updateUnification(data: UnificationInput!, id: Float!): Unification!
   removeUnification(id: Float!): Unification!
