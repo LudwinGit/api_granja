@@ -27,8 +27,13 @@ import { ConsolidateModule } from './modules/consolidate/consolidate.module';
 @Module({
   imports: [
     ConfigModule.forRoot({isGlobal:true}),
-    GraphQLModule.forRoot({
-      autoSchemaFile: 'schema.gql',
+    GraphQLModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        autoSchemaFile: 'schema.gql',
+        playground: config.get('NODE_ENV') !== 'production',
+        introspection: config.get('NODE_ENV') !== 'production',
+      })
     }),
     TypeOrmModule.forRootAsync(
       {
