@@ -1,7 +1,14 @@
-import { Resolver, Query, Mutation, Args, ResolveField, Parent } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { SalesService } from './sales.service';
 import { Sale } from './entities/sale.entity';
-import { SaleInput } from "./input/sale.input";
+import { SaleInput } from './input/sale.input';
 import { Seller } from '../sellers/entities/seller.entity';
 import { SellersService } from '../sellers/sellers.service';
 import { Client } from '../clients/client.entity';
@@ -12,78 +19,92 @@ import { SaleCost } from '../reports/type/saleCost';
 
 @Resolver(() => Sale)
 export class SalesResolver {
-    constructor(
-        private readonly salesService: SalesService,
-        private readonly sellerService: SellersService,
-        private readonly clientService: ClientsService
-    ) { }
+  constructor(
+    private readonly salesService: SalesService,
+    private readonly sellerService: SellersService,
+    private readonly clientService: ClientsService,
+  ) {}
 
-    @Query(() => [Sale])
-    async sales(): Promise<Sale[]> {
-        return this.salesService.findAll()
-    }
+  @Query(() => [Sale])
+  async sales(): Promise<Sale[]> {
+    return this.salesService.findAll();
+  }
 
-    @Query(() => [Sale], { nullable: true })
-    async salesPendingByRoutes(@Args({ name: 'routes', type: () => [Number] }) routes: number[]): Promise<Sale[]> {
-        return this.salesService.findPendingByRoutes(routes)
-    }
+  @Query(() => [Sale], { nullable: true })
+  async salesPendingByRoutes(
+    @Args({ name: 'routes', type: () => [Number] }) routes: number[],
+  ): Promise<Sale[]> {
+    return this.salesService.findPendingByRoutes(routes);
+  }
 
-    @Query(() => [Sale])
-    async salesBySeller(@Args('sellerId') id: number): Promise<Sale[]> {
-        return this.salesService.findBySeller(id)
-    }
+  @Query(() => [Sale])
+  async salesBySeller(@Args('sellerId') id: number): Promise<Sale[]> {
+    return this.salesService.findBySeller(id);
+  }
 
-    @Query(() => Sale)
-    async sale(@Args('id') id: number): Promise<Sale> {
-        return this.salesService.find(id)
-    }
+  @Query(() => [Sale])
+  async preSalesBySeller(@Args('sellerId') sellerId: number): Promise<Sale[]> {
+    return this.salesService.findPreSaleBySeller(sellerId);
+  }
 
-    @Query(() => [Sale])
-    async saleByDate(@Args('date') date: Date): Promise<Sale[]> {
-        return this.salesService.findByDate(date)
-    }
+  @Query(() => Sale)
+  async sale(@Args('id') id: number): Promise<Sale> {
+    return this.salesService.find(id);
+  }
 
-    @Query(() => [Sale], { nullable: true })
-    async salesBySellerAndDate(@Args('date') date: Date, @Args('sellerId') sellerId: number): Promise<Sale[]> {
-        return this.salesService.findBySellerAndDate(date, sellerId)
-    }
+  @Query(() => [Sale])
+  async saleByDate(@Args('date') date: Date): Promise<Sale[]> {
+    return this.salesService.findByDate(date);
+  }
 
-    @Query(() => [SaleCost], { nullable: true })
-    async salesByRange(@Args('dateA') dateA: Date, @Args('dateB') dateB: Date) {
-        return this.salesService.findByRangeDate(dateA, dateB)
-    }
+  @Query(() => [Sale], { nullable: true })
+  async salesBySellerAndDate(
+    @Args('date') date: Date,
+    @Args('sellerId') sellerId: number,
+  ): Promise<Sale[]> {
+    return this.salesService.findBySellerAndDate(date, sellerId);
+  }
 
-    @Mutation(() => Sale)
-    async createSale(@Args('data') input: SaleInput): Promise<Sale> {
-        return this.salesService.create(input)
-    }
+  @Query(() => [SaleCost], { nullable: true })
+  async salesByRange(@Args('dateA') dateA: Date, @Args('dateB') dateB: Date) {
+    return this.salesService.findByRangeDate(dateA, dateB);
+  }
 
-    @Mutation(() => Boolean)
-    async updateStatusSale(@Args('id') id: number, @Args('status') status: string): Promise<boolean> {
-        return this.salesService.updateStatus(id, status)
-    }
+  @Mutation(() => Sale)
+  async createSale(@Args('data') input: SaleInput): Promise<Sale> {
+    return this.salesService.create(input);
+  }
 
-    @ResolveField(() => Seller, { nullable: true })
-    async seller(@Parent() sale: Sale): Promise<Seller> {
-        const { seller } = await this.salesService.find(sale.id)
-        return seller
-    }
+  @Mutation(() => Boolean)
+  async updateStatusSale(
+    @Args('id') id: number,
+    @Args('status') status: string,
+    @Args('observation') observation: string,
+  ): Promise<boolean> {
+    return this.salesService.updateStatus(id, status, observation);
+  }
 
-    @ResolveField(() => Client, { nullable: true })
-    async client(@Parent() sale: Sale): Promise<Client> {
-        const { client } = await this.salesService.find(sale.id)
-        return client
-    }
+  @ResolveField(() => Seller, { nullable: true })
+  async seller(@Parent() sale: Sale): Promise<Seller> {
+    const { seller } = await this.salesService.find(sale.id);
+    return seller;
+  }
 
-    @ResolveField(() => Route, { nullable: true })
-    async route(@Parent() sale: Sale): Promise<Route> {
-        const { route } = await this.salesService.find(sale.id)
-        return route
-    }
+  @ResolveField(() => Client, { nullable: true })
+  async client(@Parent() sale: Sale): Promise<Client> {
+    const { client } = await this.salesService.find(sale.id);
+    return client;
+  }
 
-    @ResolveField(() => Warehouse, { nullable: true })
-    async warehouse(@Parent() sale: Sale): Promise<Warehouse> {
-        const { warehouse } = await this.salesService.find(sale.id)
-        return warehouse
-    }
+  @ResolveField(() => Route, { nullable: true })
+  async route(@Parent() sale: Sale): Promise<Route> {
+    const { route } = await this.salesService.find(sale.id);
+    return route;
+  }
+
+  @ResolveField(() => Warehouse, { nullable: true })
+  async warehouse(@Parent() sale: Sale): Promise<Warehouse> {
+    const { warehouse } = await this.salesService.find(sale.id);
+    return warehouse;
+  }
 }

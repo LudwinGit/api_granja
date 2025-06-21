@@ -54,11 +54,37 @@ type Client {
   createdAt: DateTime!
 }
 
+type ConsolidateProduct {
+  consolidateId: Float!
+  productId: Float!
+  measureId: Float!
+  unit_measure: Float!
+  quantity: Float!
+  product: Product!
+  consolidate: Consolidate!
+  measure: Measure!
+}
+
+type Consolidate {
+  id: Float!
+  warehouse: Warehouse!
+  seller: Seller!
+  route: Route!
+  total: Float!
+  discount: Float!
+  status: String!
+  observation: String
+  consolidateProducts: [ConsolidateProduct!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Route {
   id: Float!
   description: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+  consolidates: [Consolidate!]!
 }
 
 type Seller {
@@ -69,6 +95,7 @@ type Seller {
   createdAt: DateTime!
   updatedAt: DateTime!
   sales: [Sale!]!
+  consolidates: [Consolidate!]!
   warehouses: [Warehouse!]!
   routes: [Route!]!
 }
@@ -90,6 +117,15 @@ type Unification {
   sales: [Sale!]!
 }
 
+type ConsolidateSale {
+  consolidateId: Float!
+  saleId: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  sale: Sale!
+  consolidate: Consolidate!
+}
+
 type Sale {
   id: Float!
   type_sale: String!
@@ -105,6 +141,7 @@ type Sale {
   createdAt: DateTime!
   updatedAt: DateTime!
   saleproducts: [SaleProduct!]!
+  saleConsolidates: [ConsolidateSale!]!
 }
 
 type SaleProduct {
@@ -211,6 +248,25 @@ type ProductSale {
   category: String!
 }
 
+type ProductKardex {
+  id: Float!
+  observation: String!
+  created: DateTime!
+  type: String!
+  origin: String
+  destiny: String
+  quantity: Float!
+}
+
+type StockWarehouse {
+  productid: Float!
+  sku: String!
+  description: String!
+  stock: Float!
+  stockpre: Float!
+  totalstock: Float!
+}
+
 type Query {
   warehouses: [Warehouse!]
   warehousesWithoutAddingtoSeller(sellerId: Float!): [Warehouse!]
@@ -234,6 +290,7 @@ type Query {
   sales: [Sale!]!
   salesPendingByRoutes(routes: [Float!]!): [Sale!]
   salesBySeller(sellerId: Float!): [Sale!]!
+  preSalesBySeller(sellerId: Float!): [Sale!]!
   sale(id: Float!): Sale!
   saleByDate(date: DateTime!): [Sale!]!
   salesBySellerAndDate(sellerId: Float!, date: DateTime!): [Sale!]
@@ -251,6 +308,12 @@ type Query {
   reportSaleProductByDates(date_b: DateTime!, date_a: DateTime!): [ProductSale!]
   unifications: [Unification!]!
   unification(id: Float!): Unification!
+  kardex(sku: String!, warehouseId: Float!, date: DateTime!): [ProductKardex!]
+  stockWarehouse(warehouseId: Float!): [StockWarehouse!]
+  salesByConsolidate(consolidateId: Float!): [ConsolidateSale!]!
+  productsByConsolidate(consolidateId: Float!): [ConsolidateProduct!]!
+  consolidates: [Consolidate!]!
+  consolidate(consolidateId: Float!): Consolidate!
 }
 
 type Mutation {
@@ -284,7 +347,7 @@ type Mutation {
   updateRoute(data: RouteInput!, id: Float!): Route
   removeRoute(id: Float!): Route
   createSale(data: SaleInput!): Sale!
-  updateStatusSale(status: String!, id: Float!): Boolean!
+  updateStatusSale(observation: String!, status: String!, id: Float!): Boolean!
   createClient(data: ClientInput!): Client!
   updateClient(data: ClientInput!, id: Float!): Client!
   removeClient(id: Float!): Client
@@ -303,11 +366,17 @@ type Mutation {
   login(data: AuthInput!): User
   addProductToSale(data: SaleProductInput!): SaleProduct!
   removeProducttoSale(measureId: Float!, productId: Float!, saleId: Float!): Boolean!
+  anulateProductsSale(saleId: Float!): Boolean!
   createUnification(data: UnificationInput!): Unification!
   updateUnification(data: UnificationInput!, id: Float!): Unification!
   removeUnification(id: Float!): Unification!
   addSaleToUnification(saleId: Float!, unificationId: Float!): Unification!
   addSalesToUnification(data: [Float!]!, id: Float!): Unification!
+  createConsolidate(data: CreateConsolidateInput!): Consolidate!
+  addSaleToConsolidate(data: AddSaleConsolidateInput!): Boolean!
+  removeSaleToConsolidate(data: AddSaleConsolidateInput!): Boolean!
+  updateConsolidate(data: UpdateConsolidateInput!): Consolidate!
+  removeConsolidate(id: Int!): Consolidate!
 }
 
 input WarehouseInput {
@@ -431,4 +500,20 @@ input UnificationInput {
   observation: String!
   date: DateTime!
   status: String
+}
+
+input CreateConsolidateInput {
+  observation: String!
+  warehouseId: Float!
+  sellerId: Float!
+  routeId: Float!
+}
+
+input AddSaleConsolidateInput {
+  consolidateId: Float!
+  saleId: Float!
+}
+
+input UpdateConsolidateInput {
+  id: Int!
 }

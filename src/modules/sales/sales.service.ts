@@ -10,6 +10,7 @@ import { SellersService } from '../sellers/sellers.service';
 import { RoutesService } from '../routes/routes.service';
 import { WarehousesService } from '../warehouses/warehouses.service';
 import { SaleCost } from '../reports/type/saleCost';
+import { SaleproductService } from '../saleproduct/saleproduct.service';
 
 @Injectable()
 export class SalesService {
@@ -19,10 +20,11 @@ export class SalesService {
         private readonly sellerService: SellersService,
         private readonly routeService: RoutesService,
         private readonly warehouseService: WarehousesService,
+        // private readonly saleProductService: SaleproductService
     ) { }
 
     async findAll(): Promise<Sale[]> {
-        return await this.saleRepository.find({ relations: ["seller", "route", "client", "warehouse"], order: { id: "DESC" } })
+        return await this.saleRepository.find({ relations: ["seller", "route", "client", "warehouse"], order: { id: "DESC" } });
     }
 
     async find(id: number): Promise<Sale> {
@@ -43,6 +45,22 @@ export class SalesService {
         return sales
     }
 
+    async findPreSaleBySeller(sellerId: number) {
+        return await this.saleRepository
+            .createQueryBuilder("sale")
+            .where(`sale."sellerId" = ${sellerId} and sale.status='P' and sale.type_sale = 'P' and sale.total>0`)
+            .orderBy("sale.id", "ASC")
+            .getMany()
+    }
+
+    async findPreSaleBySellerAndRoute(sellerId: number, routeId: number): Promise<Sale[]> {
+        return await this.saleRepository
+            .createQueryBuilder("sale")
+            .where(`sale."sellerId" = ${sellerId} and sale."routeId" = ${routeId} and sale."status"='P' and sale."type_sale" = 'P' and sale."total">0`)
+            .orderBy("sale.id", "ASC")
+            .getMany()
+    }
+
     async findBySellerAndDate(date: Date, sellerId: number): Promise<Sale[]> {
         const moment = require('moment-timezone')
         const fecha = moment(date).tz("America/Guatemala")
@@ -53,8 +71,7 @@ export class SalesService {
                 .orderBy("sale.id", "DESC")
                 .getMany()
             return sales
-        }
-        else {
+        } else {
             const sales = await this.saleRepository
                 .createQueryBuilder("sale")
                 .where(`sale."created_at"::date = '${fecha.format("YYYY-MM-DD")}'`)
@@ -69,7 +86,6 @@ export class SalesService {
         const moment = require('moment-timezone')
         const datea = moment(dateA).tz("America/Guatemala")
         const dateb = moment(dateB).tz("America/Guatemala")
-        console.log(`select * from vw_sales_cost where date between '${datea.format("YYYY-MM-DD")}' and '${dateb.format("YYYY-MM-DD")}'`);
         const sales = await this.saleRepository.query(`select * from vw_sales_cost where date between '${datea.format("YYYY-MM-DD")}' and '${dateb.format("YYYY-MM-DD")}'`)
         return sales
     }
@@ -92,14 +108,26 @@ export class SalesService {
         return sale
     }
 
+    async cancelSale(id: number): Promise<boolean> {
+        try {
+            const sale: Sale = await this.saleRepository.findOne(id)
+            if (!sale)
+                throw new HttpException('No existe la venta para anular', HttpStatus.NOT_FOUND);
+            await this.saleRepository.update(id, { status: "A" })
+            return true
+        } catch (error) {
+            return false
+        }
+    }
+
     async updateTotal(id: number, total: number) {
         const sale = await this.saleRepository.findOne(id)
         sale.total = parseFloat(sale.total.toString()) + parseFloat(total.toString())
         await this.saleRepository.update(id, sale)
     }
 
-    async updateStatus(id: number, status: string): Promise<boolean> {
-        await this.saleRepository.update(id, { status })
+    async updateStatus(id: number, status: string, observation): Promise < boolean > {
+        await this.saleRepository.update(id, { status,observation })
         return true
     }
 

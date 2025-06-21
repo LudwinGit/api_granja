@@ -7,6 +7,7 @@ import { SellersModule } from '../sellers/sellers.module';
 import { RoutesModule } from '../routes/routes.module';
 import { WarehouseModule } from '../warehouses/warehouses.module';
 import { ClientsModule } from '../clients/clients.module';
+import { SaleproductModule } from '../saleproduct/saleproduct.module';
 
 @Module({
   imports: [

@@ -5,6 +5,7 @@ import { WarehouseProduct } from "../warehouses/entitys/warehouseProduct.entity"
 import { TransactionProduct } from "../transactions/entities/transactionProduct.entity";
 import { SaleProduct } from "../saleproduct/saleproduct.entity";
 import { UnificationProduct } from "../unificationproduct/unificationproduct.entity";
+import { ConsolidateProduct } from "../consolidate/entities/consolidateProduct.entity";
 
 @ObjectType()
 @Entity({name:'product'})
@@ -72,6 +73,9 @@ export class Product{
 
     @OneToMany(()=>TransactionProduct,transactionProduct => transactionProduct.product)
     transactionProducts: TransactionProduct[]
+
+    @OneToMany(()=>ConsolidateProduct,saleProduct => saleProduct.product)
+    consolidateProducts: ConsolidateProduct[]
 
     // @Field(()=>[Measure])
     // // @ManyToMany(()=>Measure, measure => measure.products)

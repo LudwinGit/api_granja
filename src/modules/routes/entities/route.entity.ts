@@ -3,6 +3,7 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateCol
 import { Sale } from "src/modules/sales/entities/sale.entity";
 import { Client } from "src/modules/clients/client.entity";
 import { Seller } from "src/modules/sellers/entities/seller.entity";
+import { Consolidate } from "src/modules/consolidate/entities/consolidate.entity";
 
 @ObjectType()
 @Entity({ name: 'route' })
@@ -25,6 +26,10 @@ export class Route {
 
     @OneToMany(() => Sale, sale => sale.route)
     sales: Sale[];
+
+    @Field(()=>[Consolidate])
+    @OneToMany(() => Consolidate, consolidate => consolidate.route)
+    consolidates: Consolidate[];
 
     @OneToMany(() => Client, client => client.route)
     clients: Client[];

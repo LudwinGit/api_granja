@@ -22,12 +22,18 @@ import { PermissionsModule } from './modules/permissions/permissions.module';
 import { UnificationsModule } from './modules/unifications/unifications.module';
 import { UnificationproductModule } from './modules/unificationproduct/unificationproduct.module';
 import { ReportsModule } from './modules/reports/reports.module';
+import { ConsolidateModule } from './modules/consolidate/consolidate.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({isGlobal:true}),
-    GraphQLModule.forRoot({
-      autoSchemaFile: 'schema.gql',
+    GraphQLModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        autoSchemaFile: 'schema.gql',
+        playground: config.get('NODE_ENV') !== 'production',
+        introspection: config.get('NODE_ENV') !== 'production',
+      })
     }),
     TypeOrmModule.forRootAsync(
       {
@@ -65,6 +71,7 @@ import { ReportsModule } from './modules/reports/reports.module';
     UnificationsModule,
     UnificationproductModule,
     ReportsModule,
+    ConsolidateModule,
   ],
   controllers: [],
   providers: [],
