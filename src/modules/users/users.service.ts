@@ -64,7 +64,7 @@ export class UsersService {
     }
 
     async findByUsername(username: string): Promise<User> {
-        return this.userRepository.findOne({ username })
+        return this.userRepository.findOne({ username }, { relations: ['employee'] })
     }
 
     async addPermission(userId: number, permissionId: number): Promise<Permission> {

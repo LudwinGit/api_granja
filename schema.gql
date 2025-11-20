@@ -229,6 +229,14 @@ type Warehouse {
   warehouseCategory: WarehouseCategory!
 }
 
+type PaginatedWarehouseProduct {
+  data: [WarehouseProduct!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  totalPages: Int!
+}
+
 type SaleCost {
   id: Float!
   date: DateTime!
@@ -271,6 +279,7 @@ type Query {
   warehouses: [Warehouse!]
   warehousesWithoutAddingtoSeller(sellerId: Float!): [Warehouse!]
   warehouse(id: Float!): Warehouse
+  minStockByWarehouse(pageSize: Int = 100, page: Int = 1, warehouseId: Int!): PaginatedWarehouseProduct!
   warehousesCategories: [WarehouseCategory!]
   warehouseCategory(id: String!): WarehouseCategory
   products: [Product!]
