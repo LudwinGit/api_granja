@@ -2,12 +2,18 @@ import { InputType, Field } from "@nestjs/graphql";
 
 @InputType()
 export class SaleInput {
+    @Field({nullable:true})
+    id: number
+
     @Field()
     type_sale: string
 
-    @Field()
+    @Field({ nullable: true })
     warehouseId: number
 
+    @Field({ nullable: true })
+    total: number
+    
     @Field({ nullable: true })
     discount: number
 
@@ -20,7 +26,7 @@ export class SaleInput {
     @Field()
     sellerId: number
 
-    @Field()
+    @Field({ nullable: true })
     routeId: number
 
     @Field({ nullable: true })

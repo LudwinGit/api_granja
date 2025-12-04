@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
-import { UserInput } from './input/user.input';
+import { UpdateUserInput, UserInput } from './input/user.input';
 import { PasswordService } from '../common/services/password.service';
 import { EmployeesService } from '../employees/employees.service';
 import { PermissionsService } from '../permissions/permissions.service';
@@ -36,11 +36,14 @@ export class UsersService {
         return user
     }
 
-    async update(id: number, input: UserInput): Promise<User> {
+    async update(id: number, input: UpdateUserInput): Promise<User> {
         const user: User = await this.userRepository.findOne(id)
         if (!user)
             throw new HttpException('User Not Found', HttpStatus.NOT_FOUND);
-        user.password = this.pwdService.hash(input.password);
+
+        if (input.password)
+            input.password = this.pwdService.hash(input.password);
+        
         user.username = input.username
         await this.userRepository.update(id, user)
         return user

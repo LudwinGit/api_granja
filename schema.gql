@@ -135,8 +135,8 @@ type Sale {
   status: String!
   observation: String
   seller: Seller!
-  client: Client!
-  route: Route!
+  client: Client
+  route: Route
   invoiced: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -151,6 +151,7 @@ type SaleProduct {
   unit_measure: Float!
   quantity: Float!
   price: Float!
+  price_seller: Float!
   product: Product!
   sale: Sale!
   measure: Measure!
@@ -356,7 +357,7 @@ type Mutation {
   updateRoute(data: RouteInput!, id: Float!): Route
   removeRoute(id: Float!): Route
   createSale(data: SaleInput!): Sale!
-  updateStatusSale(observation: String!, status: String!, id: Float!): Boolean!
+  updateStatusSale(input: SaleInput!): Boolean!
   createClient(data: ClientInput!): Client!
   updateClient(data: ClientInput!, id: Float!): Client!
   removeClient(id: Float!): Client
@@ -367,7 +368,7 @@ type Mutation {
   removeProductToTransaction(transactionId: Float!, productId: Float!): TransactionProduct
   applyTransaction(id: Float!): Boolean
   createUser(data: UserInput!): User!
-  updateUser(data: UserInput!, id: Float!): User!
+  updateUser(data: UpdateUserInput!, id: Float!): User!
   removeUser(id: Float!): User
   deactivateUser(id: Float!): User!
   addPermissionToUser(permissionId: Float!, userId: Float!): Permission!
@@ -450,13 +451,15 @@ input RouteInput {
 }
 
 input SaleInput {
+  id: Float
   type_sale: String!
-  warehouseId: Float!
+  warehouseId: Float
+  total: Float
   discount: Float
   status: String
   observation: String
   sellerId: Float!
-  routeId: Float!
+  routeId: Float
   clientId: Float
 }
 
@@ -491,6 +494,12 @@ input UserInput {
   isActive: Boolean!
 }
 
+input UpdateUserInput {
+  username: String!
+  password: String
+  isActive: Boolean!
+}
+
 input AuthInput {
   username: String!
   password: String!
@@ -503,6 +512,7 @@ input SaleProductInput {
   unit_measure: Float!
   quantity: Float!
   price: Float!
+  price_seller: Float = 0
 }
 
 input UnificationInput {

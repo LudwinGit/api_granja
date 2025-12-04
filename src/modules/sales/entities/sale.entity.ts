@@ -47,12 +47,12 @@ export class Sale {
     @ManyToOne(() => Seller, seller => seller.sales, { nullable: true })
     seller: Seller;
 
-    @Field(() => Client)
+    @Field(() => Client, { nullable: true })
     @ManyToOne(() => Client, client => client.sales, { nullable: true })
     client: Client;
 
-    @Field(() => Route)
-    @ManyToOne(() => Route, route => route.sales)
+    @Field(() => Route, { nullable: true })
+    @ManyToOne(() => Route, route => route.sales, { nullable: true })
     route: Route;
 
     @Field()
