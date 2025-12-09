@@ -81,4 +81,9 @@ export class Sale {
 
     @ManyToOne(() => Unification, unification => unification.sales)
     unification: Unification
+
+    // @Field(() => SaleReturn, { nullable: true })
+    // @OneToOne(() => SaleReturn, saleReturn => saleReturn.sale, { nullable: true })
+    // @JoinColumn({ name: 'sale_return_id' })
+    // saleReturn: SaleReturn
 }
