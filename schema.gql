@@ -126,6 +126,29 @@ type ConsolidateSale {
   consolidate: Consolidate!
 }
 
+type SaleReturnProduct {
+  returnId: Float!
+  productId: Float!
+  measureId: Float!
+  unit_measure: Float!
+  quantity: Float!
+  price: Float!
+  product: Product!
+  saleReturn: SaleReturn!
+  measure: Measure!
+}
+
+type SaleReturn {
+  id: Float!
+  sale: Sale!
+  total: Float!
+  observation: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  status: String!
+  returnProducts: [SaleReturnProduct!]!
+}
+
 type Sale {
   id: Float!
   type_sale: String!
@@ -142,6 +165,7 @@ type Sale {
   updatedAt: DateTime!
   saleproducts: [SaleProduct!]!
   saleConsolidates: [ConsolidateSale!]!
+  saleReturns: [SaleReturn!]
 }
 
 type SaleProduct {
@@ -276,28 +300,6 @@ type StockWarehouse {
   totalstock: Float!
 }
 
-type SaleReturnProduct {
-  returnId: Float!
-  productId: Float!
-  measureId: Float!
-  unit_measure: Float!
-  quantity: Float!
-  price: Float!
-  product: Product!
-  saleReturn: SaleReturn!
-  measure: Measure!
-}
-
-type SaleReturn {
-  id: Float!
-  sale: Sale!
-  total: Float!
-  observation: String
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  returnProducts: [SaleReturnProduct!]!
-}
-
 type Query {
   warehouses: [Warehouse!]
   warehousesWithoutAddingtoSeller(sellerId: Float!): [Warehouse!]
@@ -349,6 +351,8 @@ type Query {
   saleReturns: [SaleReturn!]!
   saleReturn(id: Float!): SaleReturn
   saleReturnBySale(saleId: Float!): SaleReturn
+  saleReturnsBySale(saleId: Float!): [SaleReturn!]!
+  saleReturnsByDate(status: String, idseller: Int, to: String!, from: String!): [SaleReturn!]!
 }
 
 type Mutation {

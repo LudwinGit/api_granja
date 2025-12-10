@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { ObjectType, Field } from '@nestjs/graphql';
 import { Sale } from 'src/modules/sales/entities/sale.entity';
 import { SaleReturnProduct } from './sale-return-product.entity';
@@ -11,7 +11,7 @@ export class SaleReturn {
     id: number;
 
     @Field(() => Sale)
-    @OneToOne(() => Sale, sale => (sale as any).saleReturn)
+    @ManyToOne(() => Sale, sale => (sale as any).saleReturns)
     @JoinColumn({ name: 'sale_id' })
     sale: Sale;
 
@@ -30,6 +30,10 @@ export class SaleReturn {
     @Field()
     @UpdateDateColumn({ name: 'updated_at' })
     updatedAt: Date;
+
+    @Field()
+    @Column({ type: "char", length: 1, default: "I", comment: "I:In Process, F:Finalized, C:Cancelled" })
+    status: string
 
     @Field(() => [SaleReturnProduct])
     @OneToMany(() => SaleReturnProduct, rp => rp.saleReturn)

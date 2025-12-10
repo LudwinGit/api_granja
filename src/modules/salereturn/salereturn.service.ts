@@ -31,23 +31,91 @@ export class SalereturnService {
   ) {}
 
   async findAll(): Promise<SaleReturn[]> {
-    return await this.saleReturnRepository.find({ relations: ['sale', 'returnProducts'], order: { id: 'DESC' } });
+    return await this.saleReturnRepository.find({
+      relations: [
+        'sale',
+        'sale.saleproducts',
+        'sale.seller',
+        'sale.seller.employee',
+        'sale.client',
+        'sale.route',
+        'returnProducts',
+      ],
+      order: { id: 'DESC' },
+    });
   }
 
   async find(id: number): Promise<SaleReturn> {
-    return await this.saleReturnRepository.findOne(id, { relations: ['sale', 'returnProducts'] });
+    return await this.saleReturnRepository.findOne(id, {
+      relations: [
+        'sale',
+        'sale.saleproducts',
+        'sale.seller',
+        'sale.seller.employee',
+        'sale.client',
+        'sale.route',
+        'returnProducts',
+      ],
+    });
   }
 
-  async findBySale(saleId: number): Promise<SaleReturn> {
-    return await this.saleReturnRepository.findOne({ where: { sale: saleId }, relations: ['sale', 'returnProducts'] });
+  async findBySale(saleId: number): Promise<SaleReturn[]> {
+    return await this.saleReturnRepository.find({
+      where: { sale: saleId },
+      relations: [
+        'sale',
+        'sale.saleproducts',
+        'sale.seller',
+        'sale.seller.employee',
+        'sale.client',
+        'sale.route',
+        'returnProducts',
+      ],
+      order: { id: 'DESC' },
+    });
+  }
+
+  async findByDateRange(from: string, to: string, idseller?: number, status?: string): Promise<SaleReturn[]> {
+    // Normalize `from`/`to` to date-only (YYYY-MM-DD) so hours are ignored.
+    // Accepts inputs like 'YYYY-MM-DD', 'YYYY-MM-DDTHH:mm:ss', or 'YYYY-MM-DD HH:mm:ss'.
+    const normalize = (d: string) => {
+      if (!d) return d;
+      // split by T or space and take first part
+      return d.split('T')[0].split(' ')[0];
+    };
+
+    const fromDate = normalize(from);
+    const toDate = normalize(to);
+
+    const qb = this.saleReturnRepository
+      .createQueryBuilder('sr')
+      .leftJoinAndSelect('sr.returnProducts', 'rp')
+      .leftJoinAndSelect('sr.sale', 's')
+      .leftJoinAndSelect('s.saleproducts', 'sp')
+      .leftJoinAndSelect('s.seller', 'sel')
+      .leftJoinAndSelect('sel.employee', 'employee')
+      .leftJoinAndSelect('s.client', 'client')
+      .leftJoinAndSelect('s.route', 'route')
+      .where('DATE(sr.created_at) BETWEEN :from AND :to', { from: fromDate, to: toDate });
+
+    if (idseller) {
+      qb.andWhere('sel.id = :idseller', { idseller });
+    }
+
+    if (status) {
+      qb.andWhere('sr.status = :status', { status });
+    }
+
+    return await qb.orderBy('sr.created_at', 'DESC').getMany();
   }
 
   async create(input: SaleReturnInput): Promise<SaleReturn> {
     const sale = await this.salesService.find(input.saleId);
     if (!sale) throw new HttpException('Sale Not Found', HttpStatus.NOT_FOUND);
-    // check if sale already has a return
+    // check if sale has any return in a non-'C' status. If so, block creation.
     const existing = await this.findBySale(sale.id);
-    if (existing) throw new HttpException('Sale already has a return', HttpStatus.BAD_REQUEST);
+    if (existing && existing.some(r => r.status && r.status !== 'C'))
+      throw new HttpException('Sale has an active return in non-closed status', HttpStatus.BAD_REQUEST);
 
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
@@ -57,12 +125,13 @@ export class SalereturnService {
         sale: sale,
         total: input.total || 0,
         observation: input.observation || null,
+        status: 'F',
       });
       const saved = await queryRunner.manager.save(sr);
 
       const products = input.products || [];
       for (const p of products) {
-        // validate product and measure
+        // validate product and measurergba(122, 9, 9, 1)
         const product = await this.productsService.findOne(p.productId);
         if (!product) throw new HttpException('Product Not Found', HttpStatus.NOT_FOUND);
         const measure = await this.measuresService.find(p.measureId);
@@ -90,10 +159,8 @@ export class SalereturnService {
         }
       }
 
-      // update sale total by subtracting returned total
-      if (input.total) {
-        await this.salesService.updateTotal(sale.id, -Math.abs(input.total));
-      }
+      // NOTE: Do NOT modify the sale total here. Returns are kept for historical
+      // records only; the sale total should remain unchanged.
 
       await queryRunner.commitTransaction();
       return await this.find(saved.id);
