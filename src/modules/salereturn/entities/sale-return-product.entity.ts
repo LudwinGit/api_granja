@@ -37,7 +37,7 @@ export class SaleReturnProduct {
 
     @Field(() => SaleReturn)
     @ManyToOne(() => SaleReturn, saleReturn => saleReturn.returnProducts)
-    saleReturn: SaleReturn;
+    return: SaleReturn;
 
     @Field(() => Measure)
     @ManyToOne(() => Measure, measure => measure.saleproducts)

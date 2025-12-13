@@ -144,7 +144,7 @@ export class SalereturnService {
           unit_measure: p.unit_measure,
           quantity: p.quantity,
           price: p.price || 0,
-          saleReturn: saved,
+          return: saved,
           product: product,
           measure: measure,
         });

@@ -36,6 +36,6 @@ export class SaleReturn {
     status: string
 
     @Field(() => [SaleReturnProduct])
-    @OneToMany(() => SaleReturnProduct, rp => rp.saleReturn)
+    @OneToMany(() => SaleReturnProduct, rp => rp.return)
     returnProducts: SaleReturnProduct[];
 }

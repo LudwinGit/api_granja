@@ -134,7 +134,7 @@ type SaleReturnProduct {
   quantity: Float!
   price: Float!
   product: Product!
-  saleReturn: SaleReturn!
+  return: SaleReturn!
   measure: Measure!
 }
 
@@ -300,6 +300,21 @@ type StockWarehouse {
   totalstock: Float!
 }
 
+type ProductNetSold {
+  productId: Float!
+  sku: String!
+  description: String!
+  cantidad: Float!
+}
+
+type PaginatedProductNetSold {
+  data: [ProductNetSold!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  totalPages: Int!
+}
+
 type Query {
   warehouses: [Warehouse!]
   warehousesWithoutAddingtoSeller(sellerId: Float!): [Warehouse!]
@@ -344,6 +359,7 @@ type Query {
   unification(id: Float!): Unification!
   kardex(sku: String!, warehouseId: Float!, date: DateTime!): [ProductKardex!]
   stockWarehouse(warehouseId: Float!): [StockWarehouse!]
+  productsNetSold(pageSize: Int = 100, page: Int = 1): PaginatedProductNetSold
   salesByConsolidate(consolidateId: Float!): [ConsolidateSale!]!
   productsByConsolidate(consolidateId: Float!): [ConsolidateProduct!]!
   consolidates: [Consolidate!]!

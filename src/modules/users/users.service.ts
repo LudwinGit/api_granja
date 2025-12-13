@@ -42,7 +42,7 @@ export class UsersService {
             throw new HttpException('User Not Found', HttpStatus.NOT_FOUND);
 
         if (input.password)
-            input.password = this.pwdService.hash(input.password);
+            user.password = this.pwdService.hash(input.password);
         
         user.username = input.username
         await this.userRepository.update(id, user)
