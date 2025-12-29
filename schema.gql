@@ -60,6 +60,8 @@ type ConsolidateProduct {
   measureId: Float!
   unit_measure: Float!
   quantity: Float!
+  price: Float!
+  price_seller: Float!
   product: Product!
   consolidate: Consolidate!
   measure: Measure!

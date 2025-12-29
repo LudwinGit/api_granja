@@ -30,13 +30,13 @@ export class ConsolidateService {
   ) {}
 
   async create(create: CreateConsolidateInput): Promise<Consolidate> {
-    let warehouse = await this.warehouseService.find(create.warehouseId);
+    const warehouse = await this.warehouseService.find(create.warehouseId);
     if (!warehouse)
       throw new HttpException('Warehouse Not Found', HttpStatus.NOT_FOUND);
-    let seller = await this.sellerService.find(create.sellerId);
+    const seller = await this.sellerService.find(create.sellerId);
     if (!seller)
       throw new HttpException('El vendedor no existe', HttpStatus.NOT_FOUND);
-    let route = await this.routeService.find(create.routeId);
+    const route = await this.routeService.find(create.routeId);
     if (!route)
       throw new HttpException('La ruta no existe', HttpStatus.NOT_FOUND);
 
