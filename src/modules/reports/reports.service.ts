@@ -58,7 +58,7 @@ export class ReportsService {
         FROM ventas v
         JOIN product p ON p.id = v."productId"
         LEFT JOIN devoluciones d ON d."productId" = v."productId"
-        WHERE v.total_vendido - COALESCE(d.total_devuelto, 0) > 0
+        WHERE (v.total_vendido - COALESCE(d.total_devuelto, 0) > 0) and p."isActive" = true
         )
     `;
 
