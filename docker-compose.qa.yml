@@ -1,7 +1,6 @@
 version: "3.7"
 services:
-    web:
-        container_name: web
+    webqa:
         restart: always
         image: ludwin/web-granja:54a0db61475131fbce71e6a20311e01a1bc70889
         ports:
@@ -9,10 +8,9 @@ services:
         environment:
             - DOCKER_SERVICE_API=http://api:${API_PORT}
         depends_on:
-            - api
+            - apiqa
 
-    api:
-        container_name: api
+    apiqa:
         restart: always
         image: ludwin/api-granja
         ports:
@@ -21,10 +19,9 @@ services:
         env_file:
             - .env
         depends_on:
-            - database
+            - databaseqa
 
-    database:
-        container_name: db
+    databaseqa:
         image: postgres:17.5-alpine
         restart: always
         env_file:

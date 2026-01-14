@@ -119,7 +119,7 @@ export class ConsolidateService {
   findAllSalesByConsolidate(idConsolidate: number): Promise<ConsolidateSale[]> {
     return this.consolidateSaleRepository.find({
       where: { consolidateId: idConsolidate },
-      relations: ['sale'],
+      relations: ['sale', 'sale.client','sale.saleproducts'],
     });
   }
 
