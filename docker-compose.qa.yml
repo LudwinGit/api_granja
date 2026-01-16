@@ -15,6 +15,7 @@ services:
         image: ludwin/api-granja:qa
         ports:
             - ${API_PORT}:${API_PORT}
+        command: npm run start:dev
         env_file:
             - .env
         depends_on:
