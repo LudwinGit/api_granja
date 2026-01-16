@@ -37,3 +37,5 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             cd /home/deploy_actions/github_actions/granja
+            docker compose pull
+            docker compose up -d
