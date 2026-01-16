@@ -45,7 +45,7 @@ import { SaleReturnsModule } from "./modules/salereturn/salereturns.module";
             host: config.get('DB_HOST'),
             username: config.get('DB_USER'),
             password: config.get('DB_PASSWORD'),
-            port: +config.get('DB_LISTEN_PORT_OUT'),
+            port: +config.get('DB_PORT'),
             database: config.get('DB_NAME'),
             autoLoadEntities: true,
             synchronize: config.get('DB_SYNCHRONIZE'), //Solo en desarrollo
