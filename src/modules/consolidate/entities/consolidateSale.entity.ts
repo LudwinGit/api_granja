@@ -1,7 +1,5 @@
 import { ObjectType, Field } from '@nestjs/graphql';
-import { Entity, PrimaryColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { Measure } from 'src/modules/measures/measure.entity';
-import { Product } from 'src/modules/products/product.entity';
+import { Entity, PrimaryColumn, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Consolidate } from './consolidate.entity';
 import { Sale } from 'src/modules/sales/entities/sale.entity';
 

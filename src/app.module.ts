@@ -23,6 +23,7 @@ import { UnificationsModule } from './modules/unifications/unifications.module';
 import { UnificationproductModule } from './modules/unificationproduct/unificationproduct.module';
 import { ReportsModule } from './modules/reports/reports.module';
 import { ConsolidateModule } from './modules/consolidate/consolidate.module';
+import { SaleReturnsModule } from "./modules/salereturn/salereturns.module";
 
 @Module({
   imports: [
@@ -72,6 +73,7 @@ import { ConsolidateModule } from './modules/consolidate/consolidate.module';
     UnificationproductModule,
     ReportsModule,
     ConsolidateModule,
+    SaleReturnsModule
   ],
   controllers: [],
   providers: [],
