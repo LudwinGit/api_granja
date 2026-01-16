@@ -17,3 +17,15 @@ export class UserInput {
     @Field()
     isActive: boolean
 }
+
+@InputType()
+export class UpdateUserInput{
+    @Field()
+    username: string
+
+    @Field({ nullable: true })
+    password: string
+
+    @Field()
+    isActive: boolean
+}

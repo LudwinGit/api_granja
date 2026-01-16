@@ -24,10 +24,12 @@ export class ProductsService {
     ) { }
 
     async findAll(): Promise<Product[]> {
-        return await this.productRepository.find({ relations: ["productmeasures"], order: {
-            description: 'ASC'
-        } })
-        // return await this.productRepository.find({ relations: ["measures"] })
+        return await this.productRepository.find({
+            where: { isActive: true },
+            relations: ["productmeasures"], order: {
+                description: 'ASC'
+            }
+        })
     }
 
     async findOne(id: number): Promise<Product> {

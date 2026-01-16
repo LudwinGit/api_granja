@@ -66,7 +66,7 @@ export class SalesResolver {
   }
 
   @Query(() => [SaleCost], { nullable: true })
-  async salesByRange(@Args('dateA') dateA: Date, @Args('dateB') dateB: Date) {
+  async salesByRange(@Args('dateA') dateA: Date, @Args('dateB') dateB: Date) : Promise<SaleCost[]> {
     return this.salesService.findByRangeDate(dateA, dateB);
   }
 
@@ -77,11 +77,9 @@ export class SalesResolver {
 
   @Mutation(() => Boolean)
   async updateStatusSale(
-    @Args('id') id: number,
-    @Args('status') status: string,
-    @Args('observation') observation: string,
+    @Args('input') input: SaleInput,
   ): Promise<boolean> {
-    return this.salesService.updateStatus(id, status, observation);
+    return this.salesService.updateStatus(input);
   }
 
   @ResolveField(() => Seller, { nullable: true })
