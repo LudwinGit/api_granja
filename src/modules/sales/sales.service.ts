@@ -1,4 +1,4 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Sale } from './entities/sale.entity';
 import { Repository } from 'typeorm';
@@ -42,7 +42,7 @@ export class SalesService {
         return sales
     }
 
-    async findPreSaleBySeller(sellerId: number) {
+    async findPreSaleBySeller(sellerId: number) : Promise<Sale[]> {
         return await this.saleRepository
             .createQueryBuilder("sale")
             .where(`sale."sellerId" = ${sellerId} and sale.status='P' and sale.type_sale = 'P' and sale.total>0`)
@@ -128,7 +128,9 @@ export class SalesService {
                 status: input.status,
                 observation: input.observation,
                 client: input.clientId ? await this.clientService.find(input.clientId) : null,
-                route: input.routeId ? await this.routeService.find(input.routeId) : null
+                route: input.routeId ? await this.routeService.find(input.routeId) : null,
+                total: input.total,
+                total_seller: input.total_seller
             }
         )
         return true
