@@ -7,6 +7,7 @@ import { Client } from "src/modules/clients/client.entity";
 import { SaleProduct } from "src/modules/saleproduct/saleproduct.entity";
 import { Unification } from "src/modules/unifications/unification.entity";
 import { ConsolidateSale } from "src/modules/consolidate/entities/consolidateSale.entity";
+import { SaleReturn } from "src/modules/salereturn/entities/sale-return.entity";
 
 @ObjectType()
 @Entity()
@@ -32,7 +33,7 @@ export class Sale {
     discount: number
 
     @Field()
-    @Column({ type: "char", length: 1, default: "I" })
+    @Column({ type: "char", length: 1, default: "I", comment: "P:Pending, I:In Process, F:Finalized, C:Cancelled, A:Anulated" })
     status: string
 
     @Field({ nullable: true })
@@ -47,12 +48,12 @@ export class Sale {
     @ManyToOne(() => Seller, seller => seller.sales, { nullable: true })
     seller: Seller;
 
-    @Field(() => Client)
+    @Field(() => Client, { nullable: true })
     @ManyToOne(() => Client, client => client.sales, { nullable: true })
     client: Client;
 
-    @Field(() => Route)
-    @ManyToOne(() => Route, route => route.sales)
+    @Field(() => Route, { nullable: true })
+    @ManyToOne(() => Route, route => route.sales, { nullable: true })
     route: Route;
 
     @Field()
@@ -81,4 +82,8 @@ export class Sale {
 
     @ManyToOne(() => Unification, unification => unification.sales)
     unification: Unification
+
+    @Field(() => [SaleReturn], { nullable: true })
+    @OneToMany(() => SaleReturn, saleReturn => saleReturn.sale)
+    saleReturns: SaleReturn[]
 }

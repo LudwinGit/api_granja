@@ -1,22 +1,25 @@
 import { InputType, Field } from "@nestjs/graphql";
 
 @InputType()
-export class SaleProductInput{
+export class SaleProductInput {
     @Field()
-    saleId:number
+    saleId: number
 
     @Field()
-    productId:number
+    productId: number
 
     @Field()
-    measureId:number
+    measureId: number
 
     @Field()
-    unit_measure:number
+    unit_measure: number
 
     @Field()
-    quantity:number
+    quantity: number
 
-    @Field()    
-    price:number   
+    @Field()
+    price: number
+
+    @Field({ defaultValue: 0 })
+    price_seller: number
 }

@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { TransactionProduct } from '../transactions/entities/transactionProduct.entity';
 import { WarehouseProduct } from '../warehouses/entitys/warehouseProduct.entity';
 import { WarehouseProductInput } from './warehouseproduct.input';
+import { PaginatedWarehouseProduct } from '../common/shared/Paginated';
 
 @Injectable()
 export class WarehouseproductService {
@@ -78,6 +79,27 @@ export class WarehouseproductService {
             return true
         } catch (error) {
             return false
+        }
+    }
+
+    async minStockByWarehouse(warehouseId: number, page: number, pageSize: number): Promise<PaginatedWarehouseProduct> {
+        const [products, total] = await this.warehouseproductRepository
+            .createQueryBuilder("warehouse_product")
+            .leftJoinAndSelect("warehouse_product.product", "product")
+            .where('warehouse_product.warehouseId = :warehouseId', { warehouseId })
+            .andWhere('product.isActive = true')
+            .andWhere('warehouse_product.stock <= product.min_stock * 1.1')
+            .orderBy('product.min_stock', 'ASC')
+            .skip((page - 1) * pageSize)
+            .take(pageSize)
+            .getManyAndCount();
+
+        return {
+            data: products,
+            total,
+            page,
+            pageSize,
+            totalPages: Math.ceil(total / pageSize)
         }
     }
 

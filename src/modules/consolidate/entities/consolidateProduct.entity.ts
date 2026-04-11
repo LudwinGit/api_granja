@@ -27,6 +27,14 @@ export class ConsolidateProduct {
   @Column()
   quantity: number;
 
+  @Field()
+  @Column({ type: 'decimal', default: 0 })
+  price: number;
+
+  @Field()
+  @Column({ type: 'decimal', default: 0 })
+  price_seller: number;
+
   @Field(() => Product)
   @ManyToOne(
     () => Product,
