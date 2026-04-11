@@ -69,12 +69,14 @@ export class ConsolidateResolver {
 
   @ResolveField(() => Seller, { nullable: true })
   async seller(@Parent() consolidate: Consolidate): Promise<Seller> {
+    if (consolidate.seller) return consolidate.seller;
     const { seller } = await this.consolidateService.find(consolidate.id);
     return seller;
   }
 
   @ResolveField(() => Route, { nullable: true })
   async route(@Parent() consolidate: Consolidate): Promise<Route> {
+    if (consolidate.route) return consolidate.route;
     const { route } = await this.consolidateService.find(consolidate.id);
     return route;
   }
