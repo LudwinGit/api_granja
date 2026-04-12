@@ -84,24 +84,28 @@ export class SalesResolver {
 
   @ResolveField(() => Seller, { nullable: true })
   async seller(@Parent() sale: Sale): Promise<Seller> {
+    if (sale.seller) return sale.seller;
     const { seller } = await this.salesService.find(sale.id);
     return seller;
   }
 
   @ResolveField(() => Client, { nullable: true })
   async client(@Parent() sale: Sale): Promise<Client> {
+    if (sale.client) return sale.client;
     const { client } = await this.salesService.find(sale.id);
     return client;
   }
 
   @ResolveField(() => Route, { nullable: true })
   async route(@Parent() sale: Sale): Promise<Route> {
+    if (sale.route) return sale.route;
     const { route } = await this.salesService.find(sale.id);
     return route;
   }
 
   @ResolveField(() => Warehouse, { nullable: true })
   async warehouse(@Parent() sale: Sale): Promise<Warehouse> {
+    if (sale.warehouse) return sale.warehouse;
     const { warehouse } = await this.salesService.find(sale.id);
     return warehouse;
   }

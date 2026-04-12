@@ -120,8 +120,13 @@ export class ConsolidateService {
     return this.consolidateSaleRepository
       .createQueryBuilder('cs')
       .innerJoinAndSelect('cs.sale', 'sale')
-      .innerJoinAndSelect('sale.client', 'client')
-      .leftJoinAndSelect('sale.saleproducts', 'saleproducts')
+      .leftJoinAndSelect('sale.seller', 'seller')
+      .leftJoinAndSelect('seller.employee', 'employee')
+      .leftJoinAndSelect('sale.client', 'client')
+      .leftJoinAndSelect('sale.route', 'saleRoute')
+      .leftJoinAndSelect('sale.saleproducts', 'saleproduct')
+      .leftJoinAndSelect('saleproduct.measure', 'measure')
+      .leftJoinAndSelect('saleproduct.product', 'product')
       .where('cs.consolidateId = :id', { id: idConsolidate })
       .getMany();
   }
@@ -129,13 +134,13 @@ export class ConsolidateService {
   findAllProductsByConsolidate(
     idConsolidate: number,
   ): Promise<ConsolidateProduct[]> {
-    let productos = this.consolidateProductRepository
+    return this.consolidateProductRepository
       .createQueryBuilder('consolidate_product')
       .innerJoinAndSelect('consolidate_product.product', 'product')
-      .where('consolidate_product.consolidateId =' + idConsolidate)
+      .leftJoinAndSelect('product.productmeasures', 'productmeasures')
+      .where('consolidate_product.consolidateId = :id', { id: idConsolidate })
       .orderBy('product.description', 'ASC')
       .getMany();
-    return productos;
   }
 
   async findAll(): Promise<Consolidate[]> {

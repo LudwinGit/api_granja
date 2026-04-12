@@ -55,6 +55,7 @@ export class SellersResolver {
 
     @ResolveField(() => Employee, { nullable: true })
     async employee(@Parent() seller: Seller) {
+        if (seller.employee) return seller.employee;
         const { employee } = await this.sellerService.find(seller.id)
         return employee
     }
