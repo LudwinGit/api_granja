@@ -151,15 +151,24 @@ export class ConsolidateService {
   }
 
   async find(id: number): Promise<Consolidate> {
-    return await this.consolidateRepository.findOne(id, {
-      relations: ['seller', 'route', 'consolidateProducts'],
-    });
+    return await this.consolidateRepository
+      .createQueryBuilder('consolidate')
+      .leftJoinAndSelect('consolidate.seller', 'seller')
+      .leftJoinAndSelect('seller.employee', 'employee')
+      .leftJoinAndSelect('consolidate.route', 'route')
+      .leftJoinAndSelect('consolidate.consolidateProducts', 'consolidateProducts')
+      .where('consolidate.id = :id', { id })
+      .getOne();
   }
 
   async findSellerAndRoute(id: number): Promise<Consolidate> {
-    return await this.consolidateRepository.findOne(id, {
-      relations: ['seller', 'route'],
-    });
+    return await this.consolidateRepository
+      .createQueryBuilder('consolidate')
+      .leftJoinAndSelect('consolidate.seller', 'seller')
+      .leftJoinAndSelect('seller.employee', 'employee')
+      .leftJoinAndSelect('consolidate.route', 'route')
+      .where('consolidate.id = :id', { id })
+      .getOne();
   }
 
   update(id: number, updateConsolidateInput: UpdateConsolidateInput) {

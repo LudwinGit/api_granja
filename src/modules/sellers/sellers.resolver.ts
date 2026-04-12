@@ -84,7 +84,8 @@ export class SellersResolver {
 
     @ResolveField(()=>[Sale],{nullable:true})
     async sales(@Parent() seller:Seller):Promise<Sale[]>{
-        const {sales} = await this.sellerService.find(seller.id)
+        if (seller.sales) return seller.sales;
+        const { sales } = await this.sellerService.findSales(seller.id)
         return sales
     }
 }
