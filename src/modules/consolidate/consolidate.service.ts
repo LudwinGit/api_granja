@@ -117,10 +117,13 @@ export class ConsolidateService {
   }
 
   findAllSalesByConsolidate(idConsolidate: number): Promise<ConsolidateSale[]> {
-    return this.consolidateSaleRepository.find({
-      where: { consolidateId: idConsolidate },
-      relations: ['sale', 'sale.client','sale.saleproducts'],
-    });
+    return this.consolidateSaleRepository
+      .createQueryBuilder('cs')
+      .innerJoinAndSelect('cs.sale', 'sale')
+      .innerJoinAndSelect('sale.client', 'client')
+      .leftJoinAndSelect('sale.saleproducts', 'saleproducts')
+      .where('cs.consolidateId = :id', { id: idConsolidate })
+      .getMany();
   }
 
   findAllProductsByConsolidate(
@@ -137,7 +140,6 @@ export class ConsolidateService {
 
   async findAll(): Promise<Consolidate[]> {
     return await this.consolidateRepository.find({
-      relations: ['seller', 'route'],
       order: { id: 'DESC' },
       take: 100,
     });
@@ -146,6 +148,12 @@ export class ConsolidateService {
   async find(id: number): Promise<Consolidate> {
     return await this.consolidateRepository.findOne(id, {
       relations: ['seller', 'route', 'consolidateProducts'],
+    });
+  }
+
+  async findSellerAndRoute(id: number): Promise<Consolidate> {
+    return await this.consolidateRepository.findOne(id, {
+      relations: ['seller', 'route'],
     });
   }
 
