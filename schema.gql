@@ -76,6 +76,7 @@ type Consolidate {
   discount: Float!
   status: String!
   observation: String
+  total_seller: Float!
   consolidateProducts: [ConsolidateProduct!]!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -163,6 +164,7 @@ type Sale {
   client: Client
   route: Route
   invoiced: Boolean!
+  total_seller: Float!
   createdAt: DateTime!
   updatedAt: DateTime!
   saleproducts: [SaleProduct!]!
@@ -503,6 +505,7 @@ input SaleInput {
   type_sale: String!
   warehouseId: Float
   total: Float
+  total_seller: Float
   discount: Float
   status: String
   observation: String

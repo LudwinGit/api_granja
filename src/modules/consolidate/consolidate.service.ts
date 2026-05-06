@@ -117,58 +117,36 @@ export class ConsolidateService {
   }
 
   findAllSalesByConsolidate(idConsolidate: number): Promise<ConsolidateSale[]> {
-    return this.consolidateSaleRepository
-      .createQueryBuilder('cs')
-      .innerJoinAndSelect('cs.sale', 'sale')
-      .leftJoinAndSelect('sale.seller', 'seller')
-      .leftJoinAndSelect('seller.employee', 'employee')
-      .leftJoinAndSelect('sale.client', 'client')
-      .leftJoinAndSelect('sale.route', 'saleRoute')
-      .leftJoinAndSelect('sale.saleproducts', 'saleproduct')
-      .leftJoinAndSelect('saleproduct.measure', 'measure')
-      .leftJoinAndSelect('saleproduct.product', 'product')
-      .where('cs.consolidateId = :id', { id: idConsolidate })
-      .getMany();
+    return this.consolidateSaleRepository.find({
+      where: { consolidateId: idConsolidate },
+      relations: ['sale', 'sale.client','sale.saleproducts'],
+    });
   }
 
   findAllProductsByConsolidate(
     idConsolidate: number,
   ): Promise<ConsolidateProduct[]> {
-    return this.consolidateProductRepository
+    let productos = this.consolidateProductRepository
       .createQueryBuilder('consolidate_product')
       .innerJoinAndSelect('consolidate_product.product', 'product')
-      .leftJoinAndSelect('product.productmeasures', 'productmeasures')
-      .where('consolidate_product.consolidateId = :id', { id: idConsolidate })
+      .where('consolidate_product.consolidateId =' + idConsolidate)
       .orderBy('product.description', 'ASC')
       .getMany();
+    return productos;
   }
 
   async findAll(): Promise<Consolidate[]> {
     return await this.consolidateRepository.find({
+      relations: ['seller', 'route'],
       order: { id: 'DESC' },
       take: 100,
     });
   }
 
   async find(id: number): Promise<Consolidate> {
-    return await this.consolidateRepository
-      .createQueryBuilder('consolidate')
-      .leftJoinAndSelect('consolidate.seller', 'seller')
-      .leftJoinAndSelect('seller.employee', 'employee')
-      .leftJoinAndSelect('consolidate.route', 'route')
-      .leftJoinAndSelect('consolidate.consolidateProducts', 'consolidateProducts')
-      .where('consolidate.id = :id', { id })
-      .getOne();
-  }
-
-  async findSellerAndRoute(id: number): Promise<Consolidate> {
-    return await this.consolidateRepository
-      .createQueryBuilder('consolidate')
-      .leftJoinAndSelect('consolidate.seller', 'seller')
-      .leftJoinAndSelect('seller.employee', 'employee')
-      .leftJoinAndSelect('consolidate.route', 'route')
-      .where('consolidate.id = :id', { id })
-      .getOne();
+    return await this.consolidateRepository.findOne(id, {
+      relations: ['seller', 'route', 'consolidateProducts'],
+    });
   }
 
   update(id: number, updateConsolidateInput: UpdateConsolidateInput) {

@@ -57,6 +57,10 @@ export class Consolidate {
   @Column({ type: 'varchar', length: 200, nullable: true })
   observation: string;
 
+  @Field()
+  @Column({ type: 'decimal', default: 0 })
+  total_seller: number;
+
   @Field(() => [ConsolidateProduct])
   @OneToMany(
     () => ConsolidateProduct,

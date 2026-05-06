@@ -41,10 +41,14 @@ export class SaleproductService {
 
         if (stock < (input.quantity * measure.unit))
             throw new HttpException(`La existencia es menor a lo solicitado (existencia: ${stock})`, HttpStatus.INTERNAL_SERVER_ERROR);
-        const sp = await this.saleProductRepository.create(input)
+        const sp = this.saleProductRepository.create(input)
         const product = await this.productService.findOne(input.productId)
         const subtotal = parseFloat((input.price * input.quantity).toString())
         sale.total = parseFloat(sale.total.toString()) + subtotal
+
+        const subtotal_seller = parseFloat((input.price_seller * input.quantity).toString())
+        sale.total_seller = parseFloat(sale.total_seller.toString()) + subtotal_seller
+
         sp.product = product
         sp.measure = measure
         sp.sale = sale

@@ -13,6 +13,9 @@ export class SaleInput {
 
     @Field({ nullable: true })
     total: number
+
+    @Field({ nullable: true })
+    total_seller: number
     
     @Field({ nullable: true })
     discount: number

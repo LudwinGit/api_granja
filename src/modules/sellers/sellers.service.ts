@@ -25,11 +25,7 @@ export class SellersService {
     }
 
     async find(id: number): Promise<Seller> {
-        return await this.sellerRepository.findOne(id, { relations: ["employee", "warehouses", "routes"] })
-    }
-
-    async findSales(id: number): Promise<Seller> {
-        return await this.sellerRepository.findOne(id, { relations: ["sales"] })
+        return await this.sellerRepository.findOne(id, { relations: ["employee", "warehouses","routes","sales"] })
     }
 
     async create(employee: Employee, input: SellerInput): Promise<Seller> {

@@ -40,10 +40,6 @@ export class Sale {
     @Column({ type: "varchar", length: 200, nullable: true })
     observation: string
 
-    // @Field()
-    // @Column({nullable:true})
-    // cashier: number
-
     @Field(() => Seller)
     @ManyToOne(() => Seller, seller => seller.sales, { nullable: true })
     seller: Seller;
@@ -60,9 +56,9 @@ export class Sale {
     @Column({ default: false })
     invoiced: boolean
 
-    // @Field()
-    // @Column({nullable:true})
-    // consolidated:number
+    @Field()
+    @Column({ type: "decimal", default: 0 })
+    total_seller: number
 
     @Field()
     @CreateDateColumn({ name: 'created_at' })
