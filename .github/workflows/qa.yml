@@ -15,7 +15,6 @@ jobs:
 
       - name: Build the Docker image
         run: |
-          docker build . --file Dockerfile --tag ludwin/api-granja:${{ github.sha }}
           docker build . --file Dockerfile --tag ludwin/api-granja:qa
 
       - name: Log in to Docker Hub
@@ -26,7 +25,6 @@ jobs:
 
       - name: Push the Docker image to Docker Hub
         run: |
-          docker push ludwin/api-granja:${{ github.sha }}
           docker push ludwin/api-granja:qa
 
       - name: Deploy to Development Server via SSH
@@ -36,6 +34,6 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            cd /home/deploy_actions/github_actions/granja
+            cd /home/deploy_actions/qa/granja
             docker compose pull
             docker compose up -d
