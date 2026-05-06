@@ -38,14 +38,12 @@ export class SaleproductResolver {
 
     @ResolveField(() => Measure)
     async measure(@Parent() saleproduct: SaleProduct): Promise<Measure> {
-        if (saleproduct.measure) return saleproduct.measure;
-        return await this.measureService.find(saleproduct.measureId);
+        return await this.measureService.find(saleproduct.measureId)
     }
 
     @ResolveField(() => Product)
     async product(@Parent() saleproduct: SaleProduct): Promise<Product> {
-        if (saleproduct.product) return saleproduct.product;
-        return await this.productService.findOne(saleproduct.productId);
+        return await this.productService.findOne(saleproduct.productId)
     }
 
 
