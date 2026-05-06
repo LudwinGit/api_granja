@@ -22,7 +22,7 @@ export class RoutesService {
         const routes = await
             this.routeRepository
                 .createQueryBuilder("route")
-                .leftJoinAndSelect("route.sellers", "seller","seller.id=:sellerId",{sellerId})
+                .leftJoin("route.sellers", "seller","seller.id=:sellerId",{sellerId})
                 .where("seller.id is null")
                 .getMany()
         return routes
@@ -37,15 +37,15 @@ export class RoutesService {
 
     async update(id:number,input:RouteInput):Promise<Route>{
         input.description = input.description.toUpperCase()
-        const route = this.routeRepository.findOne(id)
+        const route = await this.routeRepository.findOne(id)
         if(!route)
             throw new HttpException('Route Not Found', HttpStatus.NOT_FOUND);
         await this.routeRepository.update(id,{...input})
-        return route
+        return { ...route, ...input }
     }
 
     async delete(id:number):Promise<Route>{
-        const route = this.routeRepository.findOne(id)
+        const route = await this.routeRepository.findOne(id)
         if(!route)
             throw new HttpException('Route Not Found', HttpStatus.NOT_FOUND);
         await this.routeRepository.delete(id)

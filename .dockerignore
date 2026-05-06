@@ -1,2 +1,5 @@
-/tools/*
+node_modules
+.git
+*.log
+.env/tools/*
 .env
