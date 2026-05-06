@@ -55,7 +55,6 @@ export class SellersResolver {
 
     @ResolveField(() => Employee, { nullable: true })
     async employee(@Parent() seller: Seller) {
-        if (seller.employee) return seller.employee;
         const { employee } = await this.sellerService.find(seller.id)
         return employee
     }
@@ -84,8 +83,7 @@ export class SellersResolver {
 
     @ResolveField(()=>[Sale],{nullable:true})
     async sales(@Parent() seller:Seller):Promise<Sale[]>{
-        if (seller.sales) return seller.sales;
-        const { sales } = await this.sellerService.findSales(seller.id)
+        const {sales} = await this.sellerService.find(seller.id)
         return sales
     }
 }
